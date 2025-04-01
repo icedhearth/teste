@@ -5,8 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Formulário para Visto Americano</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-storage.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -33,7 +31,7 @@
         button:hover {
             background-color: #20b354;
         }
-        #spouseInfo, #spouseDeathInfo, #spousePassportInfo, #parentsInfo, #previousUSVisaInfo, #travelCompanionsInfo, #visaDeniedDetails, #payerInfo, #payerAddressInfo, #renewalInfo, #parentsInUSInfo, #acquaintancesInfo, #paiInfo, #maeInfo {
+        #spouseInfo, #spouseDeathInfo, #spousePassportInfo, #parentsInfo, #previousUSVisaInfo, #travelCompanionsInfo, #visaDeniedDetails, #payerInfo, #payerAddressInfo, #renewalInfo, #parentsInUSInfo, #acquaintancesInfo {
             display: none;
             margin-top: 10px;
         }
@@ -45,7 +43,7 @@
 
     <form id="visaForm" name="visaForm" method="POST">
         <h3>Informações Pessoais</h3>
-        <label for="nome">Nome (como no passaporte):</label>
+        <label for="nome">Nome completo (como no passaporte):</label>
         <input type="text" id="nome" name="nome">
 
         <label for="sobrenome">Sobrenome (como no passaporte):</label>
@@ -146,43 +144,20 @@
             <option value="">Selecione</option>
             <option value="Sim">Sim</option>
             <option value="Não">Não</option>
-            <option value="Não sei">Não sei</option>
         </select>
 
         <div id="parentsInfo">
-            <h4>Dados do Pai</h4>
-            <label for="statusPai">Status do Pai:</label>
-            <select id="statusPai" name="statusPai" onchange="togglePaiInfo()">
-                <option value="">Selecione</option>
-                <option value="Vivo">Vivo</option>
-                <option value="Falecido">Falecido</option>
-                <option value="Não sei">Não sei</option>
-            </select>
+            <label for="nomePai">Nome completo do pai:</label>
+            <input type="text" id="nomePai" name="nomePai">
 
-            <div id="paiInfo" style="display: none;">
-                <label for="nomePai">Nome completo do pai:</label>
-                <input type="text" id="nomePai" name="nomePai">
+            <label for="nascimentoPai">Data de nascimento do pai:</label>
+            <input type="date" id="nascimentoPai" name="nascimentoPai">
 
-                <label for="nascimentoPai">Data de nascimento do pai:</label>
-                <input type="date" id="nascimentoPai" name="nascimentoPai">
-            </div>
+            <label for="nomeMae">Nome completo da mãe:</label>
+            <input type="text" id="nomeMae" name="nomeMae">
 
-            <h4>Dados da Mãe</h4>
-            <label for="statusMae">Status da Mãe:</label>
-            <select id="statusMae" name="statusMae" onchange="toggleMaeInfo()">
-                <option value="">Selecione</option>
-                <option value="Vivo">Vivo</option>
-                <option value="Falecido">Falecido</option>
-                <option value="Não sei">Não sei</option>
-            </select>
-
-            <div id="maeInfo" style="display: none;">
-                <label for="nomeMae">Nome completo da mãe:</label>
-                <input type="text" id="nomeMae" name="nomeMae">
-
-                <label for="nascimentoMae">Data de nascimento da mãe:</label>
-                <input type="date" id="nascimentoMae" name="nascimentoMae">
-            </div>
+            <label for="nascimentoMae">Data de nascimento da mãe:</label>
+            <input type="date" id="nascimentoMae" name="nascimentoMae">
 
             <label for="paisNosEUA">Seus pais estão nos EUA?</label>
             <select id="paisNosEUA" name="paisNosEUA" onchange="toggleParentsInUSInfo()">
@@ -446,7 +421,11 @@
         <button type="submit">Enviar Formulário</button>
     </form>
 
-    <script>
+    <script type="module">
+        // Importa as funções necessárias do Firebase SDK
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-app.js";
+        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-storage.js";
+
         // Configuração do Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyAkBV0rHEghBOHl2mDOs6rMDHkUgYMxFr0",
@@ -459,10 +438,9 @@
         };
 
         // Inicializa o Firebase
-        const app = firebase.initializeApp(firebaseConfig);
-        const storage = firebase.storage(app);
+        const app = initializeApp(firebaseConfig);
+        const storage = getStorage(app);
 
-        // Funções de controle dos campos condicionais
         function formatCEP(input) {
             let value = input.value.replace(/\D/g, '');
             if (value.length > 8) value = value.slice(0, 8);
@@ -495,41 +473,6 @@
             const temPaisVivos = document.getElementById('temPaisVivos').value;
             const parentsInfo = document.getElementById('parentsInfo');
             parentsInfo.style.display = (temPaisVivos === 'Sim') ? 'block' : 'none';
-
-            if (temPaisVivos !== 'Sim') {
-                document.getElementById('statusPai').value = '';
-                document.getElementById('statusMae').value = '';
-                togglePaiInfo();
-                toggleMaeInfo();
-            }
-        }
-
-        function togglePaiInfo() {
-            const statusPai = document.getElementById('statusPai').value;
-            const paiInfo = document.getElementById('paiInfo');
-            if (statusPai === 'Vivo') {
-                paiInfo.style.display = 'block';
-                document.getElementById('nomePai').required = true;
-                document.getElementById('nascimentoPai').required = true;
-            } else {
-                paiInfo.style.display = 'none';
-                document.getElementById('nomePai').required = false;
-                document.getElementById('nascimentoPai').required = false;
-            }
-        }
-
-        function toggleMaeInfo() {
-            const statusMae = document.getElementById('statusMae').value;
-            const maeInfo = document.getElementById('maeInfo');
-            if (statusMae === 'Vivo') {
-                maeInfo.style.display = 'block';
-                document.getElementById('nomeMae').required = true;
-                document.getElementById('nascimentoMae').required = true;
-            } else {
-                maeInfo.style.display = 'none';
-                document.getElementById('nomeMae').required = false;
-                document.getElementById('nascimentoMae').required = false;
-            }
         }
 
         function toggleParentsInUSInfo() {
@@ -587,17 +530,11 @@
             return date.toLocaleDateString('pt-BR');
         }
 
-        // Função para gerar o PDF e enviar ao WhatsApp
         async function generatePDF(event) {
             event.preventDefault();
             console.log('Função generatePDF iniciada');
 
             try {
-                // Verifica se o jsPDF está carregado
-                if (!window.jspdf || !window.jspdf.jsPDF) {
-                    throw new Error('Biblioteca jsPDF não foi carregada corretamente.');
-                }
-
                 console.log('Capturando dados do formulário');
                 const { jsPDF } = window.jspdf;
                 const form = document.getElementById('visaForm');
@@ -612,9 +549,13 @@
                 const margin = 10;
                 let yPosition = 30;
 
+                // Função para desenhar o cabeçalho estilizado
                 function drawHeader() {
-                    doc.setFillColor(0, 48, 135);
+                    // Fundo azul escuro
+                    doc.setFillColor(0, 48, 135); // #003087
                     doc.rect(0, 0, pageWidth, 25, 'F');
+
+                    // Título em branco
                     doc.setFontSize(16);
                     doc.setTextColor(255, 255, 255);
                     doc.setFont("Helvetica", "bold");
@@ -622,28 +563,33 @@
                     const titleWidth = doc.getTextWidth(title);
                     const titleX = (pageWidth - titleWidth) / 2;
                     doc.text(title, titleX, 15);
+
+                    // Estrelas brancas sutis nas laterais
                     doc.setFontSize(14);
+                    doc.setTextColor(255, 255, 255);
                     const starSpacing = 8;
                     for (let i = 0; i < 3; i++) {
-                        doc.text("*", titleX - (i + 1) * starSpacing - 5, 15);
-                        doc.text("*", titleX + titleWidth + (i + 1) * starSpacing + 5, 15);
+                        doc.text("*", titleX - (i + 1) * starSpacing - 5, 15); // Lado esquerdo
+                        doc.text("*", titleX + titleWidth + (i + 1) * starSpacing + 5, 15); // Lado direito
                     }
                 }
 
+                // Função para desenhar a borda da página
                 function drawPageBorder() {
-                    doc.setDrawColor(0, 48, 135);
+                    doc.setDrawColor(0, 48, 135); // #003087
                     doc.setLineWidth(0.5);
                     doc.rect(margin / 2, margin / 2, pageWidth - margin, pageHeight - margin);
                 }
 
+                // Função para adicionar um título de seção
                 function addSectionTitle(title) {
                     if (yPosition + 15 > pageHeight - margin) {
                         doc.addPage();
                         yPosition = 30;
-                        drawHeader();
+                        drawHeader(); // Adiciona o cabeçalho na nova página
                         drawPageBorder();
                     }
-                    doc.setFillColor(200, 16, 46);
+                    doc.setFillColor(200, 16, 46); // #C8102E (vermelho claro)
                     doc.rect(margin, yPosition - 5, pageWidth - 2 * margin, 10, 'F');
                     doc.setFontSize(12);
                     doc.setTextColor(255, 255, 255);
@@ -652,6 +598,7 @@
                     yPosition += 15;
                 }
 
+                // Função para adicionar texto com quebra de página e suporte a negrito (alinhado à esquerda)
                 function addText(text, isBold = false) {
                     const maxWidth = pageWidth - 2 * margin;
                     const lineHeight = 7;
@@ -665,15 +612,16 @@
                         if (yPosition + lineHeight > pageHeight - margin) {
                             doc.addPage();
                             yPosition = 30;
-                            drawHeader();
+                            drawHeader(); // Adiciona o cabeçalho na nova página
                             drawPageBorder();
                         }
                         doc.text(lines[i], margin, yPosition);
                         yPosition += lineHeight;
                     }
-                    yPosition += 2;
+                    yPosition += 2; // Espaço extra após o parágrafo
                 }
 
+                // Função para justificar texto (simulação)
                 function addJustifiedText(text, isBold = false) {
                     const maxWidth = pageWidth - 2 * margin;
                     const lineHeight = 7;
@@ -687,16 +635,20 @@
                         if (yPosition + lineHeight > pageHeight - margin) {
                             doc.addPage();
                             yPosition = 30;
-                            drawHeader();
+                            drawHeader(); // Adiciona o cabeçalho na nova página
                             drawPageBorder();
                         }
+
+                        // Se for a última linha ou uma linha curta, alinha à esquerda
                         if (i === lines.length - 1 || doc.getTextWidth(lines[i]) < maxWidth * 0.8) {
                             doc.text(lines[i], margin, yPosition);
                         } else {
+                            // Simula justificação distribuindo o espaço entre palavras
                             const words = lines[i].trim().split(/\s+/);
                             const totalWordWidth = words.reduce((sum, word) => sum + doc.getTextWidth(word), 0);
                             const spaceWidth = (maxWidth - totalWordWidth) / (words.length - 1);
                             let x = margin;
+
                             for (let j = 0; j < words.length; j++) {
                                 doc.text(words[j], x, yPosition);
                                 x += doc.getTextWidth(words[j]) + spaceWidth;
@@ -704,12 +656,14 @@
                         }
                         yPosition += lineHeight;
                     }
-                    yPosition += 5;
+                    yPosition += 5; // Espaço extra após o parágrafo para a Declaração
                 }
 
+                // Desenha o cabeçalho e a borda na primeira página
                 drawHeader();
                 drawPageBorder();
 
+                // Informações Pessoais
                 addSectionTitle("Informações Pessoais");
                 addText(`Nome: `);
                 addText(solicitanteNome, true);
@@ -741,6 +695,7 @@
                 addText(`Data de Validade do Passaporte: ${formatDateBr(formData.get('dataValidadePassaporte'))}`);
                 addText(`Local de Emissão do Passaporte: ${formData.get('localEmissaoPassaporte') || 'Não informado'}`);
 
+                // Informações de Contato
                 addSectionTitle("Informações de Contato");
                 addText(`CEP: ${formData.get('cep') || 'Não informado'}`);
                 addText(`Endereço: ${formData.get('endereco') || 'Não informado'}`);
@@ -750,19 +705,14 @@
                 addText(`Telefone: ${formData.get('telefone') || 'Não informado'}`);
                 addText(`E-mail: ${formData.get('email') || 'Não informado'}`);
 
+                // Informações Familiares
                 addSectionTitle("Informações Familiares");
-                addText(`Seus pais estão vivos: ${formData.get('temPaisVivos') || 'Não informado'}`);
+                addText(`Pais Vivos: ${formData.get('temPaisVivos') || 'Não informado'}`);
                 if (formData.get('temPaisVivos') === 'Sim') {
-                    addText(`Status do Pai: ${formData.get('statusPai') || 'Não informado'}`);
-                    if (formData.get('statusPai') === 'Vivo') {
-                        addText(`Nome do Pai: ${formData.get('nomePai') || 'Não informado'}`);
-                        addText(`Data de Nascimento do Pai: ${formatDateBr(formData.get('nascimentoPai'))}`);
-                    }
-                    addText(`Status da Mãe: ${formData.get('statusMae') || 'Não informado'}`);
-                    if (formData.get('statusMae') === 'Vivo') {
-                        addText(`Nome da Mãe: ${formData.get('nomeMae') || 'Não informado'}`);
-                        addText(`Data de Nascimento da Mãe: ${formatDateBr(formData.get('nascimentoMae'))}`);
-                    }
+                    addText(`Nome do Pai: ${formData.get('nomePai') || 'Não informado'}`);
+                    addText(`Data de Nascimento do Pai: ${formatDateBr(formData.get('nascimentoPai'))}`);
+                    addText(`Nome da Mãe: ${formData.get('nomeMae') || 'Não informado'}`);
+                    addText(`Data de Nascimento da Mãe: ${formatDateBr(formData.get('nascimentoMae'))}`);
                     addText(`Pais nos EUA: ${formData.get('paisNosEUA') || 'Não informado'}`);
                     if (formData.get('paisNosEUA') === 'Sim') {
                         addText(`Explicação sobre Pais nos EUA: ${formData.get('explicacaoPaisEUA') || 'Não informado'}`);
@@ -776,6 +726,7 @@
                     addText(`Vínculo com o Conhecido: ${formData.get('vinculoConhecido') || 'Não informado'}`);
                 }
 
+                // Detalhes da Viagem
                 addSectionTitle("Detalhes da Viagem");
                 addText(`Objetivo da Viagem: ${formData.get('objetivo') || 'Não informado'}`);
                 addText(`Data de Chegada: ${formatDateBr(formData.get('chegada'))}`);
@@ -787,7 +738,7 @@
                     addText(`Endereço Igual ao Solicitante: ${formData.get('payerSameAddress') || 'Não informado'}`);
                     if (formData.get('payerSameAddress') === 'Não') {
                         addText(`CEP do Pagante: ${formData.get('payerCEP') || 'Não informado'}`);
-                        addText(`Endereço do Pagante: ${formData.get('payerEndereco') || 'Não informado'}`);
+                        addText(`Endereço do Pagante: ${formData.get(' payerEndereco') || 'Não informado'}`);
                         addText(`Cidade do Pagante: ${formData.get('payerCidade') || 'Não informado'}`);
                         addText(`Estado do Pagante: ${formData.get('payerEstado') || 'Não informado'}`);
                         addText(`País do Pagante: ${formData.get('payerPais') || 'Não informado'}`);
@@ -802,6 +753,7 @@
                     addText(`Relação com o(s) Companheiro(s): ${formData.get('relacaoCompanheiro') || 'Não informado'}`);
                 }
 
+                // Informações de Trabalho
                 addSectionTitle("Informações de Trabalho");
                 addText(`Ocupação: ${formData.get('ocupacao') || 'Não informado'}`);
                 addText(`Empregador: ${formData.get('empregador') || 'Não informado'}`);
@@ -810,6 +762,7 @@
                 addText(`Data de Início no Trabalho: ${formatDateBr(formData.get('dataInicioTrabalho'))}`);
                 addText(`Renda Mensal: ${formData.get('rendaMensal') || 'Não informado'}`);
 
+                // Informações de Educação
                 addSectionTitle("Informações de Educação");
                 addText(`Nível de Educação: ${formData.get('nivelEducacao') || 'Não informado'}`);
                 addText(`Instituição: ${formData.get('instituicao') || 'Não informado'}`);
@@ -817,6 +770,7 @@
                 addText(`Data de Início do Curso: ${formatDateBr(formData.get('dataInicioEducacao'))}`);
                 addText(`Data de Conclusão do Curso: ${formatDateBr(formData.get('dataFimEducacao'))}`);
 
+                // Histórico de Viagens
                 addSectionTitle("Histórico de Viagens");
                 addText(`Primeiro Visto ou Renovação: ${formData.get('primeiroVisto') || 'Não informado'}`);
                 if (formData.get('primeiroVisto') === 'Renovação') {
@@ -839,6 +793,7 @@
                     addText(`Detalhes da Negativa: ${formData.get('detalhesVistoNegado') || 'Não informado'}`);
                 }
 
+                // Declaração (agora justificada)
                 addSectionTitle("Declaração");
                 addText(`Nome: ${solicitanteNome}`, true);
                 addText(`Local: ${formData.get('declaracaoLocal') || 'Não informado'}`);
@@ -866,36 +821,26 @@
                 console.log('Salvando PDF localmente');
                 doc.save('formulario_visto.pdf');
 
-                // Enviar para o Firebase Storage
                 console.log('Enviando PDF para o Firebase Storage');
                 const pdfBlob = doc.output('blob');
                 const timestamp = Date.now();
                 const fileName = `pdfs/formulario_visto_${formData.get('nome') || 'sem_nome'}_${timestamp}.pdf`;
-                const storageRef = storage.ref().child(fileName);
+                const storageRef = ref(storage, fileName);
 
-                try {
-                    await storageRef.put(pdfBlob);
-                    console.log('PDF enviado para o Firebase Storage com sucesso');
+                // Faz o upload do PDF para o Firebase Storage
+                await uploadBytes(storageRef, pdfBlob);
+                console.log('PDF enviado para o Firebase Storage com sucesso');
 
-                    const downloadUrl = await storageRef.getDownloadURL();
-                    console.log('URL de download gerada:', downloadUrl);
+                // Obtém a URL de download do PDF
+                const downloadUrl = await getDownloadURL(storageRef);
+                console.log('URL de download gerada:', downloadUrl);
 
-                    // Enviar mensagem para o WhatsApp
-                    console.log('Enviando mensagem para o WhatsApp');
-                    const whatsappMessage = `Formulário de Visto Americano preenchido por ${formData.get('nome') || 'Não informado'}.\nPassaporte: ${formData.get('passaporte') || 'Não informado'}\nClique no link para visualizar e baixar o PDF: ${downloadUrl}`;
-                    const whatsappUrl = `https://api.whatsapp.com/send?phone=${fixedWhatsAppNumber}&text=${encodeURIComponent(whatsappMessage)}`;
-                    window.open(whatsappUrl, '_blank');
+                console.log('Enviando mensagem para o WhatsApp');
+                const whatsappMessage = `Formulário de Visto Americano preenchido por ${formData.get('nome') || 'Não informado'}.\nPassaporte: ${formData.get('passaporte') || 'Não informado'}\nClique no link para visualizar e baixar o PDF: ${downloadUrl}`;
+                const whatsappUrl = `https://api.whatsapp.com/send?phone=${fixedWhatsAppNumber}&text=${encodeURIComponent(whatsappMessage)}`;
+                window.open(whatsappUrl, '_blank');
 
-                    alert('Formulário enviado com sucesso! O PDF foi baixado e uma mensagem com o link foi enviada ao WhatsApp.');
-                } catch (uploadError) {
-                    console.error('Erro ao enviar PDF para o Firebase Storage:', uploadError.message);
-                    alert('Formulário processado, mas houve um erro ao enviar o PDF para o Firebase. O PDF foi baixado localmente.');
-
-                    // Enviar mensagem para o WhatsApp sem o link do PDF
-                    const whatsappMessage = `Formulário de Visto Americano preenchido por ${formData.get('nome') || 'Não informado'}.\nPassaporte: ${formData.get('passaporte') || 'Não informado'}\nO PDF não pôde ser enviado ao Firebase, mas foi baixado localmente.`;
-                    const whatsappUrl = `https://api.whatsapp.com/send?phone=${fixedWhatsAppNumber}&text=${encodeURIComponent(whatsappMessage)}`;
-                    window.open(whatsappUrl, '_blank');
-                }
+                alert('Formulário enviado com sucesso! O PDF foi baixado e uma mensagem com o link foi enviada ao WhatsApp.');
             } catch (error) {
                 console.error('Erro ao gerar PDF ou enviar para o WhatsApp:', error.message);
                 alert(`Erro ao processar o formulário: ${error.message}`);
