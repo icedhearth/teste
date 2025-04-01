@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Formulário para Visto Americano</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/11.5.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/11.5.0/firebase-storage.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-storage.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -593,6 +593,11 @@
             console.log('Função generatePDF iniciada');
 
             try {
+                // Verifica se o jsPDF está carregado
+                if (!window.jspdf || !window.jspdf.jsPDF) {
+                    throw new Error('Biblioteca jsPDF não foi carregada corretamente.');
+                }
+
                 console.log('Capturando dados do formulário');
                 const { jsPDF } = window.jspdf;
                 const form = document.getElementById('visaForm');
@@ -861,24 +866,36 @@
                 console.log('Salvando PDF localmente');
                 doc.save('formulario_visto.pdf');
 
+                // Enviar para o Firebase Storage
                 console.log('Enviando PDF para o Firebase Storage');
                 const pdfBlob = doc.output('blob');
                 const timestamp = Date.now();
                 const fileName = `pdfs/formulario_visto_${formData.get('nome') || 'sem_nome'}_${timestamp}.pdf`;
                 const storageRef = storage.ref().child(fileName);
 
-                await storageRef.put(pdfBlob);
-                console.log('PDF enviado para o Firebase Storage com sucesso');
+                try {
+                    await storageRef.put(pdfBlob);
+                    console.log('PDF enviado para o Firebase Storage com sucesso');
 
-                const downloadUrl = await storageRef.getDownloadURL();
-                console.log('URL de download gerada:', downloadUrl);
+                    const downloadUrl = await storageRef.getDownloadURL();
+                    console.log('URL de download gerada:', downloadUrl);
 
-                console.log('Enviando mensagem para o WhatsApp');
-                const whatsappMessage = `Formulário de Visto Americano preenchido por ${formData.get('nome') || 'Não informado'}.\nPassaporte: ${formData.get('passaporte') || 'Não informado'}\nClique no link para visualizar e baixar o PDF: ${downloadUrl}`;
-                const whatsappUrl = `https://api.whatsapp.com/send?phone=${fixedWhatsAppNumber}&text=${encodeURIComponent(whatsappMessage)}`;
-                window.open(whatsappUrl, '_blank');
+                    // Enviar mensagem para o WhatsApp
+                    console.log('Enviando mensagem para o WhatsApp');
+                    const whatsappMessage = `Formulário de Visto Americano preenchido por ${formData.get('nome') || 'Não informado'}.\nPassaporte: ${formData.get('passaporte') || 'Não informado'}\nClique no link para visualizar e baixar o PDF: ${downloadUrl}`;
+                    const whatsappUrl = `https://api.whatsapp.com/send?phone=${fixedWhatsAppNumber}&text=${encodeURIComponent(whatsappMessage)}`;
+                    window.open(whatsappUrl, '_blank');
 
-                alert('Formulário enviado com sucesso! O PDF foi baixado e uma mensagem com o link foi enviada ao WhatsApp.');
+                    alert('Formulário enviado com sucesso! O PDF foi baixado e uma mensagem com o link foi enviada ao WhatsApp.');
+                } catch (uploadError) {
+                    console.error('Erro ao enviar PDF para o Firebase Storage:', uploadError.message);
+                    alert('Formulário processado, mas houve um erro ao enviar o PDF para o Firebase. O PDF foi baixado localmente.');
+
+                    // Enviar mensagem para o WhatsApp sem o link do PDF
+                    const whatsappMessage = `Formulário de Visto Americano preenchido por ${formData.get('nome') || 'Não informado'}.\nPassaporte: ${formData.get('passaporte') || 'Não informado'}\nO PDF não pôde ser enviado ao Firebase, mas foi baixado localmente.`;
+                    const whatsappUrl = `https://api.whatsapp.com/send?phone=${fixedWhatsAppNumber}&text=${encodeURIComponent(whatsappMessage)}`;
+                    window.open(whatsappUrl, '_blank');
+                }
             } catch (error) {
                 console.error('Erro ao gerar PDF ou enviar para o WhatsApp:', error.message);
                 alert(`Erro ao processar o formulário: ${error.message}`);
