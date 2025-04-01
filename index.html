@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Formulário para Visto Americano</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/11.5.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/11.5.0/firebase-storage.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -49,7 +51,6 @@
         <label for="sobrenome">Sobrenome (como no passaporte):</label>
         <input type="text" id="sobrenome" name="sobrenome">
 
-        <!-- Resto dos campos de Informações Pessoais permanece igual -->
         <label for="outrosNomes">Já usou outros nomes? (ex.: nome de solteiro, apelido):</label>
         <input type="text" id="outrosNomes" name="outrosNomes">
 
@@ -117,7 +118,6 @@
         <label for="localEmissaoPassaporte">Local de emissão do passaporte:</label>
         <input type="text" id="localEmissaoPassaporte" name="localEmissaoPassaporte">
 
-        <!-- Informações de Contato permanece igual -->
         <h3>Informações de Contato</h3>
         <label for="cep">CEP (ex.: 70.340-902):</label>
         <input type="text" id="cep" name="cep" maxlength="10" oninput="formatCEP(this)">
@@ -140,7 +140,6 @@
         <label for="email">E-mail:</label>
         <input type="email" id="email" name="email">
 
-        <!-- Informações Familiares ajustadas -->
         <h3>Informações Familiares</h3>
         <label for="temPaisVivos">Seus pais estão vivos?</label>
         <select id="temPaisVivos" name="temPaisVivos" onchange="toggleParentsInfo()">
@@ -192,7 +191,7 @@
                 <option value="Não">Não</option>
             </select>
 
-            <div id="parentsInUSInfo" style="display: none;">
+            <div id="parentsInUSInfo">
                 <label for="explicacaoPaisEUA">Explique a situação dos seus pais nos EUA:</label>
                 <textarea id="explicacaoPaisEUA" name="explicacaoPaisEUA"></textarea>
             </div>
@@ -220,7 +219,6 @@
             <input type="text" id="vinculoConhecido" name="vinculoConhecido">
         </div>
 
-        <!-- Demais seções permanecem iguais -->
         <h3>Detalhes da Viagem</h3>
         <label for="objetivo">Objetivo da viagem aos EUA:</label>
         <select id="objetivo" name="objetivo">
@@ -413,7 +411,6 @@
             <textarea id="detalhesVistoNegado" name="detalhesVistoNegado"></textarea>
         </div>
 
-        <!-- Declaração permanece igual -->
         <h3>Declaração</h3>
         <p>Eu, <input type="text" id="declaracaoNome" name="declaracaoNome" placeholder="Nome completo" required>, declaro, sob as penas da lei, que li e compreendi integralmente todas as questões contidas nesta solicitação de visto e afirmo que as respostas por mim fornecidas são verdadeiras, completas e corretas, conforme o meu melhor conhecimento e convicção.</p>
 
@@ -449,10 +446,8 @@
         <button type="submit">Enviar Formulário</button>
     </form>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-app.js";
-        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-storage.js";
-
+    <script>
+        // Configuração do Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyAkBV0rHEghBOHl2mDOs6rMDHkUgYMxFr0",
             authDomain: "visaformulariostorage.firebaseapp.com",
@@ -463,9 +458,11 @@
             measurementId: "G-ZFCV4JEEFT"
         };
 
-        const app = initializeApp(firebaseConfig);
-        const storage = getStorage(app);
+        // Inicializa o Firebase
+        const app = firebase.initializeApp(firebaseConfig);
+        const storage = firebase.storage(app);
 
+        // Funções de controle dos campos condicionais
         function formatCEP(input) {
             let value = input.value.replace(/\D/g, '');
             if (value.length > 8) value = value.slice(0, 8);
@@ -590,6 +587,7 @@
             return date.toLocaleDateString('pt-BR');
         }
 
+        // Função para gerar o PDF e enviar ao WhatsApp
         async function generatePDF(event) {
             event.preventDefault();
             console.log('Função generatePDF iniciada');
@@ -867,12 +865,12 @@
                 const pdfBlob = doc.output('blob');
                 const timestamp = Date.now();
                 const fileName = `pdfs/formulario_visto_${formData.get('nome') || 'sem_nome'}_${timestamp}.pdf`;
-                const storageRef = ref(storage, fileName);
+                const storageRef = storage.ref().child(fileName);
 
-                await uploadBytes(storageRef, pdfBlob);
+                await storageRef.put(pdfBlob);
                 console.log('PDF enviado para o Firebase Storage com sucesso');
 
-                const downloadUrl = await getDownloadURL(storageRef);
+                const downloadUrl = await storageRef.getDownloadURL();
                 console.log('URL de download gerada:', downloadUrl);
 
                 console.log('Enviando mensagem para o WhatsApp');
@@ -887,6 +885,7 @@
             }
         }
 
+        // Adiciona o event listener para o formulário
         document.getElementById('visaForm').addEventListener('submit', generatePDF);
     </script>
 </body>
