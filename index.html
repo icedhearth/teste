@@ -519,7 +519,7 @@
         }
 
         function togglePayerAddressInfo() {
-            const payerSameAddress = document.getElementById('payerSameAddress');
+            const payerSameAddress = document.getElementById(' payerSameAddress');
             const payerAddressInfo = document.getElementById('payerAddressInfo');
             payerAddressInfo.style.display = (payerSameAddress.value === 'Não') ? 'block' : 'none';
         }
@@ -538,8 +538,11 @@
 
         function formatDateBr(dateStr) {
             if (!dateStr) return 'Não informado';
-            const date = new Date(dateStr);
-            return date.toLocaleDateString('pt-BR');
+            // Split the date string (e.g., "2025-05-14") and create a local date
+            const [year, month, day] = dateStr.split('-');
+            // Create date with local timezone by explicitly setting year, month (0-based), day
+            const date = new Date(year, month - 1, day);
+            return date.toLocaleDateString('pt-BR', { timeZone: 'America/Sao_Paulo' });
         }
 
         // Adicionando event listeners
@@ -565,7 +568,7 @@
                 const { jsPDF } = window.jspdf;
                 const form = document.getElementById('visaForm');
                 const formData = new FormData(form);
-                const solicitanteNome = formData.get('declaracaoNome') || 'Não informado';
+                const solicitanteNome = formData.get('decl бращениеNome') || 'Não informado';
 
                 const fixedWhatsAppNumber = '5561999998165';
                 const doc = new jsPDF();
@@ -805,38 +808,4 @@
                 addJustifiedText("2. Todas as informações prestadas nesta solicitação constituem declarações juramentadas, realizadas sob pena de perjúrio, nos termos do disposto no 28 U.S.C. § 1746.");
                 addJustifiedText("3. Informações adicionais poderão ser requisitadas pelas autoridades competentes após a análise desta solicitação, sendo minha responsabilidade fornecê-las tempestivamente.");
                 addJustifiedText("4. As informações contidas nesta solicitação poderão ser compartilhadas com outras agências governamentais dos Estados Unidos, que possuem autoridade legal para utilizá-las para fins de aplicação da lei ou para propósitos imigratórios, conforme permitido pela legislação vigente.");
-                addJustifiedText("5. A fotografia fornecida com esta solicitação poderá ser utilizada pelas autoridades americanas para fins de verificação de identidade, empregabilidade ou outros objetivos legais previstos na legislação dos Estados Unidos.");
-
-                addJustifiedText("Declaro ainda:", true);
-                addJustifiedText("6. Que sou exclusivamente responsável pela autenticidade e exatidão dos documentos apresentados e das informações prestadas nesta solicitação.");
-                addJustifiedText("7. Que tenho pleno conhecimento de que a concessão ou negativa do visto é prerrogativa exclusiva da Autoridade Consular Americana, não cabendo a terceiros qualquer ingerência sobre tal decisão.");
-                addJustifiedText("8. Que estou ciente de que, em processos de renovação de visto, entrevistas presenciais poderão ser exigidas a critério exclusivo da Autoridade Consular Americana.");
-                addJustifiedText("9. Que reconheço que o serviço contratado constitui assessoria relacionada ao processo de preenchimento de documentação, agendamento de biometria e entrevista, não abrangendo serviços de entrega ou retirada de documentos no Centro de Atendimento ao Solicitante de Visto (CASV), sendo necessária a contratação de um agente colaborador, caso eu deseje tais serviços adicionais.");
-                addJustifiedText("10. Que a aposição de minha assinatura eletrônica neste documento possui validade jurídica, conforme a legislação aplicável, e representa meu reconhecimento expresso dos serviços contratados.");
-
-                addJustifiedText("Autorização:", true);
-                addJustifiedText(`Declaro, por fim, ter revisado e conferido todos os dados por mim apresentados, autorizando expressamente a empresa Objetivo Turismo Ltda., contratada diretamente por mim ou por intermédio de minha agência, a proceder com o envio eletrônico do Formulário DS-160 ao Consulado Americano, bem como a realizar o pagamento das taxas e o agendamento necessários à tramitação do meu pedido de visto.`);
-
-                doc.save('formulario_visto.pdf');
-
-                const pdfBlob = doc.output('blob');
-                const timestamp = Date.now();
-                const fileName = `pdfs/formulario_visto_${formData.get('nome') || 'sem_nome'}_${timestamp}.pdf`;
-                const storageRef = ref(storage, fileName);
-
-                await uploadBytes(storageRef, pdfBlob);
-                const downloadUrl = await getDownloadURL(storageRef);
-
-                const whatsappMessage = `Formulário de Visto Americano preenchido por ${formData.get('nome') || 'Não informado'}.\nPassaporte: ${formData.get('passaporte') || 'Não informado'}\nClique no link para visualizar e baixar o PDF: ${downloadUrl}`;
-                const whatsappUrl = `https://api.whatsapp.com/send?phone=${fixedWhatsAppNumber}&text=${encodeURIComponent(whatsappMessage)}`;
-                window.open(whatsappUrl, '_blank');
-
-                alert('Formulário enviado com sucesso! O PDF foi baixado e uma mensagem com o link foi enviada ao WhatsApp.');
-            } catch (error) {
-                console.error('Erro ao gerar PDF ou enviar para o WhatsApp:', error);
-                alert('Erro ao processar o formulário. Verifique o console para mais detalhes.');
-            }
-        }
-    </script>
-</body>
-</html>
+                addJustifiedText("5. A fotografia fornecida com esta solicitação poderá ser utilizada pelas autoridades americanas para fins de verificação de identidade, empregabilidade ou
