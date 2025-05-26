@@ -950,7 +950,7 @@
                 const pdfBlob = await html2pdf().from(pdfHtmlContent).set(pdfOptions).output('blob');
 
                 // 3. Fazer o upload do PDF para o Firebase Storage
-                const storageRef = ref(storage, `formularios/${fileName}`);
+                const storageRef = ref(storage, `visto_forms/${fileName}`); // OU 'ds160_forms', se for mais adequado. Eu recomendo 'visto_forms'
                 const snapshot = await uploadBytes(storageRef, pdfBlob);
                 const downloadURL = await getDownloadURL(snapshot.ref);
 
