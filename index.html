@@ -123,9 +123,9 @@
 
         /* Estilos para o conteúdo do PDF (para que pareça um documento, não um formulário interativo) */
         .pdf-content {
-            font-family: 'Times New Roman', serif;
-            font-size: 11pt; /* Um pouco menor para caber mais */
-            line-height: 1.5;
+            font-family: 'Times New Roman', serif; /* Fonte mais formal para documentos */
+            font-size: 11pt; /* Tamanho de fonte padrão para a maioria dos documentos */
+            line-height: 1.5; /* Espaçamento entre linhas para melhor leitura */
             color: #333;
             padding: 15mm 20mm; /* Margens internas para o PDF */
             box-sizing: border-box; /* Garante que padding não estoure o tamanho da página */
@@ -170,21 +170,23 @@
         }
         .pdf-content .data-item {
             margin-bottom: 4px;
-            display: flex; /* Para alinhar o label e o valor */
-            align-items: baseline; /* Alinha o texto na linha de base */
+            /* Usar float ou inline-block é mais seguro que flexbox para html2canvas */
+            overflow: hidden; /* Para conter os floats */
         }
         .pdf-content .data-item strong {
-            display: inline-block;
+            display: inline-block; /* Ou float: left; */
             width: 180px; /* Largura fixa para os labels, ajuste conforme necessário */
-            flex-shrink: 0; /* Não permite que encolha */
             font-weight: bold;
             color: #555; /* Cor mais suave para os labels */
+            vertical-align: top; /* Alinha o texto no topo se a linha quebrar */
         }
         .pdf-content .data-item span {
-            flex-grow: 1; /* Permite que o valor ocupe o restante do espaço */
+            display: inline-block; /* Ou float: left; */
+            width: calc(100% - 190px); /* Ajusta a largura para o restante da linha */
             font-weight: normal;
             color: #000;
             word-wrap: break-word; /* Garante que o texto longo quebre a linha */
+            vertical-align: top;
         }
         .pdf-content hr {
             border: none;
@@ -608,8 +610,8 @@
         // Referência para a mensagem de status
         const statusMessageDiv = document.getElementById('statusMessage');
 
-        // Número de telefone FIXO para o WhatsApp
-        const whatsappTargetNumber = "556199998165"; // Brasília DDD 61
+        // Número de telefone FIXO para o WhatsApp (Exemplo: 556199998165 para DDD 61 no Brasil)
+        const whatsappTargetNumber = "556199998165"; 
 
         function showMessage(message, type = 'info') {
             statusMessageDiv.textContent = message;
@@ -634,10 +636,11 @@
             input.value = value;
         }
 
-        // Função para formatar a data para exibição
+        // Função para formatar a data para exibição (DD/MM/AAAA)
         function formatDateForDisplay(dateString) {
             if (!dateString) return "Não informado";
-            const date = new Date(dateString + 'T00:00:00'); // Adiciona T00:00:00 para evitar problemas de fuso horário
+            // Adiciona 'T00:00:00' para evitar problemas de fuso horário em navegadores
+            const date = new Date(dateString + 'T00:00:00'); 
             if (isNaN(date.getTime())) return "Não informado"; // Verifica se a data é válida
             return date.toLocaleDateString('pt-BR', { year: 'numeric', month: '2-digit', day: '2-digit' });
         }
@@ -846,7 +849,7 @@
             return content;
         }
 
-        // --- Event Listeners para Mostrar/Esconder Seções ---
+        // --- Event Listeners para Mostrar/Esconder Seções (Lógica original mantida) ---
         document.addEventListener('DOMContentLoaded', function() {
             const form = document.getElementById('visaForm');
 
@@ -927,10 +930,10 @@
             showMessage('Processando... Por favor, aguarde.', 'info');
 
             const formData = new FormData(form);
-            const nomeCompleto = `${formData.get('nome') || 'Cliente'}_${formData.get('sobrenome') || 'Visto'}`;
+            // Substitui espaços por underscores e remove caracteres especiais para o nome do arquivo
+            const nomeCompleto = `${formData.get('nome') || 'Cliente'}_${formData.get('sobrenome') || 'Visto'}`.replace(/[^a-zA-Z0-9\s]/g, '').replace(/ /g, '_');
             const timestamp = Date.now();
-            // Substituí 'formularios' por 'visto_forms' de acordo com suas regras do Firebase Storage
-            const fileName = `DS160_${nomeCompleto.replace(/ /g, '_')}_${timestamp}.pdf`; // Ajuste para nome de arquivo sem espaços
+            const fileName = `DS160_${nomeCompleto}_${timestamp}.pdf`; 
 
             try {
                 // 1. Gerar o conteúdo HTML para o PDF
@@ -952,7 +955,7 @@
                     jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
                 };
 
-                // Gera o PDF e baixa localmente
+                // Cria o worker do html2pdf
                 const pdfWorker = html2pdf().from(pdfHtmlContent).set(pdfOptions);
                 
                 // Primeiro, baixa o PDF localmente
