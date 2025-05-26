@@ -83,7 +83,7 @@
         }
         /* Estilos para as seções condicionais */
         #spouseInfo, #spouseDeathInfo, #parentsInfo, #previousUSVisaInfo, #travelCompanionsInfo, #visaDeniedDetails, #payerInfo, #payerAddressInfo, #renewalInfo, #parentsInUSInfo, #acquaintancesInfo {
-            display: none;
+            display: none; /* COMEÇAM OCULTOS */
             margin-top: 20px;
             padding: 20px;
             border: 1px dashed #a0a0a0; /* Borda tracejada para destacar */
@@ -846,7 +846,7 @@
 
             content += `
                     <h3>Declaração</h3>
-                    <p class="declaration-text">Eu, <strong>${getVal('declaracaoNome', v => v.toUpperCase())}</strong>, declaro, sob as penas da lei, que li e compreendi integralmente todas as questões contidas nesta solicitação de visto e afirmo que as respostas por mim fornecidas são verdadeiras, completas e corretas, conforme o meu melhor conhecimento e convicção.</p>
+                    <p class="declaration-text">Eu, <input type="text" id="declaracaoNome" name="declaracaoNome" placeholder="Nome completo" required>, declaro, sob as penas da lei, que li e compreendi integralmente todas as questões contidas nesta solicitação de visto e afirmo que as respostas por mim fornecidas são verdadeiras, completas e corretas, conforme o meu melhor conhecimento e convicção.</p>
 
                     <p class="declaration-text"><strong>Declaro estar ciente de:</strong></p>
                     <ol>
@@ -880,11 +880,11 @@
             return content;
         }
 
-        // --- Resto do JavaScript (mesmo do arquivo anterior, com as funções de exibição de campo) ---
-        // --- Event Listeners para Mostrar/Esconder Seções (Lógica original mantida) ---
+        // --- Event Listeners para Mostrar/Esconder Seções (Lógica restaurada) ---
         document.addEventListener('DOMContentLoaded', function() {
             const form = document.getElementById('visaForm');
 
+            // Função helper para alternar a visibilidade de uma seção
             function toggleVisibility(selectId, targetId, valuesToShow) {
                 const selectElement = document.getElementById(selectId);
                 const targetElement = document.getElementById(targetId);
@@ -906,10 +906,10 @@
                 }
 
                 selectElement.addEventListener('change', updateVisibility);
-                updateVisibility(); // Call on load to set initial state
+                updateVisibility(); // Chama na carga para definir o estado inicial
             }
 
-            // Pessoal
+            // Pessoal - Estado Civil
             toggleVisibility('estadoCivil', 'spouseInfo', ['Casado', 'Divorciado', 'Viúvo', 'União Estável']);
             document.getElementById('estadoCivil').addEventListener('change', function() {
                 const spouseDeathInfo = document.getElementById('spouseDeathInfo');
@@ -917,20 +917,24 @@
                     spouseDeathInfo.style.display = 'block';
                 } else {
                     spouseDeathInfo.style.display = 'none';
-                    document.getElementById('spouseFalecimento').value = '';
+                    document.getElementById('spouseFalecimento').value = ''; // Limpa o campo
                 }
             });
+
             // Familiar
             toggleVisibility('temPaisVivos', 'parentsInfo', ['Sim']);
             toggleVisibility('paisNosEUA', 'parentsInUSInfo', ['Sim']);
             toggleVisibility('temConhecidosEUA', 'acquaintancesInfo', ['Sim']);
+
             // Viagem
             toggleVisibility('quemPaga', 'payerInfo', ['Outra pessoa']);
             toggleVisibility('payerSameAddress', 'payerAddressInfo', ['Não']);
-            toggleVisibility('temCompanheiros', 'travelCompanionsInfo', ['Sim');
+            toggleVisibility('temCompanheiros', 'travelCompanionsInfo', ['Sim']);
+
             // Histórico
             toggleVisibility('primeiroVisto', 'renewalInfo', ['Renovação']);
             toggleVisibility('visitouEUA', 'previousUSVisaInfo', ['Sim']);
+            
             // A seção de detalhes de visto negado/entrada recusada deve ser exibida se *qualquer um* for 'Sim'
             const vistoNegadoSelect = document.getElementById('vistoNegado');
             const entradaRecusadaSelect = document.getElementById('entradaRecusada');
