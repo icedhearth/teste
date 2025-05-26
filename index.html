@@ -141,10 +141,10 @@
             background-color: #f9f9f9;
             border: 1px dashed #ddd;
             border-radius: 8px;
-            padding: 20px;
-            margin-top: 20px;
+            padding: 0 20px; /* Inicialmente padding vertical 0 para transição suave */
+            margin-top: 0; /* Inicialmente margin-top 0 para transição suave */
             transition: all 0.4s ease-in-out; /* Transição suave */
-            overflow: hidden; /* Garante que a transição de altura funcione bem */
+            overflow: hidden; /* Importante para que max-height funcione */
             max-height: 0;
             opacity: 0;
             visibility: hidden;
@@ -154,8 +154,8 @@
             max-height: 1000px; /* Valor grande o suficiente para a altura máxima */
             opacity: 1;
             visibility: visible;
-            padding: 20px; /* Garante que o padding volte */
-            margin-top: 20px; /* Garante que a margem volte */
+            padding: 20px; /* Retorna o padding normal */
+            margin-top: 20px; /* Retorna a margem normal */
         }
 
         /* Estilos para a declaração */
@@ -667,13 +667,14 @@
                 }
             };
 
-            selectElement.addEventListener('change', checkVisibility);
-            checkVisibility(); // Garante que o estado inicial esteja correto
+            // Adiciona um pequeno atraso para que as transições CSS funcionem corretamente ao carregar a página
+            setTimeout(checkVisibility, 50); // Atraso pequeno ao carregar
+            selectElement.addEventListener('change', checkVisibility); // Adiciona listener para mudanças futuras
         }
 
         // Adicionando event listeners para as funções de toggle
         document.addEventListener('DOMContentLoaded', () => {
-            toggleSection('estadoCivil', 'spouseInfo', 'Casado', ['Casado', 'Divorciado', 'Viúvo', 'União Estável']);
+            toggleSection('estadoCivil', 'spouseInfo', null, ['Casado', 'Divorciado', 'Viúvo', 'União Estável']);
             toggleSection('estadoCivil', 'spouseDeathInfo', 'Viúvo');
             toggleSection('temPaisVivos', 'parentsInfo', 'Sim');
             toggleSection('paisNosEUA', 'parentsInUSInfo', 'Sim');
@@ -683,7 +684,8 @@
             toggleSection('temCompanheiros', 'travelCompanionsInfo', 'Sim');
             toggleSection('primeiroVisto', 'renewalInfo', 'Renovação');
             toggleSection('visitouEUA', 'previousUSVisaInfo', 'Sim');
-            // Para visaDeniedDetails, ele deve aparecer se vistoNegado for 'Sim' OU entradaRecusada for 'Sim'
+            
+            // Lógica específica para vistoNegado/entradaRecusada (OU lógico)
             const vistoNegadoSelect = document.getElementById('vistoNegado');
             const entradaRecusadaSelect = document.getElementById('entradaRecusada');
             const visaDeniedDetailsDiv = document.getElementById('visaDeniedDetails');
@@ -694,16 +696,19 @@
                 } else {
                     visaDeniedDetailsDiv.classList.remove('section-visible');
                     visaDeniedDetailsDiv.querySelectorAll('input, textarea, select').forEach(input => {
-                        input.value = '';
+                        if (input.type === 'checkbox' || input.type === 'radio') {
+                            input.checked = false;
+                        } else {
+                            input.value = '';
+                        }
                     });
                 }
             };
 
+            setTimeout(updateVisaDeniedVisibility, 50); // Atraso pequeno ao carregar
             vistoNegadoSelect.addEventListener('change', updateVisaDeniedVisibility);
             entradaRecusadaSelect.addEventListener('change', updateVisaDeniedVisibility);
-            updateVisaDeniedVisibility(); // Estado inicial
-
-
+            
             document.getElementById('visaForm').addEventListener('submit', generatePDF);
         });
 
@@ -792,68 +797,45 @@
                     doc.setTextColor(0, 0, 0); /* Preto */
                     doc.setFontSize(10);
 
-                    // Expressão regular para encontrar texto entre asteriscos (para negrito)
-                    const parts = text.split(/(\*\*.*?\*\*)/g);
+                    // Divide o texto para processar negrito e itálico
+                    const parts = text.split(/(\*\*.*?\*\*|_.*?_)/g);
                     let currentX = margin;
 
                     for (let i = 0; i < parts.length; i++) {
                         let part = parts[i];
+                        let fontStyle = "normal";
+
                         if (part.startsWith('**') && part.endsWith('**')) {
-                            doc.setFont("Helvetica", "bold");
+                            fontStyle = "bold";
                             part = part.substring(2, part.length - 2); // Remove os asteriscos
                         } else if (part.startsWith('_') && part.endsWith('_')) {
-                            doc.setFont("Helvetica", "italic");
+                            fontStyle = "italic";
                             part = part.substring(1, part.length - 1); // Remove os underscores
                         }
-                        else {
-                            doc.setFont("Helvetica", "normal");
-                        }
+                        doc.setFont("Helvetica", fontStyle);
 
-                        const lines = doc.splitTextToSize(part, maxWidth - currentX + margin); // Ajusta maxWidth para a posição atual
+                        const words = part.trim().split(/\s+/);
+                        for (let j = 0; j < words.length; j++) {
+                            const word = words[j];
+                            const wordWidth = doc.getTextWidth(word);
 
-                        for (let j = 0; j < lines.length; j++) {
-                            // Quebra de página antes de adicionar texto se necessário
-                            if (yPosition + lineHeight > pageHeight - margin) {
-                                doc.addPage();
-                                yPosition = 30;
-                                drawHeader();
-                                drawPageBorder();
-                                currentX = margin; // Resetar X na nova página
-                            }
-
-                            // Verifica se é a primeira linha ou se precisa começar uma nova linha
-                            if (currentX === margin) {
-                                // Tentar justificar se não for a última linha ou se for uma linha cheia
-                                if (j < lines.length - 1 || doc.getTextWidth(lines[j]) > maxWidth * 0.8) {
-                                    const words = lines[j].trim().split(/\s+/);
-                                    const totalWordWidth = words.reduce((sum, word) => sum + doc.getTextWidth(word), 0);
-                                    if (words.length > 1) { // Só justifica se tiver mais de uma palavra
-                                        const spaceWidth = (maxWidth - totalWordWidth) / (words.length - 1);
-                                        let x = margin;
-                                        for (let k = 0; k < words.length; k++) {
-                                            doc.text(words[k], x, yPosition);
-                                            x += doc.getTextWidth(words[k]) + spaceWidth;
-                                        }
-                                    } else {
-                                        doc.text(lines[j], margin, yPosition);
-                                    }
-                                } else {
-                                    doc.text(lines[j], margin, yPosition);
-                                }
-                                currentX = margin + doc.getTextWidth(lines[j]) + 1; // Próxima posição após a linha
-                            } else {
-                                doc.text(lines[j], currentX, yPosition);
-                                currentX += doc.getTextWidth(lines[j]) + 1;
-                            }
-
-                            if (doc.getTextWidth(lines[j]) >= maxWidth - currentX + margin && j < lines.length -1) {
-                                // Se a linha preencheu o espaço disponível, mover para a próxima linha verticalmente
+                            // Verifica se a palavra cabe na linha atual
+                            if (currentX + wordWidth > pageWidth - margin) {
                                 yPosition += lineHeight;
                                 currentX = margin;
+                                // Quebra de página se necessário
+                                if (yPosition + lineHeight > pageHeight - margin) {
+                                    doc.addPage();
+                                    yPosition = 30;
+                                    drawHeader();
+                                    drawPageBorder();
+                                    currentX = margin;
+                                }
                             }
+
+                            doc.text(word, currentX, yPosition);
+                            currentX += wordWidth + doc.getTextWidth(' '); // Adiciona largura da palavra + espaço
                         }
-                        // Após cada parte, resetar para normal para que a próxima parte seja processada corretamente
-                        doc.setFont("Helvetica", "normal");
                     }
                     yPosition += lineHeight; // Espaçamento após o parágrafo
                 }
