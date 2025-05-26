@@ -634,11 +634,6 @@
             input.value = value;
         }
 
-        // Função para formatar números de telefone para WhatsApp (apenas números)
-        function formatPhoneNumberForWhatsApp(phone) {
-            return phone.replace(/\D/g, ''); // Remove todos os caracteres não numéricos
-        }
-
         // Função para formatar a data para exibição
         function formatDateForDisplay(dateString) {
             if (!dateString) return "Não informado";
@@ -663,7 +658,7 @@
                     <div class="data-item"><strong>Estado Civil:</strong> <span>${formData.get('estadoCivil') || 'Não informado'}</span></div>
             `;
 
-            if (formData.get('estadoCivil') === 'Casado' || formData.get('estadoCivil') === 'Divorciado' || formData.get('estadoCivil') === 'Viúvo' || formData.get('estadoCivil') === 'União Estável') {
+            if (['Casado', 'Divorciado', 'Viúvo', 'União Estável'].includes(formData.get('estadoCivil'))) {
                 content += `
                     <h4>Dados do Cônjuge</h4>
                     <div class="data-item"><strong>Nome do Cônjuge:</strong> <span>${formData.get('spouseNome') || 'Não informado'}</span></div>
@@ -932,34 +927,53 @@
             showMessage('Processando... Por favor, aguarde.', 'info');
 
             const formData = new FormData(form);
-            const fileName = `DS160_${formData.get('nome')}_${formData.get('sobrenome')}_${Date.now()}.pdf`;
+            const nomeCompleto = `${formData.get('nome') || 'Cliente'}_${formData.get('sobrenome') || 'Visto'}`;
+            const timestamp = Date.now();
+            // Substituí 'formularios' por 'visto_forms' de acordo com suas regras do Firebase Storage
+            const fileName = `DS160_${nomeCompleto.replace(/ /g, '_')}_${timestamp}.pdf`; // Ajuste para nome de arquivo sem espaços
 
             try {
                 // 1. Gerar o conteúdo HTML para o PDF
                 const pdfHtmlContent = generatePdfContent(formData);
+                console.log("HTML gerado para o PDF:", pdfHtmlContent); // Para depuração
 
                 // 2. Gerar o PDF a partir do HTML
                 const pdfOptions = {
                     margin: [15, 20, 15, 20], // Top, Left, Bottom, Right em mm
                     filename: fileName,
                     image: { type: 'jpeg', quality: 0.98 },
-                    html2canvas: { scale: 2, logging: true, dpi: 192, letterRendering: true },
+                    html2canvas: { 
+                        scale: 2, 
+                        logging: true, // Habilita logs para html2canvas
+                        dpi: 192, 
+                        letterRendering: true,
+                        useCORS: true // Importante se tiver imagens de outras origens
+                    },
                     jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
                 };
 
-                const pdfBlob = await html2pdf().from(pdfHtmlContent).set(pdfOptions).output('blob');
+                // Gera o PDF e baixa localmente
+                const pdfWorker = html2pdf().from(pdfHtmlContent).set(pdfOptions);
+                
+                // Primeiro, baixa o PDF localmente
+                await pdfWorker.save();
+                showMessage('PDF gerado e baixado localmente com sucesso! Enviando para o armazenamento...', 'info');
 
+                // Em seguida, obtém o blob para upload
+                const pdfBlob = await pdfWorker.output('blob');
+                
                 // 3. Fazer o upload do PDF para o Firebase Storage
-                const storageRef = ref(storage, `visto_forms/${fileName}`); // OU 'ds160_forms', se for mais adequado. Eu recomendo 'visto_forms'
+                // Usando 'visto_forms' conforme as regras do seu Firebase Storage
+                const storageRef = ref(storage, `visto_forms/${fileName}`); 
                 const snapshot = await uploadBytes(storageRef, pdfBlob);
                 const downloadURL = await getDownloadURL(snapshot.ref);
+                console.log("PDF uploaded to:", downloadURL); // Para depuração
 
                 showMessage('PDF gerado e enviado para o armazenamento com sucesso! Preparando mensagem do WhatsApp...', 'success');
 
                 // 4. Preparar e enviar a mensagem do WhatsApp para o número FIXO
-                const nomeCompleto = `${formData.get('nome')} ${formData.get('sobrenome')}`;
                 const mensagemWhatsApp = encodeURIComponent(
-                    `Olá! O formulário de visto americano de ${nomeCompleto} foi preenchido com sucesso e o PDF já está disponível para download. \n\nLink do PDF: ${downloadURL}`
+                    `Olá! O formulário de visto americano de ${formData.get('nome') || 'Cliente'} ${formData.get('sobrenome') || ''} foi preenchido com sucesso e o PDF já está disponível para download. \n\nLink do PDF: ${downloadURL}`
                 );
 
                 const whatsappUrl = `https://api.whatsapp.com/send?phone=${whatsappTargetNumber}&text=${mensagemWhatsApp}`;
@@ -971,7 +985,7 @@
 
             } catch (error) {
                 console.error("Erro completo:", error);
-                showMessage(`Ocorreu um erro ao processar o formulário: ${error.message}. Por favor, tente novamente.`, 'error');
+                showMessage(`Ocorreu um erro ao processar o formulário: ${error.message}. Por favor, tente novamente. Verifique o console do navegador para mais detalhes.`, 'error');
             } finally {
                 this.disabled = false; // Reabilita o botão
             }
