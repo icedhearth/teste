@@ -392,7 +392,7 @@
 
         <label for="servicoMilitar">8. Você serviu em qualquer força militar ou paramilitar?</label>
         <select id="servicoMilitar" name="servicoMilitar" required>
-            <option value="">Selecione</lastoption>
+            <option value="">Selecione</option>
             <option value="Sim">Sim</option>
             <option value="Não">Não</option>
         </select>
@@ -465,7 +465,7 @@
         const storage = getStorage(app);
         // const analytics = getAnalytics(app); // Opcional, remova se não usar Analytics
 
-        // --- Funções de Formatação de CPF e CEP (como no seu código original) ---
+        // --- Funções de Formatação de CPF e CEP ---
         window.formatCPF = function(input) {
             let value = input.value.replace(/\D/g, ''); // Remove tudo que não é dígito
             if (value.length > 11) value = value.substring(0, 11);
@@ -488,7 +488,7 @@
             input.value = value;
         }
 
-        // --- Funções Auxiliares (mantidas para o formulário HTML) ---
+        // --- Funções Auxiliares para o Comportamento do FORMULÁRIO HTML ---
         function formatDateBr(dateStr) {
             if (!dateStr) return 'Não informado';
             try {
@@ -511,7 +511,7 @@
             }
         }
 
-        // --- Event Listeners para Campos Condicionais (mantidos para o formulário HTML) ---
+        // --- Event Listeners para Campos Condicionais (MANTIDOS EXATAMENTE COMO VOCÊ OS TINHA) ---
         document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('propositoViagem').addEventListener('change', () => toggleConditionalField('propositoViagem', 'outrosPropositos', 'Outro'));
             document.getElementById('jaVisitouEUA').addEventListener('change', () => toggleConditionalField('jaVisitouEUA', 'visitasAnteriores'));
@@ -521,7 +521,7 @@
                 document.getElementById('infoConjuge').style.display = (estadoCivil === 'Casado(a)' || estadoCivil === 'União Estável') ? 'block' : 'none';
             });
 
-            // Segurança e Antecedentes
+            // Segurança e Antecedentes (MANTIDOS EXATAMENTE COMO VOCÊ OS TINHA)
             document.getElementById('doencaContagiosa').addEventListener('change', () => toggleConditionalField('doencaContagiosa', 'doencaContagiosaDetails'));
             document.getElementById('condenacaoCriminal').addEventListener('change', () => toggleConditionalField('condenacaoCriminal', 'condenacaoCriminalDetails'));
             document.getElementById('traficoDrogas').addEventListener('change', () => toggleConditionalField('traficoDrogas', 'traficoDrogasDetails'));
@@ -533,7 +533,7 @@
             document.getElementById('sequestroInfantil').addEventListener('change', () => toggleConditionalField('sequestroInfantil', 'sequestroInfantilDetails'));
             document.getElementById('fraudeVisto').addEventListener('change', () => toggleConditionalField('fraudeVisto', 'fraudeVistoDetails'));
 
-            // Inicializar o estado dos campos condicionais no carregamento
+            // Inicializar o estado dos campos condicionais no carregamento (MANTIDOS EXATAMENTE COMO VOCÊ OS TINHA)
             toggleConditionalField('propositoViagem', 'outrosPropositos', 'Outro');
             toggleConditionalField('jaVisitouEUA', 'visitasAnteriores');
             toggleConditionalField('vistoNegado', 'vistoNegadoDetails');
@@ -579,7 +579,7 @@
                 const lineHeight = 5;
                 const sectionSpacing = 7; // Espaço extra após cada seção
 
-                // --- Funções de Desenho para o PDF ---
+                // --- Funções de Desenho para o PDF (APENAS AQUI HÁ MUDANÇAS NO LAYOUT) ---
                 function drawHeader() {
                     doc.setFillColor(0, 48, 135); // Azul escuro
                     doc.rect(0, 0, pageWidth, 25, 'F');
@@ -645,7 +645,7 @@
                             yPosition += lineHeight;
                             for (let i = 1; i < valueLines.length; i++) {
                                 addNewPageIfNeeded();
-                                doc.text(valueLines[i], margin, yPosition);
+                                doc.text(valueLines[i], margin + labelWidth, yPosition); // Continuação do valor alinhada
                                 yPosition += lineHeight;
                             }
                         } else {
@@ -665,7 +665,7 @@
                             });
                         }
                     } else {
-                        // Apenas texto normal (usado para parágrafos da declaração)
+                        // Apenas texto normal (usado para parágrafos da declaração ou detalhes de explicação)
                         const lines = doc.splitTextToSize(String(value), maxWidth);
                         lines.forEach(line => {
                             addNewPageIfNeeded();
@@ -689,7 +689,7 @@
                     addSpacer();
                 }
 
-                // --- Geração do Conteúdo do PDF ---
+                // --- Geração do Conteúdo do PDF (USANDO OS DADOS DO FORMULÁRIO ORIGINAL) ---
                 drawHeader();
                 drawPageBorder();
 
@@ -754,7 +754,7 @@
                 addText("Outros Empregos/Ocupações (Últimos 5 Anos)", formData.get('historicoEmprego') || 'Nenhum');
                 addHorizontalLine();
 
-                // Informações de Educação (RE-ADICIONADO)
+                // Informações de Educação (AGORA PEGA OS DADOS DO FORMULÁRIO ORIGINAL)
                 addSectionTitle("Informações de Educação");
                 addText("Nome da Última Escola/Universidade", formData.get('ultimaEscola') || 'Não informado');
                 addText("Grau de Formação", formData.get('formacao') || 'Não informado');
@@ -776,47 +776,47 @@
                 addText("Nacionalidade da Mãe", formData.get('nacionalidadeMae'));
                 addHorizontalLine();
 
-                // Perguntas de Segurança e Antecedentes (RE-ADICIONADO COM DETALHES)
+                // Perguntas de Segurança e Antecedentes (AGORA PEGA OS DETALHES DO FORMULÁRIO ORIGINAL)
                 addSectionTitle("Perguntas de Segurança e Antecedentes");
-                addText("1. Possui alguma doença contagiosa de saúde pública ou transtorno físico ou mental grave?", formData.get('doencaContagiosa'));
-                if (formData.get('doencaContagiosa') === 'Sim') {
-                    addText("   Explicação:", formData.get('doencaContagiosaExplicacao'));
+                addText("1. Você possui alguma doença contagiosa de saúde pública ou transtorno físico ou mental grave?", formData.get('doencaContagiosa'));
+                if (formData.get('doencaContagiosa') === 'Sim' && formData.get('doencaContagiosaExplicacao')) {
+                    addText("   Explicação:", formData.get('doencaContagiosaExplicacao'), false); // Usar false para formatar como parágrafo
                 }
                 addText("2. Você já foi condenado(a) por qualquer crime?", formData.get('condenacaoCriminal'));
-                if (formData.get('condenacaoCriminal') === 'Sim') {
-                    addText("   Explicação:", formData.get('condenacaoCriminalExplicacao'));
+                if (formData.get('condenacaoCriminal') === 'Sim' && formData.get('condenacaoCriminalExplicacao')) {
+                    addText("   Explicação:", formData.get('condenacaoCriminalExplicacao'), false);
                 }
                 addText("3. Você esteve envolvido(a) em tráfico de drogas?", formData.get('traficoDrogas'));
-                if (formData.get('traficoDrogas') === 'Sim') {
-                    addText("   Explicação:", formData.get('traficoDrogasExplicacao'));
+                if (formData.get('traficoDrogas') === 'Sim' && formData.get('traficoDrogasExplicacao')) {
+                    addText("   Explicação:", formData.get('traficoDrogasExplicacao'), false);
                 }
                 addText("4. Você esteve envolvido(a) em lavagem de dinheiro?", formData.get('lavagemDinheiro'));
-                if (formData.get('lavagemDinheiro') === 'Sim') {
-                    addText("   Explicação:", formData.get('lavagemDinheiroExplicacao'));
+                if (formData.get('lavagemDinheiro') === 'Sim' && formData.get('lavagemDinheiroExplicacao')) {
+                    addText("   Explicação:", formData.get('lavagemDinheiroExplicacao'), false);
                 }
                 addText("5. Você já se envolveu ou pretende se envolver em atividades terroristas?", formData.get('terrorismo'));
-                if (formData.get('terrorismo') === 'Sim') {
-                    addText("   Explicação:", formData.get('terrorismoExplicacao'));
+                if (formData.get('terrorismo') === 'Sim' && formData.get('terrorismoExplicacao')) {
+                    addText("   Explicação:", formData.get('terrorismoExplicacao'), false);
                 }
                 addText("6. Você esteve envolvido(a) em genocídio ou outras atrocidades?", formData.get('genocidio'));
-                if (formData.get('genocidio') === 'Sim') {
-                    addText("   Explicação:", formData.get('genocidioExplicacao'));
+                if (formData.get('genocidio') === 'Sim' && formData.get('genocidioExplicacao')) {
+                    addText("   Explicação:", formData.get('genocidioExplicacao'), false);
                 }
                 addText("7. Você já cometeu ou instigou a cometer tortura ou violação de direitos humanos?", formData.get('violacaoDireitosHumanos'));
-                if (formData.get('violacaoDireitosHumanos') === 'Sim') {
-                    addText("   Explicação:", formData.get('violacaoDireitosHumanosExplicacao'));
+                if (formData.get('violacaoDireitosHumanos') === 'Sim' && formData.get('violacaoDireitosHumanosExplicacao')) {
+                    addText("   Explicação:", formData.get('violacaoDireitosHumanosExplicacao'), false);
                 }
                 addText("8. Você serviu em qualquer força militar ou paramilitar?", formData.get('servicoMilitar'));
-                if (formData.get('servicoMilitar') === 'Sim') {
-                    addText("   Explicação:", formData.get('servicoMilitarExplicacao'));
+                if (formData.get('servicoMilitar') === 'Sim' && formData.get('servicoMilitarExplicacao')) {
+                    addText("   Explicação:", formData.get('servicoMilitarExplicacao'), false);
                 }
                 addText("9. Você já esteve envolvido(a) em sequestro infantil?", formData.get('sequestroInfantil'));
-                if (formData.get('sequestroInfantil') === 'Sim') {
-                    addText("   Explicação:", formData.get('sequestroInfantilExplicacao'));
+                if (formData.get('sequestroInfantil') === 'Sim' && formData.get('sequestroInfantilExplicacao')) {
+                    addText("   Explicação:", formData.get('sequestroInfantilExplicacao'), false);
                 }
                 addText("10. Você já tentou obter visto para os EUA por fraude ou deturpando fatos?", formData.get('fraudeVisto'));
-                if (formData.get('fraudeVisto') === 'Sim') {
-                    addText("   Explicação:", formData.get('fraudeVistoExplicacao'));
+                if (formData.get('fraudeVisto') === 'Sim' && formData.get('fraudeVistoExplicacao')) {
+                    addText("   Explicação:", formData.get('fraudeVistoExplicacao'), false);
                 }
                 addHorizontalLine();
 
