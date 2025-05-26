@@ -240,7 +240,7 @@
                 <option value="">Selecione</option>
                 <option value="Solteiro">Solteiro</option>
                 <option value="Casado">Casado</option>
-                <option value="Divorciado">Divorciado</option>
+                <option value="Divorciado">Divorciado</                option>
                 <option value="Viúvo">Viúvo</option>
                 <option value="União Estável">União Estável</option>
             </select>
@@ -674,15 +674,25 @@
 
         // Adicionando event listeners para as funções de toggle
         document.addEventListener('DOMContentLoaded', () => {
+            // Estado Civil -> Informações do Cônjuge
             toggleSection('estadoCivil', 'spouseInfo', null, ['Casado', 'Divorciado', 'Viúvo', 'União Estável']);
+            // Estado Civil (Viúvo) -> Data de falecimento do Cônjuge
             toggleSection('estadoCivil', 'spouseDeathInfo', 'Viúvo');
+            // Pais Vivos -> Informações dos Pais
             toggleSection('temPaisVivos', 'parentsInfo', 'Sim');
+            // Pais nos EUA -> Explicação Pais nos EUA
             toggleSection('paisNosEUA', 'parentsInUSInfo', 'Sim');
+            // Tem Conhecidos nos EUA -> Dados do Conhecido
             toggleSection('temConhecidosEUA', 'acquaintancesInfo', 'Sim');
+            // Quem Paga -> Dados da Pessoa Pagante
             toggleSection('quemPaga', 'payerInfo', 'Outra pessoa');
+            // Endereço Pagante -> Endereço completo do Pagante
             toggleSection('payerSameAddress', 'payerAddressInfo', 'Não');
+            // Tem Companheiros -> Nome e Relação dos Companheiros
             toggleSection('temCompanheiros', 'travelCompanionsInfo', 'Sim');
+            // Primeiro Visto ou Renovação -> Informações de Renovação
             toggleSection('primeiroVisto', 'renewalInfo', 'Renovação');
+            // Já Visitou EUA -> Informações da Última Visita
             toggleSection('visitouEUA', 'previousUSVisaInfo', 'Sim');
             
             // Lógica específica para vistoNegado/entradaRecusada (OU lógico)
@@ -695,12 +705,15 @@
                     visaDeniedDetailsDiv.classList.add('section-visible');
                 } else {
                     visaDeniedDetailsDiv.classList.remove('section-visible');
+                    // Limpar campos quando a seção é ocultada
                     visaDeniedDetailsDiv.querySelectorAll('input, textarea, select').forEach(input => {
                         if (input.type === 'checkbox' || input.type === 'radio') {
                             input.checked = false;
                         } else {
                             input.value = '';
                         }
+                        input.dispatchEvent(new Event('change')); // Disparar para garantir que dependências reajam
+                        input.dispatchEvent(new Event('input'));
                     });
                 }
             };
@@ -855,7 +868,7 @@
                 addText(`Estado Civil: ${formData.get('estadoCivil') || 'Não informado'}`);
 
                 const estadoCivil = formData.get('estadoCivil');
-                if (estadoCivil === 'Casado' || estadoCivil === 'Divorciado' || estadoCivil === 'Viúvo' || estadoCivil === 'União Estável') {
+                if (['Casado', 'Divorciado', 'Viúvo', 'União Estável'].includes(estadoCivil)) {
                     addSectionTitle("Dados do Cônjuge");
                     addText(`Nome do Cônjuge: ${formData.get('spouseNome') || 'Não informado'}`);
                     addText(`Data de Nascimento do Cônjuge: ${formatDateBr(formData.get('spouseNascimento'))}`);
