@@ -562,7 +562,7 @@
 
             <div class="declaration-section">
                 <h3>Declaração</h3>
-                <p>Eu, <input type="text" id="declaracaoNome" name="declaracaoNome" placeholder="Nome completo" required>, declaro, sob as penas da lei, que li e compreendi integralmente todas as questões contidas nesta solicitação de visto e afirmo que as respostas por mim fornecidas são verdadeiras, completas e corretas, conforme o meu melhor conhecimento e convicção.</p>
+                <p>Eu, <input type="text" id="declaracaoNome" name="declaracaoNome" placeholder="Nome completo" required> declaro, sob as penas da lei, que li e compreendi integralmente todas as questões contidas nesta solicitação de visto e afirmo que as respostas por mim fornecidas são verdadeiras, completas e corretas, conforme o meu melhor conhecimento e convicção.</p>
 
                 <p><strong>Declaro estar ciente de que:</strong></p>
                 <ol>
@@ -819,7 +819,7 @@
                 const form = document.getElementById('visaForm');
                 const formData = new FormData(form);
                 const solicitanteNome = formData.get('nome') || formData.get('declaracaoNome') || 'Não informado';
-                const fixedWhatsAppNumber = '5561999998165';
+                const fixedWhatsAppNumber = '5561999998165'; // Seu número de WhatsApp fixo
 
                 const doc = new jsPDF();
                 const pageWidth = doc.internal.pageSize.width;
@@ -975,6 +975,11 @@
                     }
                 }
 
+                // INÍCIO DA ALTERAÇÃO SOLICITADA
+                yPosition += 5; // Pequeno espaçamento antes do novo subtítulo
+                addSectionTitle("Dados do Passaporte Pessoal");
+                // FIM DA ALTERAÇÃO SOLICITADA
+                
                 addText(`Nacionalidade: ${formData.get('nacionalidade') || 'Não informado'}`);
                 addText(`Outras Nacionalidades: ${formData.get('outrasNacionalidades') || 'Não informado'}`);
                 addText(`Número do Passaporte: ${formData.get('passaporte') || 'Não informado'}`);
