@@ -240,7 +240,7 @@
                 <option value="">Selecione</option>
                 <option value="Solteiro">Solteiro</option>
                 <option value="Casado">Casado</option>
-                <option value="Divorciado">Divorciado</                option>
+                <option value="Divorciado">Divorciado</option>
                 <option value="Viúvo">Viúvo</option>
                 <option value="União Estável">União Estável</option>
             </select>
@@ -613,33 +613,34 @@
 
         // Funções de formatação
         function formatCPF(input) {
-            let value = input.value.replace(/\D/g, ''); // Remove tudo que não é número
-            if (value.length > 11) value = value.slice(0, 11); // Limita a 11 dígitos
-            value = value.replace(/(\d{3})(\d)/, '$1.$2'); // Adiciona o primeiro ponto
-            value = value.replace(/(\d{3})(\d)/, '$1.$2'); // Adiciona o segundo ponto
-            value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2'); // Adiciona o traço
+            let value = input.value.replace(/\D/g, ''); // Remove tudo que não é número [cite: 54]
+            if (value.length > 11) value = value.slice(0, 11); // Limita a 11 dígitos [cite: 55]
+            value = value.replace(/(\d{3})(\d)/, '$1.$2'); // Adiciona o primeiro ponto [cite: 56]
+            value = value.replace(/(\d{3})(\d)/, '$1.$2'); // Adiciona o segundo ponto [cite: 57]
+            value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2'); // Adiciona o traço [cite: 58]
             input.value = value;
         }
 
         function formatCEP(input) {
             let value = input.value.replace(/\D/g, '');
-            if (value.length > 8) value = value.slice(0, 8);
+            if (value.length > 8) value = value.slice(0, 8); [cite: 61]
             if (value.length > 5) {
-                value = value.replace(/(\d{2})(\d{3})(\d{3})/, '$1.$2-$3');
+                value = value.replace(/(\d{2})(\d{3})(\d{3})/, '$1.$2-$3'); [cite: 61]
             } else if (value.length > 2) {
-                value = value.replace(/(\d{2})(\d+)/, '$1.$2');
+                value = value.replace(/(\d{2})(\d+)/, '$1.$2'); [cite: 62]
             }
             input.value = value;
         }
 
         function formatDateBr(dateStr) {
-            if (!dateStr) return 'Não informado';
+            if (!dateStr) return 'Não informado'; [cite: 85]
             const [year, month, day] = dateStr.split('-');
-            const date = new Date(year, month - 1, day);
-            return date.toLocaleDateString('pt-BR', { timeZone: 'America/Sao_Paulo' });
+            const date = new Date(year, month - 1, day); [cite: 86]
+            return date.toLocaleDateString('pt-BR', { timeZone: 'America/Sao_Paulo' }); [cite: 87]
         }
 
         // Funções de toggle (exibir/ocultar seções)
+        // Esta é a função principal de toggle, agora mais genérica
         function toggleSection(selectId, sectionId, triggerValue, showForValues = []) {
             const selectElement = document.getElementById(selectId);
             const sectionElement = document.getElementById(sectionId);
@@ -660,7 +661,7 @@
                         } else {
                             input.value = '';
                         }
-                        // Disparar eventos change/input para que outros toggles reajam
+                        // Disparar eventos change/input para que outros toggles reajam (importante para sub-toggles)
                         input.dispatchEvent(new Event('change'));
                         input.dispatchEvent(new Event('input'));
                     });
@@ -668,13 +669,14 @@
             };
 
             // Adiciona um pequeno atraso para que as transições CSS funcionem corretamente ao carregar a página
-            setTimeout(checkVisibility, 50); // Atraso pequeno ao carregar
-            selectElement.addEventListener('change', checkVisibility); // Adiciona listener para mudanças futuras
+            setTimeout(checkVisibility, 50);
+            // Adiciona listener para mudanças futuras
+            selectElement.addEventListener('change', checkVisibility);
         }
 
         // Adicionando event listeners para as funções de toggle
         document.addEventListener('DOMContentLoaded', () => {
-            // Estado Civil -> Informações do Cônjuge
+            // Estado Civil -> Informações do Cônjuge (Casado, Divorciado, Viúvo, União Estável)
             toggleSection('estadoCivil', 'spouseInfo', null, ['Casado', 'Divorciado', 'Viúvo', 'União Estável']);
             // Estado Civil (Viúvo) -> Data de falecimento do Cônjuge
             toggleSection('estadoCivil', 'spouseDeathInfo', 'Viúvo');
@@ -728,87 +730,87 @@
 
         // Função para gerar o PDF
         async function generatePDF(event) {
-            event.preventDefault();
+            event.preventDefault(); [cite: 89]
             try {
-                const { jsPDF } = window.jspdf;
-                const form = document.getElementById('visaForm');
-                const formData = new FormData(form);
-                const solicitanteNome = formData.get('nome') || formData.get('declaracaoNome') || 'Não informado';
-                const fixedWhatsAppNumber = '5561999998165'; // Seu número de WhatsApp
+                const { jsPDF } = window.jspdf; [cite: 90]
+                const form = document.getElementById('visaForm'); [cite: 91]
+                const formData = new FormData(form); [cite: 91]
+                const solicitanteNome = formData.get('nome') || formData.get('declaracaoNome') || 'Não informado'; [cite: 91]
+                const fixedWhatsAppNumber = '5561999998165'; [cite: 92] // Seu número de WhatsApp
 
-                const doc = new jsPDF();
-                const pageWidth = doc.internal.pageSize.width;
-                const pageHeight = doc.internal.pageSize.height;
-                const margin = 10;
-                let yPosition = 30;
+                const doc = new jsPDF(); [cite: 92]
+                const pageWidth = doc.internal.pageSize.width; [cite: 92]
+                const pageHeight = doc.internal.pageSize.height; [cite: 92]
+                const margin = 10; [cite: 93]
+                let yPosition = 30; [cite: 93]
 
                 function drawHeader() {
-                    doc.setFillColor(0, 48, 135); /* Azul Marinho */
-                    doc.rect(0, 0, pageWidth, 25, 'F');
-                    doc.setFontSize(16);
-                    doc.setTextColor(255, 255, 255); /* Branco */
-                    doc.setFont("Helvetica", "bold");
-                    const title = "Formulário de Solicitação de Visto Americano";
-                    const titleWidth = doc.getTextWidth(title);
-                    const titleX = (pageWidth - titleWidth) / 2;
-                    doc.text(title, titleX, 15);
-                    doc.setFontSize(14);
-                    const starSpacing = 8;
+                    doc.setFillColor(0, 48, 135); /* Azul Marinho */ [cite: 93]
+                    doc.rect(0, 0, pageWidth, 25, 'F'); [cite: 94]
+                    doc.setFontSize(16); [cite: 94]
+                    doc.setTextColor(255, 255, 255); /* Branco */ [cite: 94]
+                    doc.setFont("Helvetica", "bold"); [cite: 94]
+                    const title = "Formulário de Solicitação de Visto Americano"; [cite: 94]
+                    const titleWidth = doc.getTextWidth(title); [cite: 95]
+                    const titleX = (pageWidth - titleWidth) / 2; [cite: 95]
+                    doc.text(title, titleX, 15); [cite: 95]
+                    doc.setFontSize(14); [cite: 95]
+                    const starSpacing = 8; [cite: 95]
                     for (let i = 0; i < 3; i++) {
-                        doc.text("*", titleX - (i + 1) * starSpacing - 5, 15);
-                        doc.text("*", titleX + titleWidth + (i + 1) * starSpacing + 5, 15);
+                        doc.text("*", titleX - (i + 1) * starSpacing - 5, 15); [cite: 96]
+                        doc.text("*", titleX + titleWidth + (i + 1) * starSpacing + 5, 15); [cite: 97]
                     }
                 }
 
                 function drawPageBorder() {
-                    doc.setDrawColor(0, 48, 135); /* Azul Marinho */
-                    doc.setLineWidth(0.5);
-                    doc.rect(margin / 2, margin / 2, pageWidth - margin, pageHeight - margin);
+                    doc.setDrawColor(0, 48, 135); /* Azul Marinho */ [cite: 98]
+                    doc.setLineWidth(0.5); [cite: 99]
+                    doc.rect(margin / 2, margin / 2, pageWidth - margin, pageHeight - margin); [cite: 99]
                 }
 
                 function addSectionTitle(title) {
                     if (yPosition + 15 > pageHeight - margin) {
-                        doc.addPage();
-                        yPosition = 30;
+                        doc.addPage(); [cite: 100]
+                        yPosition = 30; [cite: 101]
                         drawHeader();
                         drawPageBorder();
                     }
-                    doc.setFillColor(200, 16, 46); /* Vermelho */
-                    doc.rect(margin, yPosition - 5, pageWidth - 2 * margin, 10, 'F');
-                    doc.setFontSize(12);
-                    doc.setTextColor(255, 255, 255); /* Branco */
-                    doc.setFont("Helvetica", "bold");
-                    doc.text(title, margin + 5, yPosition + 2);
-                    yPosition += 15;
+                    doc.setFillColor(200, 16, 46); /* Vermelho */ [cite: 101]
+                    doc.rect(margin, yPosition - 5, pageWidth - 2 * margin, 10, 'F'); [cite: 102]
+                    doc.setFontSize(12); [cite: 102]
+                    doc.setTextColor(255, 255, 255); /* Branco */ [cite: 102]
+                    doc.setFont("Helvetica", "bold"); [cite: 102]
+                    doc.text(title, margin + 5, yPosition + 2); [cite: 103]
+                    yPosition += 15; [cite: 104]
                 }
 
                 function addText(text, isBold = false) {
-                    const maxWidth = pageWidth - 2 * margin;
-                    const lineHeight = 7;
-                    const lines = doc.splitTextToSize(text, maxWidth);
+                    const maxWidth = pageWidth - 2 * margin; [cite: 104]
+                    const lineHeight = 7; [cite: 105]
+                    const lines = doc.splitTextToSize(text, maxWidth); [cite: 105]
 
-                    doc.setFont("Helvetica", isBold ? "bold" : "normal");
-                    doc.setTextColor(0, 0, 0); /* Preto */
-                    doc.setFontSize(10);
+                    doc.setFont("Helvetica", isBold ? "bold" : "normal"); [cite: 105]
+                    doc.setTextColor(0, 0, 0); /* Preto */ [cite: 105]
+                    doc.setFontSize(10); [cite: 106]
                     for (let i = 0; i < lines.length; i++) {
                         if (yPosition + lineHeight > pageHeight - margin) {
-                            doc.addPage();
-                            yPosition = 30;
+                            doc.addPage(); [cite: 106]
+                            yPosition = 30; [cite: 107]
                             drawHeader();
                             drawPageBorder();
                         }
-                        doc.text(lines[i], margin, yPosition);
-                        yPosition += lineHeight;
+                        doc.text(lines[i], margin, yPosition); [cite: 107]
+                        yPosition += lineHeight; [cite: 108]
                     }
-                    yPosition += 2; // Pequeno espaçamento extra entre itens
+                    yPosition += 2; // Pequeno espaçamento extra entre itens [cite: 108]
                 }
 
-                function addJustifiedText(text) {
-                    const maxWidth = pageWidth - 2 * margin;
-                    const lineHeight = 7;
+                function addJustifiedText(text) { // Removi o parâmetro isBold pois o negrito/itálico será tratado dentro da função
+                    const maxWidth = pageWidth - 2 * margin; [cite: 109]
+                    const lineHeight = 7; [cite: 110]
                     doc.setFont("Helvetica", "normal");
                     doc.setTextColor(0, 0, 0); /* Preto */
-                    doc.setFontSize(10);
+                    doc.setFontSize(10); [cite: 110]
 
                     // Divide o texto para processar negrito e itálico
                     const parts = text.split(/(\*\*.*?\*\*|_.*?_)/g);
@@ -838,142 +840,142 @@
                                 currentX = margin;
                                 // Quebra de página se necessário
                                 if (yPosition + lineHeight > pageHeight - margin) {
-                                    doc.addPage();
-                                    yPosition = 30;
+                                    doc.addPage(); [cite: 111]
+                                    yPosition = 30; [cite: 112]
                                     drawHeader();
                                     drawPageBorder();
                                     currentX = margin;
                                 }
                             }
 
-                            doc.text(word, currentX, yPosition);
+                            doc.text(word, currentX, yPosition); [cite: 115]
                             currentX += wordWidth + doc.getTextWidth(' '); // Adiciona largura da palavra + espaço
                         }
                     }
-                    yPosition += lineHeight; // Espaçamento após o parágrafo
+                    yPosition += lineHeight; // Espaçamento após o parágrafo [cite: 117]
                 }
 
 
                 drawHeader();
                 drawPageBorder();
 
-                addSectionTitle("Informações Pessoais");
-                addText(`Nome: ${formData.get('nome') || 'Não informado'}`, true);
-                addText(`Sobrenome: ${formData.get('sobrenome') || 'Não informado'}`);
-                addText(`Outros Nomes: ${formData.get('outrosNomes') || 'Não informado'}`);
-                addText(`CPF: ${formData.get('cpf') || 'Não informado'}`);
-                addText(`Data de Nascimento: ${formatDateBr(formData.get('nascimento'))}`);
-                addText(`Local de Nascimento: ${formData.get('localNascimento') || 'Não informado'}`);
-                addText(`Sexo: ${formData.get('sexo') || 'Não informado'}`);
-                addText(`Estado Civil: ${formData.get('estadoCivil') || 'Não informado'}`);
+                addSectionTitle("Informações Pessoais"); [cite: 118]
+                addText(`Nome: ${formData.get('nome') || 'Não informado'}`, true); [cite: 119]
+                addText(`Sobrenome: ${formData.get('sobrenome') || 'Não informado'}`); [cite: 119]
+                addText(`Outros Nomes: ${formData.get('outrosNomes') || 'Não informado'}`); [cite: 119]
+                addText(`CPF: ${formData.get('cpf') || 'Não informado'}`); [cite: 120]
+                addText(`Data de Nascimento: ${formatDateBr(formData.get('nascimento'))}`); [cite: 120]
+                addText(`Local de Nascimento: ${formData.get('localNascimento') || 'Não informado'}`); [cite: 120]
+                addText(`Sexo: ${formData.get('sexo') || 'Não informado'}`); [cite: 121]
+                addText(`Estado Civil: ${formData.get('estadoCivil') || 'Não informado'}`); [cite: 121]
 
-                const estadoCivil = formData.get('estadoCivil');
+                const estadoCivil = formData.get('estadoCivil'); [cite: 121]
                 if (['Casado', 'Divorciado', 'Viúvo', 'União Estável'].includes(estadoCivil)) {
-                    addSectionTitle("Dados do Cônjuge");
-                    addText(`Nome do Cônjuge: ${formData.get('spouseNome') || 'Não informado'}`);
-                    addText(`Data de Nascimento do Cônjuge: ${formatDateBr(formData.get('spouseNascimento'))}`);
-                    addText(`Local de Nascimento do Cônjuge: ${formData.get('spouseLocalNascimento') || 'Não informado'}`);
+                    addSectionTitle("Dados do Cônjuge"); [cite: 122]
+                    addText(`Nome do Cônjuge: ${formData.get('spouseNome') || 'Não informado'}`); [cite: 123]
+                    addText(`Data de Nascimento do Cônjuge: ${formatDateBr(formData.get('spouseNascimento'))}`); [cite: 123]
+                    addText(`Local de Nascimento do Cônjuge: ${formData.get('spouseLocalNascimento') || 'Não informado'}`); [cite: 124]
                     if (estadoCivil === 'Viúvo') {
-                        addText(`Data de Falecimento do Cônjuge: ${formatDateBr(formData.get('spouseFalecimento'))}`);
+                        addText(`Data de Falecimento do Cônjuge: ${formatDateBr(formData.get('spouseFalecimento'))}`); [cite: 124]
                     }
                 }
 
-                addText(`Nacionalidade: ${formData.get('nacionalidade') || 'Não informado'}`);
-                addText(`Outras Nacionalidades: ${formData.get('outrasNacionalidades') || 'Não informado'}`);
-                addText(`Número do Passaporte: ${formData.get('passaporte') || 'Não informado'}`);
-                addText(`Data de Emissão do Passaporte: ${formatDateBr(formData.get('dataEmissaoPassaporte'))}`);
-                addText(`Data de Validade do Passaporte: ${formatDateBr(formData.get('dataValidadePassaporte'))}`);
-                addText(`Local de Emissão do Passaporte: ${formData.get('localEmissaoPassaporte') || 'Não informado'}`);
+                addText(`Nacionalidade: ${formData.get('nacionalidade') || 'Não informado'}`); [cite: 125]
+                addText(`Outras Nacionalidades: ${formData.get('outrasNacionalidades') || 'Não informado'}`); [cite: 126]
+                addText(`Número do Passaporte: ${formData.get('passaporte') || 'Não informado'}`); [cite: 126]
+                addText(`Data de Emissão do Passaporte: ${formatDateBr(formData.get('dataEmissaoPassaporte'))}`); [cite: 126]
+                addText(`Data de Validade do Passaporte: ${formatDateBr(formData.get('dataValidadePassaporte'))}`); [cite: 127]
+                addText(`Local de Emissão do Passaporte: ${formData.get('localEmissaoPassaporte') || 'Não informado'}`); [cite: 127]
 
-                addSectionTitle("Informações de Contato");
-                addText(`CEP: ${formData.get('cep') || 'Não informado'}`);
-                addText(`Endereço: ${formData.get('endereco') || 'Não informado'}`);
-                addText(`Cidade: ${formData.get('cidade') || 'Não informado'}`);
-                addText(`Estado: ${formData.get('estado') || 'Não informado'}`);
-                addText(`País: ${formData.get('pais') || 'Não informado'}`);
-                addText(`Telefone: ${formData.get('telefone') || 'Não informado'}`);
-                addText(`E-mail: ${formData.get('email') || 'Não informado'}`);
+                addSectionTitle("Informações de Contato"); [cite: 127]
+                addText(`CEP: ${formData.get('cep') || 'Não informado'}`); [cite: 128]
+                addText(`Endereço: ${formData.get('endereco') || 'Não informado'}`); [cite: 128]
+                addText(`Cidade: ${formData.get('cidade') || 'Não informado'}`); [cite: 128]
+                addText(`Estado: ${formData.get('estado') || 'Não informado'}`); [cite: 129]
+                addText(`País: ${formData.get('pais') || 'Não informado'}`); [cite: 129]
+                addText(`Telefone: ${formData.get('telefone') || 'Não informado'}`); [cite: 129]
+                addText(`E-mail: ${formData.get('email') || 'Não informado'}`); [cite: 129]
 
-                addSectionTitle("Informações Familiares");
-                addText(`Pais Vivos: ${formData.get('temPaisVivos') || 'Não informado'}`);
+                addSectionTitle("Informações Familiares"); [cite: 130]
+                addText(`Pais Vivos: ${formData.get('temPaisVivos') || 'Não informado'}`); [cite: 130]
                 if (formData.get('temPaisVivos') === 'Sim') {
-                    addText(`Nome do Pai: ${formData.get('nomePai') || 'Não informado'}`);
-                    addText(`Data de Nascimento do Pai: ${formatDateBr(formData.get('nascimentoPai'))}`);
-                    addText(`Nome da Mãe: ${formData.get('nomeMae') || 'Não informado'}`);
-                    addText(`Data de Nascimento da Mãe: ${formatDateBr(formData.get('nascimentoMae'))}`);
-                    addText(`Pais nos EUA: ${formData.get('paisNosEUA') || 'Não informado'}`);
+                    addText(`Nome do Pai: ${formData.get('nomePai') || 'Não informado'}`); [cite: 130]
+                    addText(`Data de Nascimento do Pai: ${formatDateBr(formData.get('nascimentoPai'))}`); [cite: 131]
+                    addText(`Nome da Mãe: ${formData.get('nomeMae') || 'Não informado'}`); [cite: 131]
+                    addText(`Data de Nascimento da Mãe: ${formatDateBr(formData.get('nascimentoMae'))}`); [cite: 131]
+                    addText(`Pais nos EUA: ${formData.get('paisNosEUA') || 'Não informado'}`); [cite: 132]
                     if (formData.get('paisNosEUA') === 'Sim') {
-                        addText(`Explicação sobre Pais nos EUA: ${formData.get('explicacaoPaisEUA') || 'Não informado'}`);
+                        addText(`Explicação sobre Pais nos EUA: ${formData.get('explicacaoPaisEUA') || 'Não informado'}`); [cite: 132]
                     }
                 }
-                addText(`Conhecidos nos EUA: ${formData.get('temConhecidosEUA') || 'Não informado'}`);
+                addText(`Conhecidos nos EUA: ${formData.get('temConhecidosEUA') || 'Não informado'}`); [cite: 133]
                 if (formData.get('temConhecidosEUA') === 'Sim') {
-                    addText(`Nome do Conhecido: ${formData.get('nomeConhecido') || 'Não informado'}`);
-                    addText(`Telefone do Conhecido: ${formData.get('telefoneConhecido') || 'Não informado'}`);
-                    addText(`E-mail do Conhecido: ${formData.get('emailConhecido') || 'Não informado'}`);
-                    addText(`Vínculo com o Conhecido: ${formData.get('vinculoConhecido') || 'Não informado'}`);
+                    addText(`Nome do Conhecido: ${formData.get('nomeConhecido') || 'Não informado'}`); [cite: 134]
+                    addText(`Telefone do Conhecido: ${formData.get('telefoneConhecido') || 'Não informado'}`); [cite: 135]
+                    addText(`E-mail do Conhecido: ${formData.get('emailConhecido') || 'Não informado'}`); [cite: 135]
+                    addText(`Vínculo com o Conhecido: ${formData.get('vinculoConhecido') || 'Não informado'}`); [cite: 136]
                 }
 
-                addSectionTitle("Detalhes da Viagem");
-                addText(`Objetivo da Viagem: ${formData.get('objetivo') || 'Não informado'}`);
-                addText(`Data de Chegada: ${formatDateBr(formData.get('chegada'))}`);
-                addText(`Tempo de Estadia: ${formData.get('tempo') || 'Não informado'}`);
-                addText(`Endereço nos EUA: ${formData.get('enderecoEUA') || 'Não informado'}`);
-                addText(`Quem Paga a Viagem: ${formData.get('quemPaga') || 'Não informado'}`);
+                addSectionTitle("Detalhes da Viagem"); [cite: 136]
+                addText(`Objetivo da Viagem: ${formData.get('objetivo') || 'Não informado'}`); [cite: 137]
+                addText(`Data de Chegada: ${formatDateBr(formData.get('chegada'))}`); [cite: 137]
+                addText(`Tempo de Estadia: ${formData.get('tempo') || 'Não informado'}`); [cite: 137]
+                addText(`Endereço nos EUA: ${formData.get('enderecoEUA') || 'Não informado'}`); [cite: 138]
+                addText(`Quem Paga a Viagem: ${formData.get('quemPaga') || 'Não informado'}`); [cite: 138]
                 if (formData.get('quemPaga') === 'Outra pessoa') {
-                    addText(`Nome do Pagante: ${formData.get('payerNome') || 'Não informado'}`);
-                    addText(`Endereço Igual ao Solicitante: ${formData.get('payerSameAddress') || 'Não informado'}`);
+                    addText(`Nome do Pagante: ${formData.get('payerNome') || 'Não informado'}`); [cite: 139]
+                    addText(`Endereço Igual ao Solicitante: ${formData.get('payerSameAddress') || 'Não informado'}`); [cite: 140]
                     if (formData.get('payerSameAddress') === 'Não') {
-                        addText(`CEP do Pagante: ${formData.get('payerCEP') || 'Não informado'}`);
-                        addText(`Endereço do Pagante: ${formData.get('payerEndereco') || 'Não informado'}`);
-                        addText(`Cidade do Pagante: ${formData.get('payerCidade') || 'Não informado'}`);
-                        addText(`Estado do Pagante: ${formData.get('payerEstado') || 'Não informado'}`);
-                        addText(`País do Pagante: ${formData.get('payerPais') || 'Não informado'}`);
+                        addText(`CEP do Pagante: ${formData.get('payerCEP') || 'Não informado'}`); [cite: 140]
+                        addText(`Endereço do Pagante: ${formData.get('payerEndereco') || 'Não informado'}`); [cite: 141]
+                        addText(`Cidade do Pagante: ${formData.get('payerCidade') || 'Não informado'}`); [cite: 141]
+                        addText(`Estado do Pagante: ${formData.get('payerEstado') || 'Não informado'}`); [cite: 142]
+                        addText(`País do Pagante: ${formData.get('payerPais') || 'Não informado'}`); [cite: 142]
                     }
-                    addText(`E-mail do Pagante: ${formData.get('payerEmail') || 'Não informado'}`);
-                    addText(`Telefone do Pagante: ${formData.get('payerTelefone') || 'Não informado'}`);
-                    addText(`Vínculo com o Pagante: ${formData.get('payerVinculo') || 'Não informado'}`);
+                    addText(`E-mail do Pagante: ${formData.get('payerEmail') || 'Não informado'}`); [cite: 143]
+                    addText(`Telefone do Pagante: ${formData.get('payerTelefone') || 'Não informado'}`); [cite: 144]
+                    addText(`Vínculo com o Pagante: ${formData.get('payerVinculo') || 'Não informado'}`); [cite: 144]
                 }
-                addText(`Companheiros de Viagem: ${formData.get('temCompanheiros') || 'Não informado'}`);
+                addText(`Companheiros de Viagem: ${formData.get('temCompanheiros') || 'Não informado'}`); [cite: 145]
                 if (formData.get('temCompanheiros') === 'Sim') {
-                    addText(`Nome do(s) Companheiro(s): ${formData.get('nomeCompanheiro') || 'Não informado'}`);
-                    addText(`Relação com o(s) Companheiro(s): ${formData.get('relacaoCompanheiro') || 'Não informado'}`);
+                    addText(`Nome do(s) Companheiro(s): ${formData.get('nomeCompanheiro') || 'Não informado'}`); [cite: 146]
+                    addText(`Relação com o(s) Companheiro(s): ${formData.get('relacaoCompanheiro') || 'Não informado'}`); [cite: 147]
                 }
 
-                addSectionTitle("Informações de Trabalho");
-                addText(`Ocupação: ${formData.get('ocupacao') || 'Não informado'}`);
-                addText(`Empregador: ${formData.get('empregador') || 'Não informado'}`);
-                addText(`Endereço do Empregador: ${formData.get('enderecoEmpregador') || 'Não informado'}`);
-                addText(`Telefone do Empregador: ${formData.get('telefoneEmpregador') || 'Não informado'}`);
-                addText(`Data de Início no Trabalho: ${formatDateBr(formData.get('dataInicioTrabalho'))}`);
-                addText(`Renda Mensal: ${formData.get('rendaMensal') || 'Não informado'}`);
-                addSectionTitle("Informações de Educação");
-                addText(`Nível de Educação: ${formData.get('nivelEducacao') || 'Não informado'}`);
-                addText(`Instituição: ${formData.get('instituicao') || 'Não informado'}`);
-                addText(`Endereço da Instituição: ${formData.get('enderecoInstituicao') || 'Não informado'}`);
-                addText(`Data de Início do Curso: ${formatDateBr(formData.get('dataInicioEducacao'))}`);
-                addText(`Data de Conclusão do Curso: ${formatDateBr(formData.get('dataFimEducacao'))}`);
-                addSectionTitle("Histórico de Viagens");
-                addText(`Primeiro Visto ou Renovação: ${formData.get('primeiroVisto') || 'Não informado'}`);
+                addSectionTitle("Informações de Trabalho"); [cite: 147]
+                addText(`Ocupação: ${formData.get('ocupacao') || 'Não informado'}`); [cite: 148]
+                addText(`Empregador: ${formData.get('empregador') || 'Não informado'}`); [cite: 148]
+                addText(`Endereço do Empregador: ${formData.get('enderecoEmpregador') || 'Não informado'}`); [cite: 148]
+                addText(`Telefone do Empregador: ${formData.get('telefoneEmpregador') || 'Não informado'}`); [cite: 149]
+                addText(`Data de Início no Trabalho: ${formatDateBr(formData.get('dataInicioTrabalho'))}`); [cite: 149]
+                addText(`Renda Mensal: ${formData.get('rendaMensal') || 'Não informado'}`); [cite: 149]
+                addSectionTitle("Informações de Educação"); [cite: 150]
+                addText(`Nível de Educação: ${formData.get('nivelEducacao') || 'Não informado'}`); [cite: 150]
+                addText(`Instituição: ${formData.get('instituicao') || 'Não informado'}`); [cite: 151]
+                addText(`Endereço da Instituição: ${formData.get('enderecoInstituicao') || 'Não informado'}`); [cite: 151]
+                addText(`Data de Início do Curso: ${formatDateBr(formData.get('dataInicioEducacao'))}`); [cite: 151]
+                addText(`Data de Conclusão do Curso: ${formatDateBr(formData.get('dataFimEducacao'))}`); [cite: 151]
+                addSectionTitle("Histórico de Viagens"); [cite: 152]
+                addText(`Primeiro Visto ou Renovação: ${formData.get('primeiroVisto') || 'Não informado'}`); [cite: 152]
                 if (formData.get('primeiroVisto') === 'Renovação') {
-                    addText(`Número do Visto Anterior: ${formData.get('numeroVistoAnteriorRenovacao') || 'Não informado'}`);
-                    addText(`Data de Emissão do Visto Anterior: ${formatDateBr(formData.get('dataEmissaoVistoAnterior'))}`);
-                    addText(`Data de Validade do Visto Anterior: ${formatDateBr(formData.get('dataValidadeVistoAnterior'))}`);
-                    addText(`Local de Emissão do Visto Anterior: ${formData.get('localEmissaoVistoAnterior') || 'Não informado'}`);
+                    addText(`Número do Visto Anterior: ${formData.get('numeroVistoAnteriorRenovacao') || 'Não informado'}`); [cite: 153]
+                    addText(`Data de Emissão do Visto Anterior: ${formatDateBr(formData.get('dataEmissaoVistoAnterior'))}`); [cite: 154]
+                    addText(`Data de Validade do Visto Anterior: ${formatDateBr(formData.get('dataValidadeVistoAnterior'))}`); [cite: 154]
+                    addText(`Local de Emissão do Visto Anterior: ${formData.get('localEmissaoVistoAnterior') || 'Não informado'}`); [cite: 155]
                 }
-                addText(`Já Visitou os EUA: ${formData.get('visitouEUA') || 'Não informado'}`);
+                addText(`Já Visitou os EUA: ${formData.get('visitouEUA') || 'Não informado'}`); [cite: 156]
                 if (formData.get('visitouEUA') === 'Sim') {
-                    addText(`Data da Última Visita: ${formatDateBr(formData.get('dataUltimaVisita'))}`);
-                    addText(`Tempo da Última Visita: ${formData.get('tempoUltimaVisita') || 'Não informado'}`);
-                    addText(`Número do Visto Anterior: ${formData.get('numeroVistoAnterior') || 'Não informado'}`);
+                    addText(`Data da Última Visita: ${formatDateBr(formData.get('dataUltimaVisita'))}`); [cite: 157]
+                    addText(`Tempo da Última Visita: ${formData.get('tempoUltimaVisita') || 'Não informado'}`); [cite: 158]
+                    addText(`Número do Visto Anterior: ${formData.get('numeroVistoAnterior') || 'Não informado'}`); [cite: 158]
                 }
-                addText(`Impressão Digital Coletada: ${formData.get('impressaoDigital') || 'Não informado'}`);
-                addText(`Países Visitados (Últimos 5 Anos): ${formData.get('outrosPaises') || 'Não informado'}`);
-                addText(`Visto Negado: ${formData.get('vistoNegado') || 'Não informado'}`);
-                addText(`Entrada Recusada nos EUA: ${formData.get('entradaRecusada') || 'Não informado'}`);
+                addText(`Impressão Digital Coletada: ${formData.get('impressaoDigital') || 'Não informado'}`); [cite: 159]
+                addText(`Países Visitados (Últimos 5 Anos): ${formData.get('outrosPaises') || 'Não informado'}`); [cite: 160]
+                addText(`Visto Negado: ${formData.get('vistoNegado') || 'Não informado'}`); [cite: 160]
+                addText(`Entrada Recusada nos EUA: ${formData.get('entradaRecusada') || 'Não informado'}`); [cite: 161]
 
                 if (formData.get('vistoNegado') === 'Sim' || formData.get('entradaRecusada') === 'Sim') {
-                    addText(`Detalhes da Negativa: ${formData.get('detalhesVistoNegado') || 'Não informado'}`);
+                    addText(`Detalhes da Negativa: ${formData.get('detalhesVistoNegado') || 'Não informado'}`); [cite: 161]
                 }
 
                 addSectionTitle("Declaração e Autorização");
@@ -1000,37 +1002,33 @@
                 addText(`Aceite da Declaração: ${formData.get('aceiteDeclaracao') ? 'Concordo' : 'Não Concordo'}`);
 
 
-                const fileName = `Formulario_Visto_Americano_${solicitanteNome.replace(/\s+/g, '_')}.pdf`;
-                doc.save(fileName);
-
-                // Envio para o WhatsApp (APIs do WhatsApp Web exigem que o usuário esteja logado e a ação seja iniciada por ele)
-                // O Firebase Storage (com a apiKey fornecida) pode ser usado para hospedar o PDF e gerar um link.
-                // O link será então enviado via WhatsApp.
+                const fileName = `Formulario_Visto_Americano_${solicitanteNome.replace(/\s+/g, '_')}.pdf`; [cite: 176]
+                doc.save(fileName); [cite: 176]
 
                 // Prepara o PDF como um Blob para upload
-                const pdfBlob = doc.output('blob');
-                const storageRef = ref(storage, `vistos/${fileName}`);
+                const pdfBlob = doc.output('blob'); [cite: 176]
+                const storageRef = ref(storage, `vistos/${fileName}`); [cite: 176]
 
                 // Faz o upload do PDF para o Firebase Storage
-                await uploadBytes(storageRef, pdfBlob).then(async (snapshot) => {
-                    const downloadURL = await getDownloadURL(snapshot.ref);
+                await uploadBytes(storageRef, pdfBlob).then(async (snapshot) => { [cite: 177]
+                    const downloadURL = await getDownloadURL(snapshot.ref); [cite: 177]
                     console.log('PDF uploaded to Firebase Storage. Download URL:', downloadURL);
 
-                    const message = `Olá, ${solicitanteNome}! Seu formulário de visto americano foi gerado com sucesso. Você pode acessá-lo aqui: ${downloadURL}.`;
-                    const whatsappURL = `https://wa.me/${fixedWhatsAppNumber}?text=${encodeURIComponent(message)}`;
+                    const message = `Olá, ${solicitanteNome}! Seu formulário de visto americano foi gerado com sucesso. Você pode acessá-lo aqui: ${downloadURL}.`; [cite: 177, 178]
+                    const whatsappURL = `https://api.whatsapp.com/send?phone=${fixedWhatsAppNumber}&text=${encodeURIComponent(message)}`; [cite: 178]
 
                     // Abre o WhatsApp Web em uma nova aba
-                    window.open(whatsappURL, '_blank');
+                    window.open(whatsappURL, '_blank'); [cite: 179]
 
-                    alert('Formulário enviado com sucesso! O PDF foi gerado e uma mensagem será aberta no WhatsApp.');
+                    alert('Formulário enviado com sucesso! O PDF foi gerado e uma mensagem será aberta no WhatsApp.'); [cite: 179]
                 }).catch((error) => {
-                    console.error('Erro ao fazer upload do PDF para o Firebase Storage:', error);
-                    alert('Erro ao fazer upload do PDF. Por favor, tente novamente.');
+                    console.error('Erro ao fazer upload do PDF para o Firebase Storage:', error); [cite: 180]
+                    alert('Erro ao fazer upload do PDF. Por favor, tente novamente.'); [cite: 181]
                 });
 
             } catch (error) {
-                console.error('Erro ao gerar PDF ou enviar para o WhatsApp:', error);
-                alert('Erro ao processar o formulário. Verifique o console para mais detalhes.');
+                console.error('Erro ao gerar PDF ou enviar para o WhatsApp:', error); [cite: 180]
+                alert('Erro ao processar o formulário. Verifique o console para mais detalhes.'); [cite: 181]
             }
         }
     </script>
