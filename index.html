@@ -4,237 +4,55 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Formulário para Visto Americano</title>
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-
-    <script type="module" src="https://www.gstatic.com/firebasejs/11.5.0/firebase-app.js"></script>
-    <script type="module" src="https://www.gstatic.com/firebasejs/11.5.0/firebase-storage.js"></script>
-    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
             max-width: 800px;
             margin: 20px auto;
             padding: 20px;
-            background-color: #f4f7f6; /* Cor de fundo suave */
-            box-shadow: 0 0 15px rgba(0,0,0,0.1); /* Sombra para profundidade */
-            border-radius: 8px; /* Cantos arredondados */
-        }
-        h1 {
-            color: #003087; /* Azul escuro, como a bandeira americana */
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        h3 {
-            color: #C8102E; /* Vermelho, como a bandeira americana */
-            border-bottom: 2px solid #eee; /* Linha sutil abaixo dos títulos */
-            padding-bottom: 8px;
-            margin-top: 30px;
-            font-size: 1.2em;
-        }
-        h4 {
-            color: #333;
-            margin-top: 20px;
-            margin-bottom: 10px;
-            font-size: 1.1em;
-            border-bottom: 1px dashed #ccc; /* Linha tracejada para sub-títulos */
-            padding-bottom: 5px;
         }
         label {
             display: block;
-            margin: 15px 0 5px; /* Espaçamento maior para labels */
-            font-weight: bold;
-            color: #333;
+            margin: 10px 0 5px;
         }
-        input[type="text"],
-        input[type="date"],
-        input[type="tel"],
-        input[type="email"],
-        input[type="number"],
-        select,
-        textarea {
-            width: calc(100% - 20px); /* Ajuste para padding */
-            padding: 10px;
-            margin-bottom: 15px; /* Mais espaço abaixo dos campos */
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            box-sizing: border-box; /* Garante que padding e border não aumentem a largura */
-            font-size: 1em;
-        }
-        textarea {
-            resize: vertical; /* Permite redimensionar verticalmente */
-            min-height: 60px;
+        input, select, textarea {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
         }
         button {
-            background-color: #25D366; /* Cor de WhatsApp */
+            background-color: #25D366;
             color: white;
-            padding: 15px 30px;
+            padding: 10px 20px;
             border: none;
-            border-radius: 5px;
             cursor: pointer;
-            font-size: 1.1em;
-            margin-top: 30px;
-            display: block;
-            width: 100%; /* Botão em largura total */
-            transition: background-color 0.3s ease; /* Transição suave no hover */
         }
         button:hover {
             background-color: #20b354;
         }
-        /* Estilos para as seções condicionais */
         #spouseInfo, #spouseDeathInfo, #parentsInfo, #previousUSVisaInfo, #travelCompanionsInfo, #visaDeniedDetails, #payerInfo, #payerAddressInfo, #renewalInfo, #parentsInUSInfo, #acquaintancesInfo {
-            display: none; /* COMEÇAM OCULTOS */
-            margin-top: 20px;
-            padding: 20px;
-            border: 1px dashed #a0a0a0; /* Borda tracejada para destacar */
-            border-radius: 8px;
-            background-color: #f9f9f9; /* Fundo leve para seções condicionais */
+            display: none;
+            margin-top: 10px;
         }
         hr {
-            margin: 40px 0; /* Mais espaço para as divisórias */
-            border: 0;
-            border-top: 2px solid #003087; /* Linha divisória mais proeminente */
-        }
-        p strong {
-            color: #C8102E; /* Destaca o texto "Declaro estar ciente de:" */
-        }
-        ol {
-            margin-left: 25px;
-            color: #555;
-            line-height: 1.6; /* Melhor legibilidade para listas */
-        }
-        ol li {
-            margin-bottom: 8px; /* Espaço entre itens da lista */
-        }
-        #aceiteDeclaracao {
-            width: auto; /* Checkbox não ocupa 100% */
-            margin-left: 10px;
-            vertical-align: middle; /* Alinha com o texto */
-        }
-        .message { 
-            margin-top: 20px; 
-            padding: 10px; 
-            border-radius: 4px; 
-            display: none; /* Inicia oculto */
-        }
-        .message.success { background-color: #d4edda; color: #155724; border-color: #c3e6cb; }
-        .message.error { background-color: #f8d7da; color: #721c24; border-color: #f5c6cb; }
-        .message.info { background-color: #d1ecf1; color: #0c5460; border-color: #bee5eb; }
-
-        /* --- ESTILOS EXCLUSIVOS PARA O CONTEÚDO DO PDF --- */
-        .pdf-content {
-            font-family: 'Times New Roman', serif; /* Fonte mais formal, como documentos oficiais */
-            font-size: 10pt; /* Tamanho da fonte menor para mais conteúdo por página */
-            line-height: 1.4; /* Espaçamento entre linhas */
-            color: #000; /* Texto preto */
-            padding: 15mm 20mm; /* Margens internas para o PDF */
-            box-sizing: border-box; 
-            width: 210mm; /* Largura de uma folha A4 */
-            min-height: 297mm; /* Altura de uma folha A4 */
-            background-color: #fff; /* Fundo branco para o PDF */
-        }
-        .pdf-content h1 {
-            font-family: Arial, sans-serif;
-            color: #003087; /* Azul escuro */
-            text-align: center;
-            margin-bottom: 25px;
-            font-size: 18pt;
-            border-bottom: 2px solid #003087;
-            padding-bottom: 10px;
-            page-break-after: avoid; 
-        }
-        .pdf-content h3 {
-            font-family: Arial, sans-serif;
-            font-size: 13pt;
-            color: #C8102E; /* Vermelho */
-            border-bottom: 1px solid #C8102E;
-            padding-bottom: 5px;
-            margin-top: 25px;
-            margin-bottom: 15px;
-            page-break-before: auto; 
-            page-break-after: avoid;
-        }
-        .pdf-content h4 {
-            font-family: Arial, sans-serif;
-            font-size: 11pt;
-            color: #555;
-            margin-top: 15px;
-            margin-bottom: 8px;
-            border-bottom: 1px dashed #bbb;
-            padding-bottom: 3px;
-            page-break-after: avoid;
-        }
-        .pdf-content .data-item {
-            margin-bottom: 4px; /* Espaço entre os itens de dado */
-            display: block; /* Cada item ocupa sua própria linha */
-            padding: 2px 0;
-            border-bottom: 1px dotted #eee; /* Linha tracejada suave para separar dados */
-        }
-        .pdf-content .data-item:last-child {
-            border-bottom: none; /* Remove a linha do último item de cada bloco */
-        }
-        .pdf-content .data-item strong {
-            display: inline-block; /* Ocupa apenas o espaço necessário */
-            width: 140px; /* Largura para o label, ajuste se precisar */
-            font-weight: bold;
-            color: #333;
-            vertical-align: top; /* Garante que o label e o valor fiquem alinhados no topo */
-        }
-        .pdf-content .data-item span {
-            display: inline-block; /* Ocupa o restante da linha */
-            width: calc(100% - 150px); /* Largura total - largura do strong - margem */
-            font-weight: normal;
-            color: #000;
-            word-wrap: break-word; /* Permite quebrar palavras longas */
-            vertical-align: top;
-        }
-        /* Para seções que podem ter vários itens em uma linha (como países visitados, etc.) */
-        .pdf-content p {
-            margin-bottom: 5px;
-        }
-        .pdf-content ul, .pdf-content ol {
-            margin-left: 20px;
-            margin-bottom: 10px;
-            font-size: 9.5pt; /* Menor para as listas de declaração */
-            line-height: 1.3;
-        }
-        .pdf-content li {
-            margin-bottom: 3px;
-        }
-        .pdf-content hr {
-            border: none;
-            border-top: 1px solid #ccc;
             margin: 20px 0;
-            page-break-before: avoid; 
-            page-break-after: avoid;
-        }
-        .pdf-content .declaration-text {
-            text-align: justify;
-            margin-top: 15px;
-            margin-bottom: 10px;
-            font-size: 9.5pt;
-        }
-        .pdf-content .footer-info {
-            text-align: center;
-            margin-top: 30px;
-            font-size: 8pt;
-            color: #777;
-            border-top: 1px solid #eee;
-            padding-top: 10px;
+            border: 0;
+            border-top: 2px solid #ccc;
         }
     </style>
 </head>
 <body>
     <h1>Formulário para Visto Americano</h1>
-    <p>Preencha os dados abaixo. Ao clicar em "Gerar PDF...", um PDF detalhado do seu formulário será gerado, baixado automaticamente e uma mensagem será enviada ao WhatsApp com os dados básicos e um link para o PDF.</p>
+    <p>Preencha os dados abaixo. Ao clicar em "Enviar", um PDF detalhado será gerado, baixado automaticamente e uma mensagem será enviada ao WhatsApp com os dados básicos e um link para o PDF.</p>
 
-    <form id="visaForm" name="visaForm"> 
+    <form id="visaForm" name="visaForm" method="POST">
         <h3>Informações Pessoais</h3>
         <label for="nome">Nome completo (como no passaporte):</label>
-        <input type="text" id="nome" name="nome" required>
+        <input type="text" id="nome" name="nome">
 
         <label for="sobrenome">Sobrenome (como no passaporte):</label>
-        <input type="text" id="sobrenome" name="sobrenome" required>
+        <input type="text" id="sobrenome" name="sobrenome">
 
         <label for="outrosNomes">Já usou outros nomes? (ex.: nome de solteiro, apelido):</label>
         <input type="text" id="outrosNomes" name="outrosNomes">
@@ -243,13 +61,13 @@
         <input type="text" id="cpf" name="cpf" maxlength="14" oninput="formatCPF(this)">
 
         <label for="nascimento">Data de nascimento:</label>
-        <input type="date" id="nascimento" name="nascimento" required>
+        <input type="date" id="nascimento" name="nascimento">
 
         <label for="localNascimento">Cidade e país de nascimento:</label>
-        <input type="text" id="localNascimento" name="localNascimento" required>
+        <input type="text" id="localNascimento" name="localNascimento">
 
         <label for="sexo">Sexo:</label>
-        <select id="sexo" name="sexo" required>
+        <select id="sexo" name="sexo">
             <option value="">Selecione</option>
             <option value="Masculino">Masculino</option>
             <option value="Feminino">Feminino</option>
@@ -257,7 +75,7 @@
         </select>
 
         <label for="estadoCivil">Estado civil:</label>
-        <select id="estadoCivil" name="estadoCivil" required>
+        <select id="estadoCivil" name="estadoCivil">
             <option value="">Selecione</option>
             <option value="Solteiro">Solteiro</option>
             <option value="Casado">Casado</option>
@@ -285,48 +103,48 @@
         <hr>
 
         <label for="nacionalidade">Nacionalidade atual:</label>
-        <input type="text" id="nacionalidade" name="nacionalidade" required>
+        <input type="text" id="nacionalidade" name="nacionalidade">
 
         <label for="outrasNacionalidades">Possui outras nacionalidades? (Se sim, quais?):</label>
         <input type="text" id="outrasNacionalidades" name="outrasNacionalidades">
 
         <label for="passaporte">Número do passaporte:</label>
-        <input type="text" id="passaporte" name="passaporte" required>
+        <input type="text" id="passaporte" name="passaporte">
 
         <label for="dataEmissaoPassaporte">Data de emissão do passaporte:</label>
-        <input type="date" id="dataEmissaoPassaporte" name="dataEmissaoPassaporte" required>
+        <input type="date" id="dataEmissaoPassaporte" name="dataEmissaoPassaporte">
 
         <label for="dataValidadePassaporte">Data de validade do passaporte:</label>
-        <input type="date" id="dataValidadePassaporte" name="dataValidadePassaporte" required>
+        <input type="date" id="dataValidadePassaporte" name="dataValidadePassaporte">
 
         <label for="localEmissaoPassaporte">Local de emissão do passaporte:</label>
-        <input type="text" id="localEmissaoPassaporte" name="localEmissaoPassaporte" required>
+        <input type="text" id="localEmissaoPassaporte" name="localEmissaoPassaporte">
 
         <h3>Informações de Contato</h3>
         <label for="cep">CEP (ex.: 70.340-902):</label>
-        <input type="text" id="cep" name="cep" maxlength="10" oninput="formatCEP(this)" required>
+        <input type="text" id="cep" name="cep" maxlength="10" oninput="formatCEP(this)">
 
         <label for="endereco">Endereço completo (rua, número, bairro):</label>
-        <textarea id="endereco" name="endereco" required></textarea>
+        <textarea id="endereco" name="endereco"></textarea>
 
         <label for="cidade">Cidade:</label>
-        <input type="text" id="cidade" name="cidade" required>
+        <input type="text" id="cidade" name="cidade">
 
         <label for="estado">Estado/Província:</label>
-        <input type="text" id="estado" name="estado" required>
+        <input type="text" id="estado" name="estado">
 
         <label for="pais">País:</label>
-        <input type="text" id="pais" name="pais" required>
+        <input type="text" id="pais" name="pais">
 
         <label for="telefone">Número de telefone (com código do país):</label>
-        <input type="tel" id="telefone" name="telefone" required>
+        <input type="tel" id="telefone" name="telefone">
 
-        <label for="emailContato">E-mail de Contato:</label>
-        <input type="email" id="emailContato" name="emailContato" required>
+        <label for="email">E-mail:</label>
+        <input type="email" id="email" name="email">
 
         <h3>Informações Familiares</h3>
         <label for="temPaisVivos">Seus pais estão vivos?</label>
-        <select id="temPaisVivos" name="temPaisVivos" required>
+        <select id="temPaisVivos" name="temPaisVivos">
             <option value="">Selecione</option>
             <option value="Sim">Sim</option>
             <option value="Não">Não</option>
@@ -359,7 +177,7 @@
         </div>
 
         <label for="temConhecidosEUA">Tem conhecidos nos EUA?</label>
-        <select id="temConhecidosEUA" name="temConhecidosEUA" required>
+        <select id="temConhecidosEUA" name="temConhecidosEUA">
             <option value="">Selecione</option>
             <option value="Sim">Sim</option>
             <option value="Não">Não</option>
@@ -382,7 +200,7 @@
 
         <h3>Detalhes da Viagem</h3>
         <label for="objetivo">Objetivo da viagem aos EUA:</label>
-        <select id="objetivo" name="objetivo" required>
+        <select id="objetivo" name="objetivo">
             <option value="">Selecione</option>
             <option value="Turismo">Turismo</option>
             <option value="Negócios">Negócios</option>
@@ -393,16 +211,16 @@
         </select>
 
         <label for="chegada">Data prevista de chegada aos EUA:</label>
-        <input type="date" id="chegada" name="chegada" required>
+        <input type="date" id="chegada" name="chegada">
 
         <label for="tempo">Quanto tempo pretende ficar nos EUA? (ex.: 2 semanas, 6 meses):</label>
-        <input type="text" id="tempo" name="tempo" required>
+        <input type="text" id="tempo" name="tempo">
 
         <label for="enderecoEUA">Endereço onde ficará nos EUA (rua, cidade, estado, CEP):</label>
         <textarea id="enderecoEUA" name="enderecoEUA" placeholder="Digite o endereço, se disponível (Não obrigatório)"></textarea>
 
         <label for="quemPaga">Quem está pagando pela viagem?</label>
-        <select id="quemPaga" name="quemPaga" required>
+        <select id="quemPaga" name="quemPaga">
             <option value="">Selecione</option>
             <option value="Eu mesmo">Eu mesmo</option>
             <option value="Outra pessoa">Outra pessoa</option>
@@ -448,7 +266,7 @@
         </div>
 
         <label for="temCompanheiros">Vai viajar com alguém?</label>
-        <select id="temCompanheiros" name="temCompanheiros" required>
+        <select id="temCompanheiros" name="temCompanheiros">
             <option value="">Selecione</option>
             <option value="Sim">Sim</option>
             <option value="Não">Não</option>
@@ -464,26 +282,26 @@
 
         <h3>Informações de Trabalho</h3>
         <label for="ocupacao">Ocupação atual:</label>
-        <input type="text" id="ocupacao" name="ocupacao" required>
+        <input type="text" id="ocupacao" name="ocupacao">
 
         <label for="empregador">Nome do empregador:</label>
-        <input type="text" id="empregador" name="empregador" required>
+        <input type="text" id="empregador" name="empregador">
 
         <label for="enderecoEmpregador">Endereço do empregador:</label>
-        <textarea id="enderecoEmpregador" name="enderecoEmpregador" required></textarea>
+        <textarea id="enderecoEmpregador" name="enderecoEmpregador"></textarea>
 
         <label for="telefoneEmpregador">Telefone do empregador:</label>
-        <input type="tel" id="telefoneEmpregador" name="telefoneEmpregador" required>
+        <input type="tel" id="telefoneEmpregador" name="telefoneEmpregador">
 
         <label for="dataInicioTrabalho">Data de início no emprego:</label>
-        <input type="date" id="dataInicioTrabalho" name="dataInicioTrabalho" required>
+        <input type="date" id="dataInicioTrabalho" name="dataInicioTrabalho">
 
         <label for="rendaMensal">Renda mensal (em reais):</label>
-        <input type="text" id="rendaMensal" name="rendaMensal" required>
+        <input type="text" id="rendaMensal" name="rendaMensal">
 
         <h3>Informações de Educação</h3>
         <label for="nivelEducacao">Nível mais alto de educação concluído:</label>
-        <select id="nivelEducacao" name="nivelEducacao" required>
+        <select id="nivelEducacao" name="nivelEducacao">
             <option value="">Selecione</option>
             <option value="Ensino Fundamental">Ensino Fundamental</option>
             <option value="Ensino Médio">Ensino Médio</option>
@@ -492,20 +310,20 @@
         </select>
 
         <label for="instituicao">Nome da instituição educacional:</label>
-        <input type="text" id="instituicao" name="instituicao" required>
+        <input type="text" id="instituicao" name="instituicao">
 
         <label for="enderecoInstituicao">Endereço da instituição:</label>
-        <textarea id="enderecoInstituicao" name="enderecoInstituicao" required></textarea>
+        <textarea id="enderecoInstituicao" name="enderecoInstituicao"></textarea>
 
         <label for="dataInicioEducacao">Data de início do curso:</label>
-        <input type="date" id="dataInicioEducacao" name="dataInicioEducacao" required>
+        <input type="date" id="dataInicioEducacao" name="dataInicioEducacao">
 
         <label for="dataFimEducacao">Data de conclusão do curso:</label>
-        <input type="date" id="dataFimEducacao" name="dataFimEducacao" required>
+        <input type="date" id="dataFimEducacao" name="dataFimEducacao">
 
         <h3>Histórico de Viagens</h3>
         <label for="primeiroVisto">É o seu primeiro visto ou uma renovação?</label>
-        <select id="primeiroVisto" name="primeiroVisto" required>
+        <select id="primeiroVisto" name="primeiroVisto">
             <option value="">Selecione</option>
             <option value="Primeiro visto">Primeiro visto</option>
             <option value="Renovação">Renovação</option>
@@ -526,14 +344,14 @@
         </div>
 
         <label for="visitouEUA">Já visitou os EUA antes?</label>
-        <select id="visitouEUA" name="visitouEUA" required>
+        <select id="visitouEUA" name="visitouEUA">
             <option value="">Selecione</option>
             <option value="Sim">Sim</option>
             <option value="Não">Não</option>
         </select>
 
         <label for="impressaoDigital">Já teve impressão digital dos dedos coletada?</label>
-        <select id="impressaoDigital" name="impressaoDigital" required>
+        <select id="impressaoDigital" name="impressaoDigital">
             <option value="">Selecione</option>
             <option value="Sim">Sim</option>
             <option value="Não">Não</option>
@@ -554,14 +372,14 @@
         <textarea id="outrosPaises" name="outrosPaises"></textarea>
 
         <label for="vistoNegado">Já teve um visto americano negado?</label>
-        <select id="vistoNegado" name="vistoNegado" required>
+        <select id="vistoNegado" name="vistoNegado">
             <option value="">Selecione</option>
             <option value="Sim">Sim</option>
             <option value="Não">Não</option>
         </select>
 
         <label for="entradaRecusada">Já foi negada admissão aos EUA ou teve entrada recusada?</label>
-        <select id="entradaRecusada" name="entradaRecusada" required>
+        <select id="entradaRecusada" name="entradaRecusada">
             <option value="">Selecione</option>
             <option value="Sim">Sim</option>
             <option value="Não">Não</option>
@@ -573,9 +391,9 @@
         </div>
 
         <h3>Declaração</h3>
-        <p class="declaration-text">Eu, <input type="text" id="declaracaoNome" name="declaracaoNome" placeholder="Nome completo" required>, declaro, sob as penas da lei, que li e compreendi integralmente todas as questões contidas nesta solicitação de visto e afirmo que as respostas por mim fornecidas são verdadeiras, completas e corretas, conforme o meu melhor conhecimento e convicção.</p>
+        <p>Eu, <input type="text" id="declaracaoNome" name="declaracaoNome" placeholder="Nome completo" required>, declaro, sob as penas da lei, que li e compreendi integralmente todas as questões contidas nesta solicitação de visto e afirmo que as respostas por mim fornecidas são verdadeiras, completas e corretas, conforme o meu melhor conhecimento e convicção.</p>
 
-        <p class="declaration-text"><strong>Declaro estar ciente de:</strong></p>
+        <p><strong>Declaro estar ciente de que:</strong></p>
         <ol>
             <li>Qualquer declaração falsa, incompleta ou enganosa poderá resultar na recusa permanente do visto ou na negativa de admissão nos Estados Unidos, conforme disposto na legislação aplicável.</li>
             <li>Todas as informações prestadas nesta solicitação constituem declarações juramentadas, realizadas sob pena de perjúrio, nos termos do disposto no <em>28 U.S.C. § 1746</em>.</li>
@@ -584,7 +402,7 @@
             <li>A fotografia fornecida com esta solicitação poderá ser utilizada pelas autoridades americanas para fins de verificação de identidade, empregabilidade ou outros objetivos legais previstos na legislação dos Estados Unidos.</li>
         </ol>
 
-        <p class="declaration-text"><strong>Declaro ainda:</strong></p>
+        <p><strong>Declaro ainda:</strong></p>
         <ol start="6">
             <li>Que sou exclusivamente responsável pela autenticidade e exatidão dos documentos apresentados e das informações prestadas nesta solicitação.</li>
             <li>Que tenho pleno conhecimento de que a concessão ou negativa do visto é prerrogativa exclusiva da Autoridade Consular Americana, não cabendo a terceiros qualquer ingerência sobre tal decisão.</li>
@@ -593,8 +411,8 @@
             <li>Que a aposição de minha assinatura eletrônica neste documento possui validade jurídica, conforme a legislação aplicável, e representa meu reconhecimento expresso dos serviços contratados.</li>
         </ol>
 
-        <p class="declaration-text"><strong>Autorização:</strong></p>
-        <p class="declaration-text">Declaro, por fim, ter revisado e conferido todos os dados por mim apresentados, autorizando expressamente a empresa <strong>Objetivo Turismo Ltda.</strong>, contratada diretamente por mim ou por intermédio de minha agência, a proceder com o envio eletrônico do Formulário DS-160 ao Consulado Americano, bem como a realizar o pagamento das taxas e o agendamento necessários à tramitação do meu pedido de visto.</p>
+        <p><strong>Autorização:</strong></p>
+        <p>Declaro, por fim, ter revisado e conferido todos os dados por mim apresentados, autorizando expressamente a empresa **Objetivo Turismo Ltda.**, contratada diretamente por mim ou por intermédio de minha agência, a proceder com o envio eletrônico do Formulário DS-160 ao Consulado Americano, bem como a realizar o pagamento das taxas e o agendamento necessários à tramitação do meu pedido de visto.</p>
 
         <label for="declaracaoLocal">Local:</label>
         <input type="text" id="declaracaoLocal" name="declaracaoLocal" required>
@@ -603,23 +421,22 @@
         <input type="date" id="declaracaoData" name="declaracaoData" required>
 
         <label>Concordo com os termos desta declaração <input type="checkbox" id="aceiteDeclaracao" name="aceiteDeclaracao" required style="width: auto; margin-left: 10px;"></label>
-    </form>
 
-    <button type="button" id="btnProcessar">Gerar PDF, Download e Enviar WhatsApp</button>
-    
-    <div class="message" id="statusMessage"></div>
+        <button type="submit">Enviar Formulário</button>
+    </form>
 
     <script type="module">
         // Importa as funções necessárias do Firebase SDK
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-app.js";
         import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-storage.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-analytics.js";
 
-        // --- Configuração do Firebase (SUAS CREDENCIAIS REAIS) ---
+        // Configuração do Firebase com suas credenciais
         const firebaseConfig = {
-            apiKey: "AIzaSyAkBV0rHEghBOHl2mDOs6rMDHkUgYMxFr0", 
+            apiKey: "AIzaSyAkBV0rHEghBOHl2mDOs6rMDHkUgYMxFr0",
             authDomain: "visaformulariostorage.firebaseapp.com",
             projectId: "visaformulariostorage",
-            storageBucket: "visaformulariostorage.firebasestorage.app", 
+            storageBucket: "visaformulariostorage.firebasestorage.app",
             messagingSenderId: "720170394408",
             appId: "1:720170394408:web:b1c294c39c489388f6261d",
             measurementId: "G-ZFCV4JEEFT"
@@ -627,408 +444,409 @@
 
         // Inicializa o Firebase
         const app = initializeApp(firebaseConfig);
-        const storage = getStorage(app); 
+        const storage = getStorage(app);
+        const analytics = getAnalytics(app);
 
-        // Referência para a mensagem de status
-        const statusMessageDiv = document.getElementById('statusMessage');
-
-        // Número de telefone FIXO para o WhatsApp (Exemplo: 556199998165 para DDD 61 no Brasil)
-        const whatsappTargetNumber = "556199998165"; 
-
-        function showMessage(message, type = 'info') {
-            statusMessageDiv.textContent = message;
-            statusMessageDiv.className = `message ${type}`;
-            statusMessageDiv.style.display = 'block'; 
-        }
-
-        // --- Funções de Formatação de CPF e CEP ---
-        window.formatCPF = function(input) {
-            let value = input.value.replace(/\D/g, '');
-            if (value.length > 11) value = value.slice(0, 11);
-            value = value.replace(/(\d{3})(\d)/, '$1.$2');
-            value = value.replace(/(\d{3})(\d)/, '$1.$2');
-            value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+        // Funções de formatação e toggle
+        function formatCPF(input) {
+            let value = input.value.replace(/\D/g, ''); // Remove tudo que não é número
+            if (value.length > 11) value = value.slice(0, 11); // Limita a 11 dígitos
+            value = value.replace(/(\d{3})(\d)/, '$1.$2'); // Adiciona o primeiro ponto
+            value = value.replace(/(\d{3})(\d)/, '$1.$2'); // Adiciona o segundo ponto
+            value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2'); // Adiciona o traço
             input.value = value;
         }
 
-        window.formatCEP = function(input) {
+        function formatCEP(input) {
             let value = input.value.replace(/\D/g, '');
             if (value.length > 8) value = value.slice(0, 8);
-            value = value.replace(/^(\d{5})(\d)/, '$1-$2');
+            if (value.length > 5) {
+                value = value.replace(/(\d{2})(\d{3})(\d{3})/, '$1.$2-$3');
+            } else if (value.length > 2) {
+                value = value.replace(/(\d{2})(\d+)/, '$1.$2');
+            }
             input.value = value;
         }
 
-        // Função para formatar a data para exibição (DD/MM/AAAA)
-        function formatDateForDisplay(dateString) {
-            if (!dateString) return "Não informado";
-            // Adiciona 'T00:00:00' para evitar problemas de fuso horário em navegadores
-            const date = new Date(dateString + 'T00:00:00'); 
-            if (isNaN(date.getTime())) return "Não informado"; // Verifica se a data é válida
-            return date.toLocaleDateString('pt-BR', { year: 'numeric', month: '2-digit', day: '2-digit' });
+        function toggleSpouseInfo() {
+            const estadoCivil = document.getElementById('estadoCivil');
+            const spouseInfo = document.getElementById('spouseInfo');
+            const spouseDeathInfo = document.getElementById('spouseDeathInfo');
+            if (estadoCivil.value === 'Casado' || estadoCivil.value === 'Divorciado' || estadoCivil.value === 'Viúvo' || estadoCivil.value === 'União Estável') {
+                spouseInfo.style.display = 'block';
+                spouseDeathInfo.style.display = (estadoCivil.value === 'Viúvo') ? 'block' : 'none';
+            } else {
+                spouseInfo.style.display = 'none';
+                spouseDeathInfo.style.display = 'none';
+            }
         }
 
-        // Função principal para gerar o conteúdo HTML do PDF a partir dos dados do formulário
-        function generatePdfContent(formData) {
-            // Helper para obter valor formatado, com fallback "Não informado"
-            const getVal = (key, formatter = (v) => v) => {
-                const val = formData.get(key);
-                return val ? formatter(val) : 'Não informado';
-            };
-
-            let content = `
-                <div class="pdf-content">
-                    <h1>Formulário de Solicitação de Visto Americano</h1>
-                    
-                    <h3>Informações Pessoais</h3>
-                    <div class="data-item"><strong>Nome Completo:</strong> <span>${getVal('nome')} ${getVal('sobrenome')}</span></div>
-                    <div class="data-item"><strong>Outros Nomes Utilizados:</strong> <span>${getVal('outrosNomes', v => v || 'Não')}</span></div>
-                    <div class="data-item"><strong>CPF:</strong> <span>${getVal('cpf')}</span></div>
-                    <div class="data-item"><strong>Data de Nascimento:</strong> <span>${getVal('nascimento', formatDateForDisplay)}</span></div>
-                    <div class="data-item"><strong>Local de Nascimento:</strong> <span>${getVal('localNascimento')}</span></div>
-                    <div class="data-item"><strong>Sexo:</strong> <span>${getVal('sexo')}</span></div>
-                    <div class="data-item"><strong>Estado Civil:</strong> <span>${getVal('estadoCivil')}</span></div>
-            `;
-
-            if (['Casado', 'Divorciado', 'Viúvo', 'União Estável'].includes(formData.get('estadoCivil'))) {
-                content += `
-                    <h4>Dados do Cônjuge</h4>
-                    <div class="data-item"><strong>Nome do Cônjuge:</strong> <span>${getVal('spouseNome')}</span></div>
-                    <div class="data-item"><strong>Data de Nascimento do Cônjuge:</strong> <span>${getVal('spouseNascimento', formatDateForDisplay)}</span></div>
-                    <div class="data-item"><strong>Local de Nascimento do Cônjuge:</strong> <span>${getVal('spouseLocalNascimento')}</span></div>
-                `;
-                if (formData.get('estadoCivil') === 'Viúvo') {
-                    content += `<div class="data-item"><strong>Data de Falecimento do Cônjuge:</strong> <span>${getVal('spouseFalecimento', formatDateForDisplay)}</span></div>`;
-                }
-            }
-
-            content += `
-                    <hr>
-                    <div class="data-item"><strong>Nacionalidade Atual:</strong> <span>${getVal('nacionalidade')}</span></div>
-                    <div class="data-item"><strong>Outras Nacionalidades:</strong> <span>${getVal('outrasNacionalidades', v => v || 'Não possui')}</span></div>
-                    <div class="data-item"><strong>Número do Passaporte:</strong> <span>${getVal('passaporte')}</span></div>
-                    <div class="data-item"><strong>Data de Emissão do Passaporte:</strong> <span>${getVal('dataEmissaoPassaporte', formatDateForDisplay)}</span></div>
-                    <div class="data-item"><strong>Data de Validade do Passaporte:</strong> <span>${getVal('dataValidadePassaporte', formatDateForDisplay)}</span></div>
-                    <div class="data-item"><strong>Local de Emissão do Passaporte:</strong> <span>${getVal('localEmissaoPassaporte')}</span></div>
-
-                    <h3>Informações de Contato</h3>
-                    <div class="data-item"><strong>CEP:</strong> <span>${getVal('cep')}</span></div>
-                    <div class="data-item"><strong>Endereço Completo:</strong> <span>${getVal('endereco')}</span></div>
-                    <div class="data-item"><strong>Cidade:</strong> <span>${getVal('cidade')}</span></div>
-                    <div class="data-item"><strong>Estado/Província:</strong> <span>${getVal('estado')}</span></div>
-                    <div class="data-item"><strong>País:</strong> <span>${getVal('pais')}</span></div>
-                    <div class="data-item"><strong>Telefone:</strong> <span>${getVal('telefone')}</span></div>
-                    <div class="data-item"><strong>E-mail:</strong> <span>${getVal('emailContato')}</span></div>
-
-                    <h3>Informações Familiares</h3>
-                    <div class="data-item"><strong>Seus Pais Estão Vivos?:</strong> <span>${getVal('temPaisVivos')}</span></div>
-            `;
-
-            if (formData.get('temPaisVivos') === 'Sim') {
-                content += `
-                    <div class="data-item"><strong>Nome do Pai:</strong> <span>${getVal('nomePai')}</span></div>
-                    <div class="data-item"><strong>Data de Nascimento do Pai:</strong> <span>${getVal('nascimentoPai', formatDateForDisplay)}</span></div>
-                    <div class="data-item"><strong>Nome da Mãe:</strong> <span>${getVal('nomeMae')}</span></div>
-                    <div class="data-item"><strong>Data de Nascimento da Mãe:</strong> <span>${getVal('nascimentoMae', formatDateForDisplay)}</span></div>
-                    <div class="data-item"><strong>Pais nos EUA?:</strong> <span>${getVal('paisNosEUA')}</span></div>
-                `;
-                if (formData.get('paisNosEUA') === 'Sim') {
-                    content += `<div class="data-item"><strong>Explicação sobre Pais nos EUA:</strong> <span>${getVal('explicacaoPaisEUA')}</span></div>`;
-                }
-            }
-
-            content += `
-                    <div class="data-item"><strong>Tem Conhecidos nos EUA?:</strong> <span>${getVal('temConhecidosEUA')}</span></div>
-            `;
-            if (formData.get('temConhecidosEUA') === 'Sim') {
-                content += `
-                    <h4>Dados do Conhecido nos EUA</h4>
-                    <div class="data-item"><strong>Nome do Conhecido:</strong> <span>${getVal('nomeConhecido')}</span></div>
-                    <div class="data-item"><strong>Telefone do Conhecido:</strong> <span>${getVal('telefoneConhecido')}</span></div>
-                    <div class="data-item"><strong>E-mail do Conhecido:</strong> <span>${getVal('emailConhecido')}</span></div>
-                    <div class="data-item"><strong>Vínculo com Solicitante:</strong> <span>${getVal('vinculoConhecido')}</span></div>
-                `;
-            }
-
-            content += `
-                    <h3>Detalhes da Viagem</h3>
-                    <div class="data-item"><strong>Objetivo da Viagem:</strong> <span>${getVal('objetivo')}</span></div>
-                    <div class="data-item"><strong>Data Prevista de Chegada:</strong> <span>${getVal('chegada', formatDateForDisplay)}</span></div>
-                    <div class="data-item"><strong>Tempo de Estadia Pretendido:</strong> <span>${getVal('tempo')}</span></div>
-                    <div class="data-item"><strong>Endereço nos EUA:</strong> <span>${getVal('enderecoEUA')}</span></div>
-                    <div class="data-item"><strong>Quem Paga pela Viagem:</strong> <span>${getVal('quemPaga')}</span></div>
-            `;
-
-            if (formData.get('quemPaga') === 'Outra pessoa') {
-                content += `
-                    <h4>Dados da Pessoa Pagante</h4>
-                    <div class="data-item"><strong>Nome da Pessoa Pagante:</strong> <span>${getVal('payerNome')}</span></div>
-                `;
-                if (formData.get('payerSameAddress') === 'Não') {
-                    content += `
-                        <div class="data-item"><strong>CEP do Pagante:</strong> <span>${getVal('payerCEP')}</span></div>
-                        <div class="data-item"><strong>Endereço do Pagante:</strong> <span>${getVal('payerEndereco')}</span></div>
-                        <div class="data-item"><strong>Cidade do Pagante:</strong> <span>${getVal('payerCidade')}</span></div>
-                        <div class="data-item"><strong>Estado/Província do Pagante:</strong> <span>${getVal('payerEstado')}</span></div>
-                        <div class="data-item"><strong>País do Pagante:</strong> <span>${getVal('payerPais')}</span></div>
-                    `;
-                } else {
-                    content += `<div class="data-item"><strong>Endereço do Pagante:</strong> <span>Mesmo do Solicitante</span></div>`;
-                }
-                content += `
-                    <div class="data-item"><strong>E-mail do Pagante:</strong> <span>${getVal('payerEmail')}</span></div>
-                    <div class="data-item"><strong>Telefone do Pagante:</strong> <span>${getVal('payerTelefone')}</span></div>
-                    <div class="data-item"><strong>Vínculo do Pagante:</strong> <span>${getVal('payerVinculo')}</span></div>
-                `;
-            }
-
-            content += `
-                    <div class="data-item"><strong>Vai viajar com alguém?:</strong> <span>${getVal('temCompanheiros')}</span></div>
-            `;
-            if (formData.get('temCompanheiros') === 'Sim') {
-                content += `
-                    <div class="data-item"><strong>Nome do(s) Companheiro(s):</strong> <span>${getVal('nomeCompanheiro')}</span></div>
-                    <div class="data-item"><strong>Relação com Companheiro(s):</strong> <span>${getVal('relacaoCompanheiro')}</span></div>
-                `;
-            }
-
-            content += `
-                    <h3>Informações de Trabalho</h3>
-                    <div class="data-item"><strong>Ocupação Atual:</strong> <span>${getVal('ocupacao')}</span></div>
-                    <div class="data-item"><strong>Nome do Empregador:</strong> <span>${getVal('empregador')}</span></div>
-                    <div class="data-item"><strong>Endereço do Empregador:</strong> <span>${getVal('enderecoEmpregador')}</span></div>
-                    <div class="data-item"><strong>Telefone do Empregador:</strong> <span>${getVal('telefoneEmpregador')}</span></div>
-                    <div class="data-item"><strong>Data de Início no Emprego:</strong> <span>${getVal('dataInicioTrabalho', formatDateForDisplay)}</span></div>
-                    <div class="data-item"><strong>Renda Mensal:</strong> <span>${getVal('rendaMensal', v => `R$ ${v}`)}</span></div>
-
-                    <h3>Informações de Educação</h3>
-                    <div class="data-item"><strong>Nível Mais Alto de Educação:</strong> <span>${getVal('nivelEducacao')}</span></div>
-                    <div class="data-item"><strong>Nome da Instituição:</strong> <span>${getVal('instituicao')}</span></div>
-                    <div class="data-item"><strong>Endereço da Instituição:</strong> <span>${getVal('enderecoInstituicao')}</span></div>
-                    <div class="data-item"><strong>Data de Início do Curso:</strong> <span>${getVal('dataInicioEducacao', formatDateForDisplay)}</span></div>
-                    <div class="data-item"><strong>Data de Conclusão do Curso:</strong> <span>${getVal('dataFimEducacao', formatDateForDisplay)}</span></div>
-
-                    <h3>Histórico de Viagens</h3>
-                    <div class="data-item"><strong>É o Primeiro Visto ou Renovação?:</strong> <span>${getVal('primeiroVisto')}</span></div>
-            `;
-
-            if (formData.get('primeiroVisto') === 'Renovação') {
-                content += `
-                    <h4>Dados do Visto Anterior (Renovação)</h4>
-                    <div class="data-item"><strong>Número do Visto Anterior:</strong> <span>${getVal('numeroVistoAnteriorRenovacao')}</span></div>
-                    <div class="data-item"><strong>Data de Emissão do Visto Anterior:</strong> <span>${getVal('dataEmissaoVistoAnterior', formatDateForDisplay)}</span></div>
-                    <div class="data-item"><strong>Data de Validade do Visto Anterior:</strong> <span>${getVal('dataValidadeVistoAnterior', formatDateForDisplay)}</span></div>
-                    <div class="data-item"><strong>Local de Emissão do Visto Anterior:</strong> <span>${getVal('localEmissaoVistoAnterior')}</span></div>
-                `;
-            }
-
-            content += `
-                    <div class="data-item"><strong>Já Visitou os EUA Antes?:</strong> <span>${getVal('visitouEUA')}</span></div>
-            `;
-            if (formData.get('visitouEUA') === 'Sim') {
-                content += `
-                    <h4>Última Visita aos EUA</h4>
-                    <div class="data-item"><strong>Data da Última Visita:</strong> <span>${getVal('dataUltimaVisita', formatDateForDisplay)}</span></div>
-                    <div class="data-item"><strong>Tempo de Estadia na Última Visita:</strong> <span>${getVal('tempoUltimaVisita')}</span></div>
-                    <div class="data-item"><strong>Número do Visto Anterior:</strong> <span>${getVal('numeroVistoAnterior')}</span></div>
-                `;
-            }
-            content += `
-                    <div class="data-item"><strong>Já teve Impressão Digital Coletada?:</strong> <span>${getVal('impressaoDigital')}</span></div>
-                    <div class="data-item"><strong>Países Visitados nos Últimos 5 Anos:</strong> <span>${getVal('outrosPaises')}</span></div>
-                    <div class="data-item"><strong>Já teve Visto Americano Negado?:</strong> <span>${getVal('vistoNegado')}</span></div>
-                    <div class="data-item"><strong>Já teve Entrada Recusada nos EUA?:</strong> <span>${getVal('entradaRecusada')}</span></div>
-            `;
-            if (formData.get('vistoNegado') === 'Sim' || formData.get('entradaRecusada') === 'Sim') {
-                content += `
-                    <div class="data-item"><strong>Detalhes da Negativa/Recusa:</strong> <span>${getVal('detalhesVistoNegado')}</span></div>
-                `;
-            }
-
-            content += `
-                    <h3>Declaração</h3>
-                    <p class="declaration-text">Eu, <input type="text" id="declaracaoNome" name="declaracaoNome" placeholder="Nome completo" required>, declaro, sob as penas da lei, que li e compreendi integralmente todas as questões contidas nesta solicitação de visto e afirmo que as respostas por mim fornecidas são verdadeiras, completas e corretas, conforme o meu melhor conhecimento e convicção.</p>
-
-                    <p class="declaration-text"><strong>Declaro estar ciente de:</strong></p>
-                    <ol>
-                        <li>Qualquer declaração falsa, incompleta ou enganosa poderá resultar na recusa permanente do visto ou na negativa de admissão nos Estados Unidos, conforme disposto na legislação aplicável.</li>
-                        <li>Todas as informações prestadas nesta solicitação constituem declarações juramentadas, realizadas sob pena de perjúrio, nos termos do disposto no <em>28 U.S.C. § 1746</em>.</li>
-                        <li>Informações adicionais poderão ser requisitadas pelas autoridades competentes após a análise desta solicitação, sendo minha responsabilidade fornecê-las tempestivamente.</li>
-                        <li>As informações contidas nesta solicitação poderão ser compartilhadas com outras agências governamentais dos Estados Unidos, que possuem autoridade para utilizá-las para fins de aplicação da lei ou para propósitos imigratórios, conforme permitido pela legislação vigente.</li>
-                        <li>A fotografia fornecida com esta solicitação poderá ser utilizada pelas autoridades americanas para fins de verificação de identidade, empregabilidade ou outros objetivos legais previstos na legislação dos Estados Unidos.</li>
-                    </ol>
-
-                    <p class="declaration-text"><strong>Declaro ainda:</strong></p>
-                    <ol start="6">
-                        <li>Que sou exclusivamente responsável pela autenticidade e exatidão dos documentos apresentados e das informações prestadas nesta solicitação.</li>
-                        <li>Que tenho pleno conhecimento de que a concessão ou negativa do visto é prerrogativa exclusiva da Autoridade Consular Americana, não cabendo a terceiros qualquer ingerência sobre tal decisão.</li>
-                        <li>Que estou ciente de que, em processos de renovação de visto, entrevistas presenciais poderão ser exigidas a critério exclusivo da Autoridade Consular Americana.</li>
-                        <li>Que reconheço que o serviço contratado constitui assessoria relacionada ao processo de preenchimento de documentação, agendamento de biometria e entrevista, não abrangendo serviços de entrega ou retirada de documentos no Centro de Atendimento ao Solicitante de Visto (CASV), sendo necessária a contratação de um agente colaborador, caso eu deseje tais serviços adicionais.</li>
-                        <li>Que a aposição de minha assinatura eletrônica neste documento possui validade jurídica, conforme a legislação aplicável, e representa meu reconhecimento expresso dos serviços contratados.</li>
-                    </ol>
-
-                    <p class="declaration-text"><strong>Autorização:</strong></p>
-                    <p class="declaration-text">Declaro, por fim, ter revisado e conferido todos os dados por mim apresentados, autorizando expressamente a empresa <strong>Objetivo Turismo Ltda.</strong>, contratada diretamente por mim ou por intermédio de minha agência, a proceder com o envio eletrônico do Formulário DS-160 ao Consulado Americano, bem como a realizar o pagamento das taxas e o agendamento necessários à tramitação do meu pedido de visto.</p>
-
-                    <div class="data-item"><strong>Local:</strong> <span>${getVal('declaracaoLocal')}</span></div>
-                    <div class="data-item"><strong>Data da Declaração:</strong> <span>${getVal('declaracaoData', formatDateForDisplay)}</span></div>
-                    <div class="data-item"><strong>Concordo com os termos:</strong> <span>${formData.get('aceiteDeclaracao') === 'on' ? 'Sim' : 'Não'}</span></div>
-                    <div class="footer-info">
-                        Documento gerado em: ${new Date().toLocaleString('pt-BR')}
-                    </div>
-                </div>
-            `;
-            return content;
+        function toggleParentsInfo() {
+            const temPaisVivos = document.getElementById('temPaisVivos');
+            const parentsInfo = document.getElementById('parentsInfo');
+            parentsInfo.style.display = (temPaisVivos.value === 'Sim') ? 'block' : 'none';
         }
 
-        // --- Event Listeners para Mostrar/Esconder Seções (Lógica restaurada) ---
-        document.addEventListener('DOMContentLoaded', function() {
-            const form = document.getElementById('visaForm');
+        function toggleParentsInUSInfo() {
+            const paisNosEUA = document.getElementById('paisNosEUA');
+            const parentsInUSInfo = document.getElementById('parentsInUSInfo');
+            parentsInUSInfo.style.display = (paisNosEUA.value === 'Sim') ? 'block' : 'none';
+        }
 
-            // Função helper para alternar a visibilidade de uma seção
-            function toggleVisibility(selectId, targetId, valuesToShow) {
-                const selectElement = document.getElementById(selectId);
-                const targetElement = document.getElementById(targetId);
+        function toggleTravelCompanionsInfo() {
+            const temCompanheiros = document.getElementById('temCompanheiros');
+            const travelCompanionsInfo = document.getElementById('travelCompanionsInfo');
+            travelCompanionsInfo.style.display = (temCompanheiros.value === 'Sim') ? 'block' : 'none';
+        }
 
-                function updateVisibility() {
-                    if (valuesToShow.includes(selectElement.value)) {
-                        targetElement.style.display = 'block';
-                    } else {
-                        targetElement.style.display = 'none';
-                        // Opcional: Limpar campos quando a seção é escondida
-                        Array.from(targetElement.querySelectorAll('input, select, textarea')).forEach(input => {
-                            if (input.type === 'checkbox' || input.type === 'radio') {
-                                input.checked = false;
-                            } else {
-                                input.value = '';
-                            }
-                        });
+        function togglePreviousUSVisaInfo() {
+            const visitouEUA = document.getElementById('visitouEUA');
+            const previousUSVisaInfo = document.getElementById('previousUSVisaInfo');
+            previousUSVisaInfo.style.display = (visitouEUA.value === 'Sim') ? 'block' : 'none';
+        }
+
+        function toggleVisaDeniedDetails() {
+            const vistoNegado = document.getElementById('vistoNegado');
+            const entradaRecusada = document.getElementById('entradaRecusada');
+            const visaDeniedDetails = document.getElementById('visaDeniedDetails');
+            visaDeniedDetails.style.display = (vistoNegado.value === 'Sim' || entradaRecusada.value === 'Sim') ? 'block' : 'none';
+        }
+
+        function togglePayerInfo() {
+            const quemPaga = document.getElementById('quemPaga');
+            const payerInfo = document.getElementById('payerInfo');
+            payerInfo.style.display = (quemPaga.value === 'Outra pessoa') ? 'block' : 'none';
+        }
+
+        function togglePayerAddressInfo() {
+            const payerSameAddress = document.getElementById('payerSameAddress');
+            const payerAddressInfo = document.getElementById('payerAddressInfo');
+            payerAddressInfo.style.display = (payerSameAddress.value === 'Não') ? 'block' : 'none';
+        }
+
+        function toggleRenewalInfo() {
+            const primeiroVisto = document.getElementById('primeiroVisto');
+            const renewalInfo = document.getElementById('renewalInfo');
+            renewalInfo.style.display = (primeiroVisto.value === 'Renovação') ? 'block' : 'none';
+        }
+
+        function toggleAcquaintancesInfo() {
+            const temConhecidosEUA = document.getElementById('temConhecidosEUA');
+            const acquaintancesInfo = document.getElementById('acquaintancesInfo');
+            acquaintancesInfo.style.display = (temConhecidosEUA.value === 'Sim') ? 'block' : 'none';
+        }
+
+        function formatDateBr(dateStr) {
+            if (!dateStr) return 'Não informado';
+            const [year, month, day] = dateStr.split('-');
+            const date = new Date(year, month - 1, day);
+            return date.toLocaleDateString('pt-BR', { timeZone: 'America/Sao_Paulo' });
+        }
+
+        // Adicionando event listeners
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('estadoCivil').addEventListener('change', toggleSpouseInfo);
+            document.getElementById('temPaisVivos').addEventListener('change', toggleParentsInfo);
+            document.getElementById('paisNosEUA').addEventListener('change', toggleParentsInUSInfo);
+            document.getElementById('temConhecidosEUA').addEventListener('change', toggleAcquaintancesInfo);
+            document.getElementById('quemPaga').addEventListener('change', togglePayerInfo);
+            document.getElementById('payerSameAddress').addEventListener('change', togglePayerAddressInfo);
+            document.getElementById('temCompanheiros').addEventListener('change', toggleTravelCompanionsInfo);
+            document.getElementById('primeiroVisto').addEventListener('change', toggleRenewalInfo);
+            document.getElementById('visitouEUA').addEventListener('change', togglePreviousUSVisaInfo);
+            document.getElementById('vistoNegado').addEventListener('change', toggleVisaDeniedDetails);
+            document.getElementById('entradaRecusada').addEventListener('change', toggleVisaDeniedDetails);
+            document.getElementById('visaForm').addEventListener('submit', generatePDF);
+        });
+
+        // Função para gerar o PDF
+        async function generatePDF(event) {
+            event.preventDefault();
+            try {
+                const { jsPDF } = window.jspdf;
+                const form = document.getElementById('visaForm');
+                const formData = new FormData(form);
+                const solicitanteNome = formData.get('nome') || formData.get('declaracaoNome') || 'Não informado';
+                const fixedWhatsAppNumber = '5561999998165';
+                const doc = new jsPDF();
+                const pageWidth = doc.internal.pageSize.width;
+                const pageHeight = doc.internal.pageSize.height;
+                const margin = 10;
+                let yPosition = 30;
+
+                function drawHeader() {
+                    doc.setFillColor(0, 48, 135);
+                    doc.rect(0, 0, pageWidth, 25, 'F');
+                    doc.setFontSize(16);
+                    doc.setTextColor(255, 255, 255);
+                    doc.setFont("Helvetica", "bold");
+                    const title = "Formulário de Solicitação de Visto Americano";
+                    const titleWidth = doc.getTextWidth(title);
+                    const titleX = (pageWidth - titleWidth) / 2;
+                    doc.text(title, titleX, 15);
+                    doc.setFontSize(14);
+                    const starSpacing = 8;
+                    for (let i = 0; i < 3; i++) {
+                        doc.text("*", titleX - (i + 1) * starSpacing - 5, 15);
+                        doc.text("*", titleX + titleWidth + (i + 1) * starSpacing + 5, 15);
                     }
                 }
 
-                selectElement.addEventListener('change', updateVisibility);
-                updateVisibility(); // Chama na carga para definir o estado inicial
-            }
-
-            // Pessoal - Estado Civil
-            toggleVisibility('estadoCivil', 'spouseInfo', ['Casado', 'Divorciado', 'Viúvo', 'União Estável']);
-            document.getElementById('estadoCivil').addEventListener('change', function() {
-                const spouseDeathInfo = document.getElementById('spouseDeathInfo');
-                if (this.value === 'Viúvo') {
-                    spouseDeathInfo.style.display = 'block';
-                } else {
-                    spouseDeathInfo.style.display = 'none';
-                    document.getElementById('spouseFalecimento').value = ''; // Limpa o campo
+                function drawPageBorder() {
+                    doc.setDrawColor(0, 48, 135);
+                    doc.setLineWidth(0.5);
+                    doc.rect(margin / 2, margin / 2, pageWidth - margin, pageHeight - margin);
                 }
-            });
 
-            // Familiar
-            toggleVisibility('temPaisVivos', 'parentsInfo', ['Sim']);
-            toggleVisibility('paisNosEUA', 'parentsInUSInfo', ['Sim']);
-            toggleVisibility('temConhecidosEUA', 'acquaintancesInfo', ['Sim']);
-
-            // Viagem
-            toggleVisibility('quemPaga', 'payerInfo', ['Outra pessoa']);
-            toggleVisibility('payerSameAddress', 'payerAddressInfo', ['Não']);
-            toggleVisibility('temCompanheiros', 'travelCompanionsInfo', ['Sim']);
-
-            // Histórico
-            toggleVisibility('primeiroVisto', 'renewalInfo', ['Renovação']);
-            toggleVisibility('visitouEUA', 'previousUSVisaInfo', ['Sim']);
-            
-            // A seção de detalhes de visto negado/entrada recusada deve ser exibida se *qualquer um* for 'Sim'
-            const vistoNegadoSelect = document.getElementById('vistoNegado');
-            const entradaRecusadaSelect = document.getElementById('entradaRecusada');
-            const visaDeniedDetailsDiv = document.getElementById('visaDeniedDetails');
-
-            function updateVisaDeniedDetailsVisibility() {
-                if (vistoNegadoSelect.value === 'Sim' || entradaRecusadaSelect.value === 'Sim') {
-                    visaDeniedDetailsDiv.style.display = 'block';
-                } else {
-                    visaDeniedDetailsDiv.style.display = 'none';
-                    document.getElementById('detalhesVistoNegado').value = ''; // Limpa o campo
+                function addSectionTitle(title) {
+                    if (yPosition + 15 > pageHeight - margin) {
+                        doc.addPage();
+                        yPosition = 30;
+                        drawHeader();
+                        drawPageBorder();
+                    }
+                    doc.setFillColor(200, 16, 46);
+                    doc.rect(margin, yPosition - 5, pageWidth - 2 * margin, 10, 'F');
+                    doc.setFontSize(12);
+                    doc.setTextColor(255, 255, 255);
+                    doc.setFont("Helvetica", "bold");
+                    doc.text(title, margin + 5, yPosition + 2);
+                    yPosition += 15;
                 }
-            }
-            vistoNegadoSelect.addEventListener('change', updateVisaDeniedDetailsVisibility);
-            entradaRecusadaSelect.addEventListener('change', updateVisaDeniedDetailsVisibility);
-            updateVisaDeniedDetailsVisibility(); // Chama ao carregar para o estado inicial
-        });
 
-        // --- Função para processar o formulário, gerar PDF e enviar WhatsApp ---
-        document.getElementById('btnProcessar').addEventListener('click', async function() {
-            const form = document.getElementById('visaForm');
-            if (!form.checkValidity()) {
-                showMessage('Por favor, preencha todos os campos obrigatórios.', 'error');
-                form.reportValidity(); // Mostra as mensagens de erro do navegador
-                return;
-            }
+                function addText(text, isBold = false) {
+                    const maxWidth = pageWidth - 2 * margin;
+                    const lineHeight = 7;
+                    const lines = doc.splitTextToSize(text, maxWidth);
 
-            this.disabled = true; // Desabilita o botão para evitar múltiplos cliques
-            showMessage('Processando... Por favor, aguarde.', 'info');
+                    doc.setFont("Helvetica", isBold ? "bold" : "normal");
+                    doc.setTextColor(0, 0, 0);
+                    doc.setFontSize(10);
+                    // Check space for each line individually
+                    for (let i = 0; i < lines.length; i++) {
+                        if (yPosition + lineHeight > pageHeight - margin) {
+                            doc.addPage();
+                            yPosition = 30;
+                            drawHeader();
+                            drawPageBorder();
+                        }
+                        doc.text(lines[i], margin, yPosition);
+                        yPosition += lineHeight;
+                    }
+                    yPosition += 2;
+                }
 
-            const formData = new FormData(form);
-            // Substitui espaços por underscores e remove caracteres especiais para o nome do arquivo
-            const nomeCompleto = `${formData.get('nome') || 'Cliente'}_${formData.get('sobrenome') || 'Visto'}`.replace(/[^a-zA-Z0-9\s]/g, '').replace(/ /g, '_');
-            const timestamp = Date.now();
-            const fileName = `DS160_${nomeCompleto}_${timestamp}.pdf`; 
+                function addJustifiedText(text, isBold = false) {
+                    const maxWidth = pageWidth - 2 * margin;
+                    const lineHeight = 7;
+                    const lines = doc.splitTextToSize(text, maxWidth);
 
-            try {
-                // 1. Gerar o conteúdo HTML para o PDF
-                const pdfHtmlContent = generatePdfContent(formData);
-                console.log("HTML gerado para o PDF:", pdfHtmlContent); // Para depuração
+                    doc.setFont("Helvetica", isBold ? "bold" : "normal");
+                    doc.setTextColor(0, 0, 0);
+                    doc.setFontSize(10);
+                    for (let i = 0; i < lines.length; i++) {
+                        if (yPosition + lineHeight > pageHeight - margin) {
+                            doc.addPage();
+                            yPosition = 30;
+                            drawHeader();
+                            drawPageBorder();
+                        }
+                        if (i === lines.length - 1 || doc.getTextWidth(lines[i]) < maxWidth * 0.8) {
+                            doc.text(lines[i], margin, yPosition);
+                        } else {
+                            const words = lines[i].trim().split(/\s+/);
+                            const totalWordWidth = words.reduce((sum, word) => sum + doc.getTextWidth(word), 0);
+                            const spaceWidth = (maxWidth - totalWordWidth) / (words.length - 1);
+                            let x = margin;
+                            for (let j = 0; j < words.length; j++) {
+                                doc.text(words[j], x, yPosition);
+                                x += doc.getTextWidth(words[j]) + spaceWidth;
+                            }
+                        }
+                        yPosition += lineHeight;
+                    }
+                    yPosition += 5;
+                }
 
-                // 2. Gerar o PDF a partir do HTML
-                const pdfOptions = {
-                    margin: [15, 20, 15, 20], // Top, Left, Bottom, Right em mm
-                    filename: fileName,
-                    image: { type: 'jpeg', quality: 0.98 },
-                    html2canvas: { 
-                        scale: 2, 
-                        logging: true, // Habilita logs para html2canvas
-                        dpi: 192, 
-                        letterRendering: true,
-                        useCORS: true // Importante se tiver imagens de outras origens
-                    },
-                    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-                };
+                drawHeader();
+                drawPageBorder();
 
-                // Cria o worker do html2pdf
-                const pdfWorker = html2pdf().from(pdfHtmlContent).set(pdfOptions);
-                
-                // Primeiro, baixa o PDF localmente
-                await pdfWorker.save();
-                showMessage('PDF gerado e baixado localmente com sucesso! Enviando para o armazenamento...', 'info');
+                addSectionTitle("Informações Pessoais");
+                addText(`Nome: ${formData.get('nome') || 'Não informado'}`, true);
+                addText(`Sobrenome: ${formData.get('sobrenome') || 'Não informado'}`);
+                addText(`Outros Nomes: ${formData.get('outrosNomes') || 'Não informado'}`);
+                addText(`CPF: ${formData.get('cpf') || 'Não informado'}`);
+                addText(`Data de Nascimento: ${formatDateBr(formData.get('nascimento'))}`);
+                addText(`Local de Nascimento: ${formData.get('localNascimento') || 'Não informado'}`);
+                addText(`Sexo: ${formData.get('sexo') || 'Não informado'}`);
+                addText(`Estado Civil: ${formData.get('estadoCivil') || 'Não informado'}`);
 
-                // Em seguida, obtém o blob para upload
-                const pdfBlob = await pdfWorker.output('blob');
-                
-                // 3. Fazer o upload do PDF para o Firebase Storage
-                // Usando 'visto_forms' conforme as regras do seu Firebase Storage
-                const storageRef = ref(storage, `visto_forms/${fileName}`); 
-                const snapshot = await uploadBytes(storageRef, pdfBlob);
-                const downloadURL = await getDownloadURL(snapshot.ref);
-                console.log("PDF uploaded to:", downloadURL); // Para depuração
+                const estadoCivil = formData.get('estadoCivil');
+                if (estadoCivil === 'Casado' || estadoCivil === 'Divorciado' || estadoCivil === 'Viúvo' || estadoCivil === 'União Estável') {
+                    addSectionTitle("Dados do Cônjuge");
+                    addText(`Nome do Cônjuge: ${formData.get('spouseNome') || 'Não informado'}`);
+                    addText(`Data de Nascimento do Cônjuge: ${formatDateBr(formData.get('spouseNascimento'))}`);
+                    addText(`Local de Nascimento do Cônjuge: ${formData.get('spouseLocalNascimento') || 'Não informado'}`);
+                    if (estadoCivil === 'Viúvo') {
+                        addText(`Data de Falecimento do Cônjuge: ${formatDateBr(formData.get('spouseFalecimento'))}`);
+                    }
+                }
 
-                showMessage('PDF gerado e enviado para o armazenamento com sucesso! Preparando mensagem do WhatsApp...', 'success');
+                addText(`Nacionalidade: ${formData.get('nacionalidade') || 'Não informado'}`);
+                addText(`Outras Nacionalidades: ${formData.get('outrasNacionalidades') || 'Não informado'}`);
+                addText(`Número do Passaporte: ${formData.get('passaporte') || 'Não informado'}`);
+                addText(`Data de Emissão do Passaporte: ${formatDateBr(formData.get('dataEmissaoPassaporte'))}`);
+                addText(`Data de Validade do Passaporte: ${formatDateBr(formData.get('dataValidadePassaporte'))}`);
+                addText(`Local de Emissão do Passaporte: ${formData.get('localEmissaoPassaporte') || 'Não informado'}`);
 
-                // 4. Preparar e enviar a mensagem do WhatsApp para o número FIXO
-                const mensagemWhatsApp = encodeURIComponent(
-                    `Olá! O formulário de visto americano de ${formData.get('nome') || 'Cliente'} ${formData.get('sobrenome') || ''} foi preenchido com sucesso e o PDF já está disponível para download. \n\nLink do PDF: ${downloadURL}`
-                );
+                addSectionTitle("Informações de Contato");
+                addText(`CEP: ${formData.get('cep') || 'Não informado'}`);
+                addText(`Endereço: ${formData.get('endereco') || 'Não informado'}`);
+                addText(`Cidade: ${formData.get('cidade') || 'Não informado'}`);
+                addText(`Estado: ${formData.get('estado') || 'Não informado'}`);
+                addText(`País: ${formData.get('pais') || 'Não informado'}`);
+                addText(`Telefone: ${formData.get('telefone') || 'Não informado'}`);
+                addText(`E-mail: ${formData.get('email') || 'Não informado'}`);
 
-                const whatsappUrl = `https://api.whatsapp.com/send?phone=${whatsappTargetNumber}&text=${mensagemWhatsApp}`;
-                
-                // Abre o WhatsApp
-                window.open(whatsappUrl, '_blank');
+                addSectionTitle("Informações Familiares");
+                addText(`Pais Vivos: ${formData.get('temPaisVivos') || 'Não informado'}`);
+                if (formData.get('temPaisVivos') === 'Sim') {
+                    addText(`Nome do Pai: ${formData.get('nomePai') || 'Não informado'}`);
+                    addText(`Data de Nascimento do Pai: ${formatDateBr(formData.get('nascimentoPai'))}`);
+                    addText(`Nome da Mãe: ${formData.get('nomeMae') || 'Não informado'}`);
+                    addText(`Data de Nascimento da Mãe: ${formatDateBr(formData.get('nascimentoMae'))}`);
+                    addText(`Pais nos EUA: ${formData.get('paisNosEUA') || 'Não informado'}`);
+                    if (formData.get('paisNosEUA') === 'Sim') {
+                        addText(`Explicação sobre Pais nos EUA: ${formData.get('explicacaoPaisEUA') || 'Não informado'}`);
+                    }
+                }
+                addText(`Conhecidos nos EUA: ${formData.get('temConhecidosEUA') || 'Não informado'}`);
+                if (formData.get('temConhecidosEUA') === 'Sim') {
+                    addText(`Nome do Conhecido: ${formData.get('nomeConhecido') || 'Não informado'}`);
+                    addText(`Telefone do Conhecido: ${formData.get('telefoneConhecido') || 'Não informado'}`);
+                    addText(`E-mail do Conhecido: ${formData.get('emailConhecido') || 'Não informado'}`);
+                    addText(`Vínculo com o Conhecido: ${formData.get('vinculoConhecido') || 'Não informado'}`);
+                }
 
-                showMessage('PDF gerado, enviado e mensagem do WhatsApp aberta com sucesso!', 'success');
+                addSectionTitle("Detalhes da Viagem");
+                addText(`Objetivo da Viagem: ${formData.get('objetivo') || 'Não informado'}`);
+                addText(`Data de Chegada: ${formatDateBr(formData.get('chegada'))}`);
+                addText(`Tempo de Estadia: ${formData.get('tempo') || 'Não informado'}`);
+                addText(`Endereço nos EUA: ${formData.get('enderecoEUA') || 'Não informado'}`);
+                addText(`Quem Paga a Viagem: ${formData.get('quemPaga') || 'Não informado'}`);
+                if (formData.get('quemPaga') === 'Outra pessoa') {
+                    addText(`Nome do Pagante: ${formData.get('payerNome') || 'Não informado'}`);
+                    addText(`Endereço Igual ao Solicitante: ${formData.get('payerSameAddress') || 'Não informado'}`);
+                    if (formData.get('payerSameAddress') === 'Não') {
+                        addText(`CEP do Pagante: ${formData.get('payerCEP') || 'Não informado'}`);
+                        addText(`Endereço do Pagante: ${formData.get('payerEndereco') || 'Não informado'}`);
+                        addText(`Cidade do Pagante: ${formData.get('payerCidade') || 'Não informado'}`);
+                        addText(`Estado do Pagante: ${formData.get('payerEstado') || 'Não informado'}`);
+                        addText(`País do Pagante: ${formData.get('payerPais') || 'Não informado'}`);
+                    }
+                    addText(`E-mail do Pagante: ${formData.get('payerEmail') || 'Não informado'}`);
+                    addText(`Telefone do Pagante: ${formData.get('payerTelefone') || 'Não informado'}`);
+                    addText(`Vínculo com o Pagante: ${formData.get('payerVinculo') || 'Não informado'}`);
+                }
+                addText(`Companheiros de Viagem: ${formData.get('temCompanheiros') || 'Não informado'}`);
+                if (formData.get('temCompanheiros') === 'Sim') {
+                    addText(`Nome do(s) Companheiro(s): ${formData.get('nomeCompanheiro') || 'Não informado'}`);
+                    addText(`Relação com o(s) Companheiro(s): ${formData.get('relacaoCompanheiro') || 'Não informado'}`);
+                }
+
+                addSectionTitle("Informações de Trabalho");
+                addText(`Ocupação: ${formData.get('ocupacao') || 'Não informado'}`);
+                addText(`Empregador: ${formData.get('empregador') || 'Não informado'}`);
+                addText(`Endereço do Empregador: ${formData.get('enderecoEmpregador') || 'Não informado'}`);
+                addText(`Telefone do Empregador: ${formData.get('telefoneEmpregador') || 'Não informado'}`);
+                addText(`Data de Início no Trabalho: ${formatDateBr(formData.get('dataInicioTrabalho'))}`);
+                addText(`Renda Mensal: ${formData.get('rendaMensal') || 'Não informado'}`);
+                addSectionTitle("Informações de Educação");
+                addText(`Nível de Educação: ${formData.get('nivelEducacao') || 'Não informado'}`);
+                addText(`Instituição: ${formData.get('instituicao') || 'Não informado'}`);
+                addText(`Endereço da Instituição: ${formData.get('enderecoInstituicao') || 'Não informado'}`);
+                addText(`Data de Início do Curso: ${formatDateBr(formData.get('dataInicioEducacao'))}`);
+                addText(`Data de Conclusão do Curso: ${formatDateBr(formData.get('dataFimEducacao'))}`);
+                addSectionTitle("Histórico de Viagens");
+                addText(`Primeiro Visto ou Renovação: ${formData.get('primeiroVisto') || 'Não informado'}`);
+                if (formData.get('primeiroVisto') === 'Renovação') {
+                    addText(`Número do Visto Anterior: ${formData.get('numeroVistoAnteriorRenovacao') || 'Não informado'}`);
+                    addText(`Data de Emissão do Visto Anterior: ${formatDateBr(formData.get('dataEmissaoVistoAnterior'))}`);
+                    addText(`Data de Validade do Visto Anterior: ${formatDateBr(formData.get('dataValidadeVistoAnterior'))}`);
+                    addText(`Local de Emissão do Visto Anterior: ${formData.get('localEmissaoVistoAnterior') || 'Não informado'}`);
+                }
+                addText(`Já Visitou os EUA: ${formData.get('visitouEUA') || 'Não informado'}`);
+                if (formData.get('visitouEUA') === 'Sim') {
+                    addText(`Data da Última Visita: ${formatDateBr(formData.get('dataUltimaVisita'))}`);
+                    addText(`Tempo da Última Visita: ${formData.get('tempoUltimaVisita') || 'Não informado'}`);
+                    addText(`Número do Visto Anterior: ${formData.get('numeroVistoAnterior') || 'Não informado'}`);
+                }
+                addText(`Impressão Digital Coletada: ${formData.get('impressaoDigital') || 'Não informado'}`);
+                addText(`Países Visitados (Últimos 5 Anos): ${formData.get('outrosPaises') || 'Não informado'}`);
+                addText(`Visto Negado: ${formData.get('vistoNegado') || 'Não informado'}`);
+                addText(`Entrada Recusada nos EUA: ${formData.get('entradaRecusada') || 'Não informado'}`);
+
+                if (formData.get('vistoNegado') === 'Sim' || formData.get('entradaRecusada') === 'Sim') {
+                    addText(`Detalhes da Negativa: ${formData.get('detalhesVistoNegado') || 'Não informado'}`);
+                }
+
+                addSectionTitle("Declaração e Autorização");
+                addJustifiedText(`Eu, ${formData.get('declaracaoNome') || 'Não informado'}, declaro, sob as penas da lei, que li e compreendi integralmente todas as questões contidas nesta solicitação de visto e afirmo que as respostas por mim fornecidas são verdadeiras, completas e corretas, conforme o meu melhor conhecimento e convicção.`);
+                addJustifiedText(`**Declaro estar ciente de que:**`);
+                addJustifiedText(`1. Qualquer declaração falsa, incompleta ou enganosa poderá resultar na recusa permanente do visto ou na negativa de admissão nos Estados Unidos, conforme disposto na legislação aplicável.`);
+                addJustifiedText(`2. Todas as informações prestadas nesta solicitação constituem declarações juramentadas, realizadas sob pena de perjúrio, nos termos do disposto no _28 U.S.C. § 1746_.`);
+                addJustifiedText(`3. Informações adicionais poderão ser requisitadas pelas autoridades competentes após a análise desta solicitação, sendo minha responsabilidade fornecê-las tempestivamente.`);
+                addJustifiedText(`4. As informações contidas nesta solicitação poderão ser compartilhadas com outras agências governamentais dos Estados Unidos, que possuem autoridade para utilizá-las para fins de aplicação da lei ou para propósitos imigratórios, conforme permitido pela legislação vigente.`);
+                addJustifiedText(`5. A fotografia fornecida com esta solicitação poderá ser utilizada pelas autoridades americanas para fins de verificação de identidade, empregabilidade ou outros objetivos legais previstos na legislação dos Estados Unidos.`);
+
+                addJustifiedText(`**Declaro ainda:**`);
+                addJustifiedText(`6. Que sou exclusivamente responsável pela autenticidade e exatidão dos documentos apresentados e das informações prestadas nesta solicitação.`);
+                addJustifiedText(`7. Que tenho pleno conhecimento de que a concessão ou negativa do visto é prerrogativa exclusiva da Autoridade Consular Americana, não cabendo a terceiros qualquer ingerência sobre tal decisão.`);
+                addJustifiedText(`8. Que estou ciente de que, em processos de renovação de visto, entrevistas presenciais poderão ser exigidas a critério exclusivo da Autoridade Consular Americana.`);
+                addJustifiedText(`9. Que reconheço que o serviço contratado constitui assessoria relacionada ao processo de preenchimento de documentação, agendamento de biometria e entrevista, não abrangendo serviços de entrega ou retirada de documentos no Centro de Atendimento ao Solicitante de Visto (CASV), sendo necessária a contratação de um agente colaborador, caso eu deseje tais serviços adicionais.`);
+                addJustifiedText(`10. Que a aposição de minha assinatura eletrônica neste documento possui validade jurídica, conforme a legislação aplicável, e representa meu reconhecimento expresso dos serviços contratados.`);
+
+                addJustifiedText(`**Autorização:**`);
+                addJustifiedText(`Declaro, por fim, ter revisado e conferido todos os dados por mim apresentados, autorizando expressamente a empresa Objetivo Turismo Ltda., contratada diretamente por mim ou por intermédio de minha agência, a proceder com o envio eletrônico do Formulário DS-160 ao Consulado Americano, bem como a realizar o pagamento das taxas e o agendamento necessários à tramitação do meu pedido de visto.`);
+
+                addText(`Local da Declaração: ${formData.get('declaracaoLocal') || 'Não informado'}`);
+                addText(`Data da Declaração: ${formatDateBr(formData.get('declaracaoData'))}`);
+                addText(`Aceite da Declaração: ${formData.get('aceiteDeclaracao') ? 'Concordo' : 'Não Concordo'}`);
+
+
+                const fileName = `Formulario_Visto_Americano_${solicitanteNome.replace(/\s+/g, '_')}.pdf`;
+                doc.save(fileName);
+
+                // Envio para o WhatsApp (APIs do WhatsApp Web exigem que o usuário esteja logado e a ação seja iniciada por ele)
+                // O Firebase Storage (com a apiKey fornecida) pode ser usado para hospedar o PDF e gerar um link.
+                // O link será então enviado via WhatsApp.
+
+                // Prepara o PDF como um Blob para upload
+                const pdfBlob = doc.output('blob');
+                const storageRef = ref(storage, `vistos/${fileName}`);
+
+                // Faz o upload do PDF para o Firebase Storage
+                await uploadBytes(storageRef, pdfBlob).then(async (snapshot) => {
+                    const downloadURL = await getDownloadURL(snapshot.ref);
+                    console.log('PDF uploaded to Firebase Storage. Download URL:', downloadURL);
+
+                    const message = `Olá, ${solicitanteNome}! Seu formulário de visto americano foi gerado com sucesso. Você pode acessá-lo aqui: ${downloadURL}.`;
+                    const whatsappURL = `https://wa.me/${fixedWhatsAppNumber}?text=${encodeURIComponent(message)}`;
+
+                    // Abre o WhatsApp Web em uma nova aba
+                    window.open(whatsappURL, '_blank');
+
+                    alert('Formulário enviado com sucesso! O PDF foi gerado e uma mensagem será aberta no WhatsApp.');
+                }).catch((error) => {
+                    console.error('Erro ao fazer upload do PDF para o Firebase Storage:', error);
+                    alert('Erro ao fazer upload do PDF. Por favor, tente novamente.');
+                });
 
             } catch (error) {
-                console.error("Erro completo:", error);
-                showMessage(`Ocorreu um erro ao processar o formulário: ${error.message}. Por favor, tente novamente. Verifique o console do navegador para mais detalhes.`, 'error');
-            } finally {
-                this.disabled = false; // Reabilita o botão
+                console.error('Erro ao gerar PDF ou enviar para o WhatsApp:', error);
+                alert('Erro ao processar o formulário. Verifique o console para mais detalhes.');
             }
-        });
+        }
     </script>
 </body>
 </html>
