@@ -19,55 +19,66 @@
         h1 {
             color: #003087;
             text-align: center;
+            margin-bottom: 20px;
         }
         h3 {
             color: #C8102E;
             border-bottom: 2px solid #eee;
-            padding-bottom: 5px;
-            margin-top: 25px;
+            padding-bottom: 8px;
+            margin-top: 30px;
+            font-size: 1.2em;
         }
         label {
             display: block;
-            margin: 10px 0 5px;
+            margin: 15px 0 5px;
             font-weight: bold;
             color: #333;
         }
-        input, select, textarea {
-            width: calc(100% - 16px);
-            padding: 8px;
-            margin-bottom: 10px;
+        input[type="text"],
+        input[type="date"],
+        input[type="tel"],
+        input[type="email"],
+        input[type="number"],
+        select,
+        textarea {
+            width: calc(100% - 20px); /* Ajuste para padding */
+            padding: 10px;
+            margin-bottom: 15px;
             border: 1px solid #ccc;
-            border-radius: 4px;
+            border-radius: 5px;
             box-sizing: border-box;
+            font-size: 1em;
         }
         textarea {
             resize: vertical;
+            min-height: 60px;
         }
         button {
             background-color: #25D366;
             color: white;
-            padding: 12px 25px;
+            padding: 15px 30px;
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            font-size: 16px;
-            margin-top: 20px;
+            font-size: 1.1em;
+            margin-top: 30px;
             display: block;
             width: 100%;
+            transition: background-color 0.3s ease;
         }
         button:hover {
             background-color: #20b354;
         }
         .conditional-field {
             display: none;
-            margin-top: 15px;
-            padding: 15px;
-            border: 1px dashed #ddd;
-            border-radius: 5px;
+            margin-top: 20px;
+            padding: 20px;
+            border: 1px dashed #a0a0a0;
+            border-radius: 8px;
             background-color: #f9f9f9;
         }
         hr {
-            margin: 30px 0;
+            margin: 40px 0;
             border: 0;
             border-top: 2px solid #003087;
         }
@@ -75,27 +86,38 @@
             color: #C8102E;
         }
         ol {
-            margin-left: 20px;
+            margin-left: 25px;
             color: #555;
+            line-height: 1.6;
         }
         ol li {
-            margin-bottom: 5px;
+            margin-bottom: 8px;
         }
         #aceiteTermos {
             width: auto;
             margin-left: 10px;
+            vertical-align: middle;
         }
         .loading-message {
             text-align: center;
-            margin-top: 20px;
+            margin-top: 25px;
             font-weight: bold;
             color: #003087;
+            font-size: 1.1em;
+        }
+        .disclaimer {
+            background-color: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 15px;
+            margin-bottom: 25px;
+            color: #856404;
+            border-radius: 4px;
         }
     </style>
 </head>
 <body>
     <h1>Formulário de Pedido de Visto Americano DS-160</h1>
-    <p>Preencha os dados abaixo. Ao clicar em "Enviar", um PDF detalhado e uma mensagem será enviada ao WhatsApp da nossaempresa.</p>
+    <p class="disclaimer">Preencha os dados abaixo. Ao clicar em "Enviar", um PDF detalhado e uma mensagem será enviada ao WhatsApp da nossaempresa.</p>
 
     <form id="ds160Form" name="ds160Form" method="POST">
         <h3>Informações Pessoais</h3>
@@ -240,6 +262,20 @@
         <textarea id="historicoEmprego" name="historicoEmprego" rows="4"></textarea>
 
         <hr>
+        <h3>Informações de Educação</h3>
+        <label for="ultimaEscola">Nome da última escola/universidade frequentada:</label>
+        <input type="text" id="ultimaEscola" name="ultimaEscola">
+
+        <label for="formacao">Grau de formação (ex.: Ensino Médio, Graduação, Pós-Graduação):</label>
+        <input type="text" id="formacao" name="formacao">
+
+        <label for="dataInicioEstudo">Data de início:</label>
+        <input type="date" id="dataInicioEstudo" name="dataInicioEstudo">
+
+        <label for="dataConclusaoEstudo">Data de conclusão:</label>
+        <input type="date" id="dataConclusaoEstudo" name="dataConclusaoEstudo">
+        
+        <hr>
         <h3>Informações de Família</h3>
         <label for="estadoCivil">Estado civil:</label>
         <select id="estadoCivil" name="estadoCivil" required>
@@ -356,7 +392,7 @@
 
         <label for="servicoMilitar">8. Você serviu em qualquer força militar ou paramilitar?</label>
         <select id="servicoMilitar" name="servicoMilitar" required>
-            <option value="">Selecione</option>
+            <option value="">Selecione</lastoption>
             <option value="Sim">Sim</option>
             <option value="Não">Não</option>
         </select>
@@ -452,7 +488,7 @@
             input.value = value;
         }
 
-        // --- Funções Auxiliares ---
+        // --- Funções Auxiliares (mantidas para o formulário HTML) ---
         function formatDateBr(dateStr) {
             if (!dateStr) return 'Não informado';
             try {
@@ -475,7 +511,7 @@
             }
         }
 
-        // --- Event Listeners para Campos Condicionais ---
+        // --- Event Listeners para Campos Condicionais (mantidos para o formulário HTML) ---
         document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('propositoViagem').addEventListener('change', () => toggleConditionalField('propositoViagem', 'outrosPropositos', 'Outro'));
             document.getElementById('jaVisitouEUA').addEventListener('change', () => toggleConditionalField('jaVisitouEUA', 'visitasAnteriores'));
@@ -540,6 +576,8 @@
                 const pageHeight = doc.internal.pageSize.height;
                 const margin = 15;
                 let yPosition = 30;
+                const lineHeight = 5;
+                const sectionSpacing = 7; // Espaço extra após cada seção
 
                 // --- Funções de Desenho para o PDF ---
                 function drawHeader() {
@@ -560,13 +598,17 @@
                     doc.rect(margin / 2, margin / 2, pageWidth - margin, pageHeight - margin);
                 }
 
-                function addSectionTitle(title) {
-                    if (yPosition + 15 > pageHeight - margin) {
+                function addNewPageIfNeeded(requiredHeight = 20) {
+                    if (yPosition + requiredHeight > pageHeight - margin) {
                         doc.addPage();
-                        yPosition = 30;
+                        yPosition = 30; // Reset Y position for new page
                         drawHeader();
                         drawPageBorder();
                     }
+                }
+
+                function addSectionTitle(title) {
+                    addNewPageIfNeeded(15); // Ensure space for title
                     doc.setFillColor(200, 16, 46); // Vermelho
                     doc.rect(margin, yPosition - 5, pageWidth - 2 * margin, 10, 'F');
                     doc.setFontSize(12);
@@ -574,37 +616,77 @@
                     doc.setFont("Helvetica", "bold");
                     doc.text(title, margin + 5, yPosition + 2);
                     yPosition += 15;
+                    addSpacer();
                 }
 
                 function addText(label, value, isBoldLabel = true) {
+                    addNewPageIfNeeded();
                     const maxWidth = pageWidth - 2 * margin - 10;
-                    const lineHeight = 5;
+                    
                     doc.setFontSize(10);
                     doc.setTextColor(0, 0, 0);
+                    doc.setFont("Helvetica", "normal"); // Reset font style
 
-                    const text = (isBoldLabel ? `${label}: ` : label) + value;
-                    const lines = doc.splitTextToSize(text, maxWidth);
+                    if (isBoldLabel) {
+                        doc.setFont("Helvetica", "bold");
+                        const labelText = `${label}: `;
+                        let labelWidth = doc.getTextWidth(labelText);
 
-                    lines.forEach((line, index) => {
-                        if (yPosition + lineHeight > pageHeight - margin) {
-                            doc.addPage();
-                            yPosition = 30;
-                            drawHeader();
-                            drawPageBorder();
-                        }
-                        if (isBoldLabel && index === 0) {
-                            const labelWidth = doc.getTextWidth(label + ": ");
-                            doc.setFont("Helvetica", "bold");
-                            doc.text(`${label}:`, margin, yPosition);
-                            doc.setFont("Helvetica", "normal"); // Voltar ao normal para o valor
-                            doc.text(value, margin + labelWidth, yPosition);
-                        } else {
+                        // Se o label for muito grande, ele pode precisar de quebra de linha.
+                        // Para simplificar, vou garantir que o valor comece na mesma linha se houver espaço,
+                        // caso contrário, comece na próxima linha.
+                        const valueLines = doc.splitTextToSize(String(value), maxWidth - labelWidth);
+                        
+                        if (labelWidth + doc.getTextWidth(valueLines[0]) < maxWidth) {
+                            // Label e valor cabem na mesma linha
+                            doc.text(labelText, margin, yPosition);
                             doc.setFont("Helvetica", "normal");
-                            doc.text(line, margin, yPosition);
+                            doc.text(valueLines[0], margin + labelWidth, yPosition);
+                            yPosition += lineHeight;
+                            for (let i = 1; i < valueLines.length; i++) {
+                                addNewPageIfNeeded();
+                                doc.text(valueLines[i], margin, yPosition);
+                                yPosition += lineHeight;
+                            }
+                        } else {
+                            // Label ocupa uma linha ou mais, valor começa na próxima
+                            let labelLines = doc.splitTextToSize(labelText, maxWidth);
+                            labelLines.forEach(line => {
+                                addNewPageIfNeeded();
+                                doc.text(line, margin, yPosition);
+                                yPosition += lineHeight;
+                            });
+                            doc.setFont("Helvetica", "normal");
+                            let valueLinesFull = doc.splitTextToSize(String(value), maxWidth);
+                            valueLinesFull.forEach(line => {
+                                addNewPageIfNeeded();
+                                doc.text(line, margin + 5, yPosition); // Recua um pouco o valor
+                                yPosition += lineHeight;
+                            });
                         }
-                        yPosition += lineHeight;
-                    });
-                    yPosition += 2;
+                    } else {
+                        // Apenas texto normal (usado para parágrafos da declaração)
+                        const lines = doc.splitTextToSize(String(value), maxWidth);
+                        lines.forEach(line => {
+                            addNewPageIfNeeded();
+                            doc.text(line, margin, yPosition);
+                            yPosition += lineHeight;
+                        });
+                    }
+                    addSpacer(2); // Small space after each text entry
+                }
+                
+                function addSpacer(height = 3) {
+                    yPosition += height;
+                }
+
+                function addHorizontalLine() {
+                    addNewPageIfNeeded(10);
+                    doc.setDrawColor(0, 48, 135);
+                    doc.setLineWidth(0.2);
+                    doc.line(margin, yPosition, pageWidth - margin, yPosition);
+                    yPosition += 5;
+                    addSpacer();
                 }
 
                 // --- Geração do Conteúdo do PDF ---
@@ -615,12 +697,13 @@
                 addSectionTitle("Informações Pessoais");
                 addText("Nome Completo", solicitanteNome);
                 addText("Outros Nomes Utilizados", formData.get('outrosNomes') || 'Não');
+                addText("CPF", formData.get('cpf') || 'Não informado');
                 addText("Data de Nascimento", formatDateBr(formData.get('dataNascimento')));
                 addText("Local de Nascimento", formData.get('localNascimento'));
                 addText("Sexo", formData.get('sexo'));
                 addText("Nacionalidade Atual", formData.get('nacionalidade'));
                 addText("Outras Nacionalidades", formData.get('outrasNacionalidades') || 'Não possui');
-                addText("CPF", formData.get('cpf') || 'Não informado');
+                addHorizontalLine();
 
                 // Informações de Passaporte
                 addSectionTitle("Informações de Passaporte");
@@ -629,6 +712,7 @@
                 addText("Data de Validade do Passaporte", formatDateBr(formData.get('passaporteValidade')));
                 addText("País Emissor do Passaporte", formData.get('passaportePaisEmissor'));
                 addText("Local de Emissão do Passaporte", formData.get('passaporteLocalEmissao'));
+                addHorizontalLine();
 
                 // Endereço e Contato
                 addSectionTitle("Endereço e Contato");
@@ -636,6 +720,7 @@
                 addText("CEP", formData.get('cep') || 'Não informado');
                 addText("Telefone Principal", formData.get('telefonePrincipal'));
                 addText("E-mail Principal", formData.get('email'));
+                addHorizontalLine();
 
                 // Informações de Viagem
                 addSectionTitle("Informações de Viagem");
@@ -657,15 +742,25 @@
                 if (formData.get('vistoNegado') === 'Sim') {
                     addText("Explicação da Negativa/Impedimento", formData.get('vistoNegadoExplicacao'));
                 }
+                addHorizontalLine();
 
                 // Informações de Emprego
                 addSectionTitle("Informações de Emprego");
                 addText("Ocupação/Profissão Atual", formData.get('ocupacaoAtual'));
-                addText("Empregador Atual", formData.get('empregadorAtual'));
+                addText("Nome do Empregador Atual", formData.get('empregadorAtual'));
                 addText("Endereço do Empregador Atual", formData.get('enderecoEmpregadorAtual'));
                 addText("Data de Início no Emprego Atual", formatDateBr(formData.get('dataInicioEmpregoAtual')));
                 addText("Salário Mensal (R$)", formData.get('salarioMensal'));
                 addText("Outros Empregos/Ocupações (Últimos 5 Anos)", formData.get('historicoEmprego') || 'Nenhum');
+                addHorizontalLine();
+
+                // Informações de Educação (RE-ADICIONADO)
+                addSectionTitle("Informações de Educação");
+                addText("Nome da Última Escola/Universidade", formData.get('ultimaEscola') || 'Não informado');
+                addText("Grau de Formação", formData.get('formacao') || 'Não informado');
+                addText("Data de Início do Estudo", formatDateBr(formData.get('dataInicioEstudo')) || 'Não informado');
+                addText("Data de Conclusão do Estudo", formatDateBr(formData.get('dataConclusaoEstudo')) || 'Não informado');
+                addHorizontalLine();
 
                 // Informações de Família
                 addSectionTitle("Informações de Família");
@@ -679,53 +774,62 @@
                 addText("Nacionalidade do Pai", formData.get('nacionalidadePai'));
                 addText("Nome da Mãe", formData.get('nomeMae'));
                 addText("Nacionalidade da Mãe", formData.get('nacionalidadeMae'));
+                addHorizontalLine();
 
-                // Perguntas de Segurança e Antecedentes
+                // Perguntas de Segurança e Antecedentes (RE-ADICIONADO COM DETALHES)
                 addSectionTitle("Perguntas de Segurança e Antecedentes");
-                addText("Possui Doença Contagiosa/Transtorno Grave?", formData.get('doencaContagiosa'));
+                addText("1. Possui alguma doença contagiosa de saúde pública ou transtorno físico ou mental grave?", formData.get('doencaContagiosa'));
                 if (formData.get('doencaContagiosa') === 'Sim') {
-                    addText("Explicação da Doença", formData.get('doencaContagiosaExplicacao'));
+                    addText("   Explicação:", formData.get('doencaContagiosaExplicacao'));
                 }
-                addText("Já Foi Condenado(a) por Crime?", formData.get('condenacaoCriminal'));
+                addText("2. Você já foi condenado(a) por qualquer crime?", formData.get('condenacaoCriminal'));
                 if (formData.get('condenacaoCriminal') === 'Sim') {
-                    addText("Explicação da Condenação", formData.get('condenacaoCriminalExplicacao'));
+                    addText("   Explicação:", formData.get('condenacaoCriminalExplicacao'));
                 }
-                addText("Envolvido(a) em Tráfico de Drogas?", formData.get('traficoDrogas'));
+                addText("3. Você esteve envolvido(a) em tráfico de drogas?", formData.get('traficoDrogas'));
                 if (formData.get('traficoDrogas') === 'Sim') {
-                    addText("Explicação do Tráfico de Drogas", formData.get('traficoDrogasExplicacao'));
+                    addText("   Explicação:", formData.get('traficoDrogasExplicacao'));
                 }
-                addText("Envolvido(a) em Lavagem de Dinheiro?", formData.get('lavagemDinheiro'));
+                addText("4. Você esteve envolvido(a) em lavagem de dinheiro?", formData.get('lavagemDinheiro'));
                 if (formData.get('lavagemDinheiro') === 'Sim') {
-                    addText("Explicação da Lavagem de Dinheiro", formData.get('lavagemDinheiroExplicacao'));
+                    addText("   Explicação:", formData.get('lavagemDinheiroExplicacao'));
                 }
-                addText("Envolveu-se/Pretende Envolver-se em Atividades Terroristas?", formData.get('terrorismo'));
+                addText("5. Você já se envolveu ou pretende se envolver em atividades terroristas?", formData.get('terrorismo'));
                 if (formData.get('terrorismo') === 'Sim') {
-                    addText("Explicação do Terrorismo", formData.get('terrorismoExplicacao'));
+                    addText("   Explicação:", formData.get('terrorismoExplicacao'));
                 }
-                addText("Envolvido(a) em Genocídio/Atrocidades?", formData.get('genocidio'));
+                addText("6. Você esteve envolvido(a) em genocídio ou outras atrocidades?", formData.get('genocidio'));
                 if (formData.get('genocidio') === 'Sim') {
-                    addText("Explicação do Genocídio/Atrocidades", formData.get('genocidioExplicacao'));
+                    addText("   Explicação:", formData.get('genocidioExplicacao'));
                 }
-                addText("Cometeu/Instigou Tortura/Violação de Direitos Humanos?", formData.get('violacaoDireitosHumanos'));
+                addText("7. Você já cometeu ou instigou a cometer tortura ou violação de direitos humanos?", formData.get('violacaoDireitosHumanos'));
                 if (formData.get('violacaoDireitosHumanos') === 'Sim') {
-                    addText("Explicação da Violação de Direitos Humanos", formData.get('violacaoDireitosHumanosExplicacao'));
+                    addText("   Explicação:", formData.get('violacaoDireitosHumanosExplicacao'));
                 }
-                addText("Serviu em Força Militar/Paramilitar?", formData.get('servicoMilitar'));
+                addText("8. Você serviu em qualquer força militar ou paramilitar?", formData.get('servicoMilitar'));
                 if (formData.get('servicoMilitar') === 'Sim') {
-                    addText("Explicação do Serviço Militar", formData.get('servicoMilitarExplicacao'));
+                    addText("   Explicação:", formData.get('servicoMilitarExplicacao'));
                 }
-                addText("Envolvido(a) em Sequestro Infantil?", formData.get('sequestroInfantil'));
+                addText("9. Você já esteve envolvido(a) em sequestro infantil?", formData.get('sequestroInfantil'));
                 if (formData.get('sequestroInfantil') === 'Sim') {
-                    addText("Explicação do Sequestro Infantil", formData.get('sequestroInfantilExplicacao'));
+                    addText("   Explicação:", formData.get('sequestroInfantilExplicacao'));
                 }
-                addText("Tentou Obter Visto por Fraude/Deturpação?", formData.get('fraudeVisto'));
+                addText("10. Você já tentou obter visto para os EUA por fraude ou deturpando fatos?", formData.get('fraudeVisto'));
                 if (formData.get('fraudeVisto') === 'Sim') {
-                    addText("Explicação da Fraude no Visto", formData.get('fraudeVistoExplicacao'));
+                    addText("   Explicação:", formData.get('fraudeVistoExplicacao'));
                 }
-
+                addHorizontalLine();
 
                 // Declaração e Confirmação
                 addSectionTitle("Declaração e Confirmação");
+                
+                const declaracaoText1 = `Eu, ${formData.get('nomeDeclaracao') || '[Nome do Solicitante]'}, declaro, sob as penas da lei, que li e compreendi integralmente todas as questões contidas nesta solicitação e afirmo que as respostas por mim fornecidas são verdadeiras, completas e corretas, conforme o meu melhor conhecimento e convicção.`;
+                const declaracaoText2 = `Estou ciente de que qualquer informação falsa ou enganosa fornecida neste formulário pode resultar na recusa do visto e em outras sanções legais.`;
+
+                // Garante que a declaração completa seja incluída como parágrafos
+                addText('', declaracaoText1, false); 
+                addText('', declaracaoText2, false); 
+
                 addText("Declarante", formData.get('nomeDeclaracao'));
                 addText("Local da Declaração", formData.get('localDeclaracao'));
                 addText("Data da Declaração", formatDateBr(formData.get('dataDeclaracao')));
