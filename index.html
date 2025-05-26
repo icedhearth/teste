@@ -9,7 +9,7 @@
         /* Estilos Globais */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f0f2f5;
+            background-color: #f0f2f5; /* Fundo cinza claro */
             color: #333;
             line-height: 1.6;
             margin: 0;
@@ -17,57 +17,59 @@
             display: flex;
             justify-content: center;
             align-items: flex-start;
-            min-height: 100vh;
+            min-height: 100vh; /* Altura mínima da tela */
         }
 
         .container {
             background-color: #ffffff;
             padding: 40px;
             border-radius: 12px;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-            max-width: 850px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1); /* Sombra mais suave */
+            max-width: 850px; /* Largura máxima para melhor leitura */
             width: 100%;
             margin-top: 20px;
             margin-bottom: 20px;
-            box-sizing: border-box;
+            box-sizing: border-box; /* Inclui padding e border na largura total */
         }
 
         h1 {
-            color: #003087; /* Azul mais escuro para o título principal */
+            color: #003087; /* Azul marinho para o título principal */
             text-align: center;
             margin-bottom: 30px;
-            font-size: 2.2em;
+            font-size: 2.4em; /* Título maior */
             font-weight: 700;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.05); /* Sombra sutil no texto */
         }
 
         h3 {
-            color: #0056b3; /* Azul para títulos de seção */
-            border-bottom: 3px solid #0056b3;
+            color: #0056b3; /* Azul médio para títulos de seção */
+            border-bottom: 3px solid #007bff; /* Borda azul vibrante */
             padding-bottom: 10px;
             margin-top: 35px;
             margin-bottom: 25px;
-            font-size: 1.6em;
+            font-size: 1.8em;
+            font-weight: 600;
         }
 
         h4 {
-            color: #007bff; /* Azul mais claro para subtítulos */
+            color: #007bff; /* Azul claro para subtítulos */
             margin-top: 25px;
             margin-bottom: 15px;
-            font-size: 1.3em;
+            font-size: 1.4em;
         }
 
         p {
             margin-bottom: 15px;
-            font-size: 1em;
+            font-size: 1.05em;
             color: #555;
         }
 
         label {
             display: block;
-            margin: 15px 0 8px;
+            margin: 18px 0 8px; /* Mais espaço acima do label */
             font-weight: 600;
             color: #444;
-            font-size: 0.95em;
+            font-size: 0.98em;
         }
 
         input[type="text"],
@@ -76,14 +78,14 @@
         input[type="email"],
         textarea,
         select {
-            width: calc(100% - 20px); /* Ajuste para padding */
+            width: calc(100% - 24px); /* Ajuste para padding e borda */
             padding: 12px;
-            margin-bottom: 15px;
+            margin-bottom: 18px; /* Mais espaço abaixo dos campos */
             border: 1px solid #ccc;
             border-radius: 8px;
             font-size: 1em;
             transition: border-color 0.3s ease, box-shadow 0.3s ease;
-            box-sizing: border-box; /* Garante que padding e border estejam incluídos na largura */
+            box-sizing: border-box;
         }
 
         input[type="text"]:focus,
@@ -93,7 +95,7 @@
         textarea:focus,
         select:focus {
             border-color: #007bff;
-            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25); /* Efeito de foco mais suave */
             outline: none;
         }
 
@@ -103,84 +105,88 @@
         }
 
         input[type="checkbox"] {
-            width: auto;
+            width: auto; /* Checkbox não ocupa 100% da largura */
             margin-right: 10px;
-            transform: scale(1.2); /* Aumenta o tamanho do checkbox */
-            vertical-align: middle;
-            margin-top: -3px; /* Pequeno ajuste vertical */
+            transform: scale(1.2); /* Aumenta um pouco o checkbox */
+            vertical-align: middle; /* Alinha com o texto */
+            margin-top: -3px; /* Pequeno ajuste para alinhamento visual */
         }
 
         button[type="submit"] {
-            background-color: #28a745; /* Um verde vibrante para o botão de enviar */
+            background-color: #28a745; /* Verde vibrante */
             color: white;
             padding: 15px 25px;
             border: none;
             border-radius: 8px;
             cursor: pointer;
-            font-size: 1.1em;
+            font-size: 1.15em; /* Texto maior no botão */
             font-weight: 600;
             transition: background-color 0.3s ease, transform 0.2s ease;
             width: 100%;
-            margin-top: 30px;
+            margin-top: 40px; /* Mais espaço antes do botão */
+            letter-spacing: 0.5px; /* Espaçamento entre letras */
         }
 
         button[type="submit"]:hover {
-            background-color: #218838; /* Um verde um pouco mais escuro no hover */
-            transform: translateY(-2px); /* Efeito de elevação sutil */
+            background-color: #218838; /* Verde mais escuro no hover */
+            transform: translateY(-2px); /* Efeito de elevação */
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Sombra no hover */
         }
 
         hr {
             border: 0;
             border-top: 2px dashed #e0e0e0; /* Linha tracejada suave */
-            margin: 40px 0;
+            margin: 40px 0; /* Espaço maior para as linhas */
         }
 
-        /* Estilos para seções que podem ser ocultadas/exibidas */
-        #spouseInfo, #spouseDeathInfo, #parentsInfo, #previousUSVisaInfo, #travelCompanionsInfo,
-        #visaDeniedDetails, #payerInfo, #payerAddressInfo, #renewalInfo, #parentsInUSInfo, #acquaintancesInfo {
-            background-color: #f9f9f9;
-            border: 1px dashed #ddd;
+        /* Estilos para seções que podem ser ocultadas/exibidas (mantendo display: none) */
+        /* Nenhuma transição suave aqui, apenas aparecer/desaparecer */
+        .hidden-section {
+            display: none;
+        }
+
+        .conditional-section {
+            background-color: #f8f9fa; /* Fundo sutil para seções condicionais */
+            border: 1px solid #e9ecef;
             border-radius: 8px;
-            padding: 0 20px; /* Inicialmente padding vertical 0 para transição suave */
-            margin-top: 0; /* Inicialmente margin-top 0 para transição suave */
-            transition: all 0.4s ease-in-out; /* Transição suave */
-            overflow: hidden; /* Importante para que max-height funcione */
-            max-height: 0;
-            opacity: 0;
-            visibility: hidden;
-        }
-
-        .section-visible {
-            max-height: 1000px; /* Valor grande o suficiente para a altura máxima */
-            opacity: 1;
-            visibility: visible;
-            padding: 20px; /* Retorna o padding normal */
-            margin-top: 20px; /* Retorna a margem normal */
+            padding: 20px;
+            margin-top: 25px;
+            margin-bottom: 25px;
         }
 
         /* Estilos para a declaração */
         .declaration-section {
-            background-color: #e6f7ff; /* Fundo azul claro para a declaração */
+            background-color: #e6f7ff; /* Fundo azul claro */
             border: 1px solid #99d6ff;
-            border-radius: 8px;
-            padding: 25px;
-            margin-top: 40px;
+            border-radius: 10px;
+            padding: 30px;
+            margin-top: 50px;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.05); /* Sombra interna sutil */
+        }
+
+        .declaration-section h3 {
+            border-bottom: 2px solid #0056b3;
+            padding-bottom: 10px;
+            margin-top: 0;
+            margin-bottom: 25px;
         }
 
         .declaration-section ol {
-            padding-left: 25px;
+            padding-left: 28px;
             margin-bottom: 20px;
             font-size: 0.95em;
             color: #444;
         }
 
         .declaration-section ol li {
-            margin-bottom: 8px;
+            margin-bottom: 10px;
+            line-height: 1.5;
         }
 
         .declaration-section p {
             margin-bottom: 10px;
             font-size: 0.98em;
+            color: #333;
         }
 
         .declaration-section strong {
@@ -195,11 +201,14 @@
             padding: 8px;
             font-size: 0.9em;
             border-radius: 5px;
+            margin-left: 5px; /* Pequeno espaçamento */
         }
 
-        .declaration-section input[type="checkbox"] {
+        .declaration-section label input[type="checkbox"] {
             vertical-align: middle;
+            margin-top: -2px; /* Ajuste fino para alinhamento */
         }
+
     </style>
 </head>
 <body>
@@ -245,7 +254,7 @@
                 <option value="União Estável">União Estável</option>
             </select>
 
-            <div id="spouseInfo">
+            <div id="spouseInfo" class="conditional-section hidden-section">
                 <h4>Dados do Cônjuge</h4>
                 <label for="spouseNome">Nome completo do cônjuge:</label>
                 <input type="text" id="spouseNome" name="spouseNome">
@@ -256,7 +265,7 @@
                 <label for="spouseLocalNascimento">Cidade e país de nascimento do cônjuge:</label>
                 <input type="text" id="spouseLocalNascimento" name="spouseLocalNascimento">
 
-                <div id="spouseDeathInfo">
+                <div id="spouseDeathInfo" class="conditional-section hidden-section">
                     <label for="spouseFalecimento">Data de falecimento do cônjuge:</label>
                     <input type="date" id="spouseFalecimento" name="spouseFalecimento">
                 </div>
@@ -311,7 +320,7 @@
                 <option value="Não">Não</option>
             </select>
 
-            <div id="parentsInfo">
+            <div id="parentsInfo" class="conditional-section hidden-section">
                 <label for="nomePai">Nome completo do pai:</label>
                 <input type="text" id="nomePai" name="nomePai">
 
@@ -331,7 +340,7 @@
                     <option value="Não">Não</option>
                 </select>
 
-                <div id="parentsInUSInfo">
+                <div id="parentsInUSInfo" class="conditional-section hidden-section">
                     <label for="explicacaoPaisEUA">Explique a situação dos seus pais nos EUA:</label>
                     <textarea id="explicacaoPaisEUA" name="explicacaoPaisEUA"></textarea>
                 </div>
@@ -344,7 +353,7 @@
                 <option value="Não">Não</option>
             </select>
 
-            <div id="acquaintancesInfo">
+            <div id="acquaintancesInfo" class="conditional-section hidden-section">
                 <h4>Dados do Conhecido nos EUA</h4>
                 <label for="nomeConhecido">Nome completo do conhecido:</label>
                 <input type="text" id="nomeConhecido" name="nomeConhecido">
@@ -387,7 +396,7 @@
                 <option value="Outra pessoa">Outra pessoa</option>
             </select>
 
-            <div id="payerInfo">
+            <div id="payerInfo" class="conditional-section hidden-section">
                 <h4>Dados da Pessoa Pagante</h4>
                 <label for="payerNome">Nome completo da pessoa pagante:</label>
                 <input type="text" id="payerNome" name="payerNome">
@@ -399,7 +408,7 @@
                     <option value="Não">Não</option>
                 </select>
 
-                <div id="payerAddressInfo">
+                <div id="payerAddressInfo" class="conditional-section hidden-section">
                     <label for="payerCEP">CEP (ex.: 70.340-902):</label>
                     <input type="text" id="payerCEP" name="payerCEP" maxlength="10" oninput="formatCEP(this)">
 
@@ -433,7 +442,7 @@
                 <option value="Não">Não</option>
             </select>
 
-            <div id="travelCompanionsInfo">
+            <div id="travelCompanionsInfo" class="conditional-section hidden-section">
                 <label for="nomeCompanheiro">Nome completo do(s) companheiro(s) de viagem:</label>
                 <textarea id="nomeCompanheiro" name="nomeCompanheiro"></textarea>
 
@@ -490,7 +499,7 @@
                 <option value="Renovação">Renovação</option>
             </select>
 
-            <div id="renewalInfo">
+            <div id="renewalInfo" class="conditional-section hidden-section">
                 <label for="numeroVistoAnteriorRenovacao">Número do visto anterior:</label>
                 <input type="text" id="numeroVistoAnteriorRenovacao" name="numeroVistoAnteriorRenovacao">
 
@@ -518,7 +527,7 @@
                 <option value="Não">Não</option>
             </select>
 
-            <div id="previousUSVisaInfo">
+            <div id="previousUSVisaInfo" class="conditional-section hidden-section">
                 <label for="dataUltimaVisita">Data da última visita aos EUA:</label>
                 <input type="date" id="dataUltimaVisita" name="dataUltimaVisita">
 
@@ -546,7 +555,7 @@
                 <option value="Não">Não</option>
             </select>
 
-            <div id="visaDeniedDetails">
+            <div id="visaDeniedDetails" class="conditional-section hidden-section">
                 <label for="detalhesVistoNegado">Detalhes da negativa (data e motivo):</label>
                 <textarea id="detalhesVistoNegado" name="detalhesVistoNegado"></textarea>
             </div>
@@ -611,7 +620,7 @@
         const storage = getStorage(app);
         const analytics = getAnalytics(app);
 
-        // Funções de formatação
+        // Funções de formatação (mantidas as originais)
         function formatCPF(input) {
             let value = input.value.replace(/\D/g, ''); // Remove tudo que não é número
             if (value.length > 11) value = value.slice(0, 11); // Limita a 11 dígitos
@@ -639,28 +648,26 @@
             return date.toLocaleDateString('pt-BR', { timeZone: 'America/Sao_Paulo' });
         }
 
-        // Funções de toggle (mantidas as originais do seu código)
-        // O importante aqui é que elas adicionarão/removerão a classe 'section-visible'
-        // em vez de alterar diretamente o 'display'
+        // Funções de toggle (retornadas à lógica original com display: block/none)
+        // Adicionei uma classe 'conditional-section' e 'hidden-section' para estilizar
+        // e controlar a visibilidade de forma mais clara no CSS
         function toggleSpouseInfo() {
-            const estadoCivil = document.getElementById('estadoCivil'); [cite: 64, 65]
-            const spouseInfo = document.getElementById('spouseInfo'); [cite: 65]
-            const spouseDeathInfo = document.getElementById('spouseDeathInfo'); [cite: 65]
-            if (['Casado', 'Divorciado', 'Viúvo', 'União Estável'].includes(estadoCivil.value)) { [cite: 65]
-                spouseInfo.classList.add('section-visible');
-                // Adicionei uma pequena pausa para o CSS animar o spouseInfo antes de mudar o spouseDeathInfo
-                setTimeout(() => {
-                    if (estadoCivil.value === 'Viúvo') { [cite: 66]
-                        spouseDeathInfo.classList.add('section-visible');
-                    } else {
-                        spouseDeathInfo.classList.remove('section-visible');
-                        // Limpa os campos quando ocultado
-                        spouseDeathInfo.querySelectorAll('input, textarea, select').forEach(input => input.value = '');
-                    }
-                }, 50); // Pequeno atraso para a transição
+            const estadoCivil = document.getElementById('estadoCivil');
+            const spouseInfo = document.getElementById('spouseInfo');
+            const spouseDeathInfo = document.getElementById('spouseDeathInfo');
+
+            if (['Casado', 'Divorciado', 'Viúvo', 'União Estável'].includes(estadoCivil.value)) {
+                spouseInfo.classList.remove('hidden-section');
+                if (estadoCivil.value === 'Viúvo') {
+                    spouseDeathInfo.classList.remove('hidden-section');
+                } else {
+                    spouseDeathInfo.classList.add('hidden-section');
+                    // Limpa os campos quando ocultado
+                    spouseDeathInfo.querySelectorAll('input, textarea, select').forEach(input => input.value = '');
+                }
             } else {
-                spouseInfo.classList.remove('section-visible');
-                spouseDeathInfo.classList.remove('section-visible'); // Garante que também seja oculto
+                spouseInfo.classList.add('hidden-section');
+                spouseDeathInfo.classList.add('hidden-section'); // Garante que também seja oculto
                 // Limpa todos os campos da seção quando ela é ocultada
                 spouseInfo.querySelectorAll('input, textarea, select').forEach(input => input.value = '');
                 spouseDeathInfo.querySelectorAll('input, textarea, select').forEach(input => input.value = '');
@@ -668,111 +675,110 @@
         }
 
         function toggleParentsInfo() {
-            const temPaisVivos = document.getElementById('temPaisVivos'); [cite: 67, 68]
-            const parentsInfo = document.getElementById('parentsInfo'); [cite: 68]
-            if (temPaisVivos.value === 'Sim') { [cite: 68]
-                parentsInfo.classList.add('section-visible');
-                // Reavalia a sub-seção imediatamente após a seção principal aparecer
-                setTimeout(toggleParentsInUSInfo, 50); // Pequeno atraso
+            const temPaisVivos = document.getElementById('temPaisVivos');
+            const parentsInfo = document.getElementById('parentsInfo');
+            
+            if (temPaisVivos.value === 'Sim') {
+                parentsInfo.classList.remove('hidden-section');
+                toggleParentsInUSInfo(); // Reavalia a sub-seção
             } else {
-                parentsInfo.classList.remove('section-visible');
+                parentsInfo.classList.add('hidden-section');
                 parentsInfo.querySelectorAll('input, textarea, select').forEach(input => input.value = '');
                 // Garante que a sub-seção também seja ocultada e limpa
-                document.getElementById('parentsInUSInfo').classList.remove('section-visible');
+                document.getElementById('parentsInUSInfo').classList.add('hidden-section');
                 document.getElementById('parentsInUSInfo').querySelectorAll('input, textarea, select').forEach(input => input.value = '');
             }
         }
 
         function toggleParentsInUSInfo() {
-            const paisNosEUA = document.getElementById('paisNosEUA'); [cite: 69, 70]
-            const parentsInUSInfo = document.getElementById('parentsInUSInfo'); [cite: 70]
-            if (paisNosEUA.value === 'Sim') { [cite: 70]
-                parentsInUSInfo.classList.add('section-visible');
+            const paisNosEUA = document.getElementById('paisNosEUA');
+            const parentsInUSInfo = document.getElementById('parentsInUSInfo');
+            if (paisNosEUA.value === 'Sim') {
+                parentsInUSInfo.classList.remove('hidden-section');
             } else {
-                parentsInUSInfo.classList.remove('section-visible');
+                parentsInUSInfo.classList.add('hidden-section');
                 parentsInUSInfo.querySelectorAll('input, textarea, select').forEach(input => input.value = '');
             }
         }
 
         function toggleTravelCompanionsInfo() {
-            const temCompanheiros = document.getElementById('temCompanheiros'); [cite: 71, 72]
-            const travelCompanionsInfo = document.getElementById('travelCompanionsInfo'); [cite: 72]
-            if (temCompanheiros.value === 'Sim') { [cite: 72]
-                travelCompanionsInfo.classList.add('section-visible');
+            const temCompanheiros = document.getElementById('temCompanheiros');
+            const travelCompanionsInfo = document.getElementById('travelCompanionsInfo');
+            if (temCompanheiros.value === 'Sim') {
+                travelCompanionsInfo.classList.remove('hidden-section');
             } else {
-                travelCompanionsInfo.classList.remove('section-visible');
+                travelCompanionsInfo.classList.add('hidden-section');
                 travelCompanionsInfo.querySelectorAll('input, textarea, select').forEach(input => input.value = '');
             }
         }
 
         function togglePreviousUSVisaInfo() {
-            const visitouEUA = document.getElementById('visitouEUA'); [cite: 73, 74]
-            const previousUSVisaInfo = document.getElementById('previousUSVisaInfo'); [cite: 74]
-            if (visitouEUA.value === 'Sim') { [cite: 74]
-                previousUSVisaInfo.classList.add('section-visible');
+            const visitouEUA = document.getElementById('visitouEUA');
+            const previousUSVisaInfo = document.getElementById('previousUSVisaInfo');
+            if (visitouEUA.value === 'Sim') {
+                previousUSVisaInfo.classList.remove('hidden-section');
             } else {
-                previousUSVisaInfo.classList.remove('section-visible');
+                previousUSVisaInfo.classList.add('hidden-section');
                 previousUSVisaInfo.querySelectorAll('input, textarea, select').forEach(input => input.value = '');
             }
         }
 
         function toggleVisaDeniedDetails() {
-            const vistoNegado = document.getElementById('vistoNegado'); [cite: 75, 76]
-            const entradaRecusada = document.getElementById('entradaRecusada'); [cite: 76]
-            const visaDeniedDetails = document.getElementById('visaDeniedDetails'); [cite: 76]
-            if (vistoNegado.value === 'Sim' || entradaRecusada.value === 'Sim') { [cite: 76, 77]
-                visaDeniedDetails.classList.add('section-visible');
+            const vistoNegado = document.getElementById('vistoNegado');
+            const entradaRecusada = document.getElementById('entradaRecusada');
+            const visaDeniedDetails = document.getElementById('visaDeniedDetails');
+            if (vistoNegado.value === 'Sim' || entradaRecusada.value === 'Sim') {
+                visaDeniedDetails.classList.remove('hidden-section');
             } else {
-                visaDeniedDetails.classList.remove('section-visible');
+                visaDeniedDetails.classList.add('hidden-section');
                 visaDeniedDetails.querySelectorAll('input, textarea, select').forEach(input => input.value = '');
             }
         }
 
         function togglePayerInfo() {
-            const quemPaga = document.getElementById('quemPaga'); [cite: 77, 78]
-            const payerInfo = document.getElementById('payerInfo'); [cite: 78]
-            if (quemPaga.value === 'Outra pessoa') { [cite: 78]
-                payerInfo.classList.add('section-visible');
-                // Reavalia a sub-seção imediatamente após a seção principal aparecer
-                setTimeout(togglePayerAddressInfo, 50); // Pequeno atraso
+            const quemPaga = document.getElementById('quemPaga');
+            const payerInfo = document.getElementById('payerInfo');
+            if (quemPaga.value === 'Outra pessoa') {
+                payerInfo.classList.remove('hidden-section');
+                togglePayerAddressInfo(); // Reavalia a sub-seção
             } else {
-                payerInfo.classList.remove('section-visible');
+                payerInfo.classList.add('hidden-section');
                 payerInfo.querySelectorAll('input, textarea, select').forEach(input => input.value = '');
                 // Garante que a sub-seção também seja ocultada e limpa
-                document.getElementById('payerAddressInfo').classList.remove('section-visible');
+                document.getElementById('payerAddressInfo').classList.add('hidden-section');
                 document.getElementById('payerAddressInfo').querySelectorAll('input, textarea, select').forEach(input => input.value = '');
             }
         }
 
         function togglePayerAddressInfo() {
-            const payerSameAddress = document.getElementById('payerSameAddress'); [cite: 79, 80]
-            const payerAddressInfo = document.getElementById('payerAddressInfo'); [cite: 80]
-            if (payerSameAddress.value === 'Não') { [cite: 80]
-                payerAddressInfo.classList.add('section-visible');
+            const payerSameAddress = document.getElementById('payerSameAddress');
+            const payerAddressInfo = document.getElementById('payerAddressInfo');
+            if (payerSameAddress.value === 'Não') {
+                payerAddressInfo.classList.remove('hidden-section');
             } else {
-                payerAddressInfo.classList.remove('section-visible');
+                payerAddressInfo.classList.add('hidden-section');
                 payerAddressInfo.querySelectorAll('input, textarea, select').forEach(input => input.value = '');
             }
         }
 
         function toggleRenewalInfo() {
-            const primeiroVisto = document.getElementById('primeiroVisto'); [cite: 81, 82]
-            const renewalInfo = document.getElementById('renewalInfo'); [cite: 82]
-            if (primeiroVisto.value === 'Renovação') { [cite: 82]
-                renewalInfo.classList.add('section-visible');
+            const primeiroVisto = document.getElementById('primeiroVisto');
+            const renewalInfo = document.getElementById('renewalInfo');
+            if (primeiroVisto.value === 'Renovação') {
+                renewalInfo.classList.remove('hidden-section');
             } else {
-                renewalInfo.classList.remove('section-visible');
+                renewalInfo.classList.add('hidden-section');
                 renewalInfo.querySelectorAll('input, textarea, select').forEach(input => input.value = '');
             }
         }
 
         function toggleAcquaintancesInfo() {
-            const temConhecidosEUA = document.getElementById('temConhecidosEUA'); [cite: 83, 84]
-            const acquaintancesInfo = document.getElementById('acquaintancesInfo'); [cite: 84]
-            if (temConhecidosEUA.value === 'Sim') { [cite: 84]
-                acquaintancesInfo.classList.add('section-visible');
+            const temConhecidosEUA = document.getElementById('temConhecidosEUA');
+            const acquaintancesInfo = document.getElementById('acquaintancesInfo');
+            if (temConhecidosEUA.value === 'Sim') {
+                acquaintancesInfo.classList.remove('hidden-section');
             } else {
-                acquaintancesInfo.classList.remove('section-visible');
+                acquaintancesInfo.classList.add('hidden-section');
                 acquaintancesInfo.querySelectorAll('input, textarea, select').forEach(input => input.value = '');
             }
         }
@@ -780,26 +786,24 @@
         // Adicionando event listeners e chamadas iniciais
         document.addEventListener('DOMContentLoaded', () => {
             // Adicionando listeners
-            document.getElementById('estadoCivil').addEventListener('change', toggleSpouseInfo); [cite: 87]
-            document.getElementById('temPaisVivos').addEventListener('change', toggleParentsInfo); [cite: 87]
-            document.getElementById('paisNosEUA').addEventListener('change', toggleParentsInUSInfo); [cite: 87]
-            document.getElementById('temConhecidosEUA').addEventListener('change', toggleAcquaintancesInfo); [cite: 87]
-            document.getElementById('quemPaga').addEventListener('change', togglePayerInfo); [cite: 87]
-            document.getElementById('payerSameAddress').addEventListener('change', togglePayerAddressInfo); [cite: 88]
-            document.getElementById('temCompanheiros').addEventListener('change', toggleTravelCompanionsInfo); [cite: 88]
-            document.getElementById('primeiroVisto').addEventListener('change', toggleRenewalInfo); [cite: 88]
-            document.getElementById('visitouEUA').addEventListener('change', togglePreviousUSVisaInfo); [cite: 89]
-            document.getElementById('vistoNegado').addEventListener('change', toggleVisaDeniedDetails); [cite: 89]
-            document.getElementById('entradaRecusada').addEventListener('change', toggleVisaDeniedDetails); [cite: 89]
-            document.getElementById('visaForm').addEventListener('submit', generatePDF); [cite: 89]
+            document.getElementById('estadoCivil').addEventListener('change', toggleSpouseInfo);
+            document.getElementById('temPaisVivos').addEventListener('change', toggleParentsInfo);
+            document.getElementById('paisNosEUA').addEventListener('change', toggleParentsInUSInfo);
+            document.getElementById('temConhecidosEUA').addEventListener('change', toggleAcquaintancesInfo);
+            document.getElementById('quemPaga').addEventListener('change', togglePayerInfo);
+            document.getElementById('payerSameAddress').addEventListener('change', togglePayerAddressInfo);
+            document.getElementById('temCompanheiros').addEventListener('change', toggleTravelCompanionsInfo);
+            document.getElementById('primeiroVisto').addEventListener('change', toggleRenewalInfo);
+            document.getElementById('visitouEUA').addEventListener('change', togglePreviousUSVisaInfo);
+            document.getElementById('vistoNegado').addEventListener('change', toggleVisaDeniedDetails);
+            document.getElementById('entradaRecusada').addEventListener('change', toggleVisaDeniedDetails);
+            document.getElementById('visaForm').addEventListener('submit', generatePDF);
 
             // Chamadas iniciais para definir o estado correto no carregamento da página
             toggleSpouseInfo();
             toggleParentsInfo();
-            toggleParentsInUSInfo(); // Chamada dentro de toggleParentsInfo, mas pode ser chamada aqui para garantir
             toggleAcquaintancesInfo();
             togglePayerInfo();
-            togglePayerAddressInfo(); // Chamada dentro de togglePayerInfo, mas pode ser chamada aqui para garantir
             toggleTravelCompanionsInfo();
             toggleRenewalInfo();
             togglePreviousUSVisaInfo();
@@ -807,92 +811,94 @@
         });
 
 
-        // Função para gerar o PDF
+        // Função para gerar o PDF (mantida com a correção de negrito/itálico na declaração)
         async function generatePDF(event) {
-            event.preventDefault(); [cite: 90]
+            event.preventDefault();
             try {
-                const { jsPDF } = window.jspdf; [cite: 90, 91]
-                const form = document.getElementById('visaForm'); [cite: 91]
-                const formData = new FormData(form); [cite: 91]
-                const solicitanteNome = formData.get('nome') || formData.get('declaracaoNome') || 'Não informado'; [cite: 91]
-                const fixedWhatsAppNumber = '5561999998165'; [cite: 92]
+                const { jsPDF } = window.jspdf;
+                const form = document.getElementById('visaForm');
+                const formData = new FormData(form);
+                const solicitanteNome = formData.get('nome') || formData.get('declaracaoNome') || 'Não informado';
+                const fixedWhatsAppNumber = '5561999998165';
 
-                const doc = new jsPDF(); [cite: 92]
-                const pageWidth = doc.internal.pageSize.width; [cite: 92]
-                const pageHeight = doc.internal.pageSize.height; [cite: 92]
-                const margin = 10; [cite: 93]
-                let yPosition = 30; [cite: 93]
+                const doc = new jsPDF();
+                const pageWidth = doc.internal.pageSize.width;
+                const pageHeight = doc.internal.pageSize.height;
+                const margin = 10;
+                let yPosition = 30;
 
                 function drawHeader() {
-                    doc.setFillColor(0, 48, 135); /* Azul Marinho */ [cite: 93, 94]
-                    doc.rect(0, 0, pageWidth, 25, 'F'); [cite: 94]
-                    doc.setFontSize(16); [cite: 94]
-                    doc.setTextColor(255, 255, 255); /* Branco */ [cite: 94]
-                    doc.setFont("Helvetica", "bold"); [cite: 94]
-                    const title = "Formulário de Solicitação de Visto Americano"; [cite: 94, 95]
-                    const titleWidth = doc.getTextWidth(title); [cite: 95]
-                    const titleX = (pageWidth - titleWidth) / 2; [cite: 95]
-                    doc.text(title, titleX, 15); [cite: 95]
-                    doc.setFontSize(14); [cite: 95]
-                    const starSpacing = 8; [cite: 95, 96]
-                    for (let i = 0; i < 3; i++) { [cite: 96]
-                        doc.text("*", titleX - (i + 1) * starSpacing - 5, 15); [cite: 96]
-                        doc.text("*", titleX + titleWidth + (i + 1) * starSpacing + 5, 15); [cite: 97]
+                    doc.setFillColor(0, 48, 135); /* Azul Marinho */
+                    doc.rect(0, 0, pageWidth, 25, 'F');
+                    doc.setFontSize(16);
+                    doc.setTextColor(255, 255, 255); /* Branco */
+                    doc.setFont("Helvetica", "bold");
+                    const title = "Formulário de Solicitação de Visto Americano";
+                    const titleWidth = doc.getTextWidth(title);
+                    const titleX = (pageWidth - titleWidth) / 2;
+                    doc.text(title, titleX, 15);
+                    doc.setFontSize(14);
+                    const starSpacing = 8;
+                    for (let i = 0; i < 3; i++) {
+                        doc.text("*", titleX - (i + 1) * starSpacing - 5, 15);
+                        doc.text("*", titleX + titleWidth + (i + 1) * starSpacing + 5, 15);
                     }
                 }
 
                 function drawPageBorder() {
-                    doc.setDrawColor(0, 48, 135); /* Azul Marinho */ [cite: 98]
-                    doc.setLineWidth(0.5); [cite: 99]
-                    doc.rect(margin / 2, margin / 2, pageWidth - margin, pageHeight - margin); [cite: 99, 100]
+                    doc.setDrawColor(0, 48, 135); /* Azul Marinho */
+                    doc.setLineWidth(0.5);
+                    doc.rect(margin / 2, margin / 2, pageWidth - margin, pageHeight - margin);
                 }
 
                 function addSectionTitle(title) {
-                    if (yPosition + 15 > pageHeight - margin) { [cite: 100]
-                        doc.addPage(); [cite: 100, 101]
-                        yPosition = 30; [cite: 101]
-                        drawHeader(); [cite: 101]
-                        drawPageBorder(); [cite: 101]
+                    if (yPosition + 15 > pageHeight - margin) {
+                        doc.addPage();
+                        yPosition = 30;
+                        drawHeader();
+                        drawPageBorder();
                     }
-                    doc.setFillColor(200, 16, 46); /* Vermelho */ [cite: 101, 102]
-                    doc.rect(margin, yPosition - 5, pageWidth - 2 * margin, 10, 'F'); [cite: 102]
-                    doc.setFontSize(12); [cite: 102]
-                    doc.setTextColor(255, 255, 255); /* Branco */ [cite: 102]
-                    doc.setFont("Helvetica", "bold"); [cite: 102, 103]
-                    doc.text(title, margin + 5, yPosition + 2); [cite: 103]
-                    yPosition += 15; [cite: 104]
+                    doc.setFillColor(200, 16, 46); /* Vermelho */
+                    doc.rect(margin, yPosition - 5, pageWidth - 2 * margin, 10, 'F');
+                    doc.setFontSize(12);
+                    doc.setTextColor(255, 255, 255); /* Branco */
+                    doc.setFont("Helvetica", "bold");
+                    doc.text(title, margin + 5, yPosition + 2);
+                    yPosition += 15;
                 }
 
                 function addText(text, isBold = false) {
-                    const maxWidth = pageWidth - 2 * margin; [cite: 104, 105]
-                    const lineHeight = 7; [cite: 105]
-                    const lines = doc.splitTextToSize(text, maxWidth); [cite: 105]
+                    const maxWidth = pageWidth - 2 * margin;
+                    const lineHeight = 7;
+                    const lines = doc.splitTextToSize(text, maxWidth);
 
-                    doc.setFont("Helvetica", isBold ? "bold" : "normal"); [cite: 105]
-                    doc.setTextColor(0, 0, 0); /* Preto */ [cite: 105]
-                    doc.setFontSize(10); [cite: 105]
-                    for (let i = 0; i < lines.length; i++) { [cite: 106]
-                        if (yPosition + lineHeight > pageHeight - margin) { [cite: 106]
-                            doc.addPage(); [cite: 106, 107]
-                            yPosition = 30; [cite: 107]
-                            drawHeader(); [cite: 107]
-                            drawPageBorder(); [cite: 107]
+                    doc.setFont("Helvetica", isBold ? "bold" : "normal");
+                    doc.setTextColor(0, 0, 0); /* Preto */
+                    doc.setFontSize(10);
+                    for (let i = 0; i < lines.length; i++) {
+                        if (yPosition + lineHeight > pageHeight - margin) {
+                            doc.addPage();
+                            yPosition = 30;
+                            drawHeader();
+                            drawPageBorder();
                         }
-                        doc.text(lines[i], margin, yPosition); [cite: 107, 108]
-                        yPosition += lineHeight; [cite: 108]
+                        doc.text(lines[i], margin, yPosition);
+                        yPosition += lineHeight;
                     }
-                    yPosition += 2; [cite: 109]
+                    yPosition += 2;
                 }
                 
                 function addJustifiedText(text) {
-                    const maxWidth = pageWidth - 2 * margin; [cite: 109, 110]
-                    const lineHeight = 7; [cite: 110]
-                    doc.setFont("Helvetica", "normal"); [cite: 110]
-                    doc.setTextColor(0, 0, 0); [cite: 110]
-                    doc.setFontSize(10); [cite: 110]
+                    const maxWidth = pageWidth - 2 * margin;
+                    const lineHeight = 7;
+                    doc.setFont("Helvetica", "normal");
+                    doc.setTextColor(0, 0, 0);
+                    doc.setFontSize(10);
 
+                    // Divide o texto em partes, mantendo os delimitadores para negrito e itálico
                     const parts = text.split(/(\*\*.*?\*\*|_.*?_)/g);
                     let currentX = margin;
+                    let lineBuffer = '';
 
                     for (let i = 0; i < parts.length; i++) {
                         let part = parts[i];
@@ -905,196 +911,210 @@
                             fontStyle = "italic";
                             part = part.substring(1, part.length - 1); // Remove os underscores
                         }
-                        doc.setFont("Helvetica", fontStyle);
-
-                        const words = part.trim().split(/\s+/); [cite: 113]
+                        
+                        const words = part.trim().split(/\s+/);
                         for (let j = 0; j < words.length; j++) {
                             const word = words[j];
-                            const wordWidth = doc.getTextWidth(word);
+                            const wordWithSpace = word + (j < words.length - 1 ? ' ' : ''); // Adiciona espaço se não for a última palavra
 
+                            doc.setFont("Helvetica", fontStyle);
+                            const wordWidth = doc.getTextWidth(wordWithSpace);
+
+                            // Se a palavra (com espaço) não couber na linha atual
                             if (currentX + wordWidth > pageWidth - margin) {
-                                yPosition += lineHeight; [cite: 117]
+                                // Desenha o que já está no buffer e reinicia a linha
+                                if (lineBuffer.trim() !== '') {
+                                    doc.text(lineBuffer.trim(), margin, yPosition);
+                                }
+                                yPosition += lineHeight;
                                 currentX = margin;
-                                if (yPosition + lineHeight > pageHeight - margin) { [cite: 111]
-                                    doc.addPage(); [cite: 112]
-                                    yPosition = 30; [cite: 112]
-                                    drawHeader(); [cite: 112]
-                                    drawPageBorder(); [cite: 112]
+                                lineBuffer = ''; // Limpa o buffer para a nova linha
+
+                                if (yPosition + lineHeight > pageHeight - margin) {
+                                    doc.addPage();
+                                    yPosition = 30;
+                                    drawHeader();
+                                    drawPageBorder();
                                     currentX = margin;
                                 }
                             }
-                            doc.text(word, currentX, yPosition); [cite: 112, 115, 116]
-                            currentX += wordWidth + doc.getTextWidth(' ');
+                            // Adiciona a palavra ao buffer e atualiza a posição X
+                            lineBuffer += wordWithSpace;
+                            currentX += wordWidth;
                         }
                     }
-                    yPosition += lineHeight; [cite: 117]
+                    // Desenha o restante do buffer, se houver
+                    if (lineBuffer.trim() !== '') {
+                        doc.text(lineBuffer.trim(), margin, yPosition);
+                    }
+                    yPosition += lineHeight; // Avança para a próxima linha
                 }
 
 
                 drawHeader();
                 drawPageBorder();
 
-                addSectionTitle("Informações Pessoais"); [cite: 118]
-                addText(`Nome: ${formData.get('nome') || 'Não informado'}`, true); [cite: 119]
-                addText(`Sobrenome: ${formData.get('sobrenome') || 'Não informado'}`); [cite: 119]
-                addText(`Outros Nomes: ${formData.get('outrosNomes') || 'Não informado'}`); [cite: 119, 120]
-                addText(`CPF: ${formData.get('cpf') || 'Não informado'}`); [cite: 120]
-                addText(`Data de Nascimento: ${formatDateBr(formData.get('nascimento'))}`); [cite: 120]
-                addText(`Local de Nascimento: ${formData.get('localNascimento') || 'Não informado'}`); [cite: 120]
-                addText(`Sexo: ${formData.get('sexo') || 'Não informado'}`); [cite: 121]
-                addText(`Estado Civil: ${formData.get('estadoCivil') || 'Não informado'}`); [cite: 121]
+                addSectionTitle("Informações Pessoais");
+                addText(`Nome: ${formData.get('nome') || 'Não informado'}`, true);
+                addText(`Sobrenome: ${formData.get('sobrenome') || 'Não informado'}`);
+                addText(`Outros Nomes: ${formData.get('outrosNomes') || 'Não informado'}`);
+                addText(`CPF: ${formData.get('cpf') || 'Não informado'}`);
+                addText(`Data de Nascimento: ${formatDateBr(formData.get('nascimento'))}`);
+                addText(`Local de Nascimento: ${formData.get('localNascimento') || 'Não informado'}`);
+                addText(`Sexo: ${formData.get('sexo') || 'Não informado'}`);
+                addText(`Estado Civil: ${formData.get('estadoCivil') || 'Não informado'}`);
 
-                const estadoCivil = formData.get('estadoCivil'); [cite: 121, 122]
-                if (['Casado', 'Divorciado', 'Viúvo', 'União Estável'].includes(estadoCivil)) { [cite: 122]
-                    addSectionTitle("Dados do Cônjuge"); [cite: 122, 123]
-                    addText(`Nome do Cônjuge: ${formData.get('spouseNome') || 'Não informado'}`); [cite: 123]
-                    addText(`Data de Nascimento do Cônjuge: ${formatDateBr(formData.get('spouseNascimento'))}`); [cite: 123, 124]
-                    addText(`Local de Nascimento do Cônjuge: ${formData.get('spouseLocalNascimento') || 'Não informado'}`); [cite: 124]
-                    if (estadoCivil === 'Viúvo') { [cite: 124]
-                        addText(`Data de Falecimento do Cônjuge: ${formatDateBr(formData.get('spouseFalecimento'))}`); [cite: 125]
+                const estadoCivil = formData.get('estadoCivil');
+                if (['Casado', 'Divorciado', 'Viúvo', 'União Estável'].includes(estadoCivil)) {
+                    addSectionTitle("Dados do Cônjuge");
+                    addText(`Nome do Cônjuge: ${formData.get('spouseNome') || 'Não informado'}`);
+                    addText(`Data de Nascimento do Cônjuge: ${formatDateBr(formData.get('spouseNascimento'))}`);
+                    addText(`Local de Nascimento do Cônjuge: ${formData.get('spouseLocalNascimento') || 'Não informado'}`);
+                    if (estadoCivil === 'Viúvo') {
+                        addText(`Data de Falecimento do Cônjuge: ${formatDateBr(formData.get('spouseFalecimento'))}`);
                     }
                 }
 
-                addText(`Nacionalidade: ${formData.get('nacionalidade') || 'Não informado'}`); [cite: 125, 126]
-                addText(`Outras Nacionalidades: ${formData.get('outrasNacionalidades') || 'Não informado'}`); [cite: 126]
-                addText(`Número do Passaporte: ${formData.get('passaporte') || 'Não informado'}`); [cite: 126]
-                addText(`Data de Emissão do Passaporte: ${formatDateBr(formData.get('dataEmissaoPassaporte'))}`); [cite: 126, 127]
-                addText(`Data de Validade do Passaporte: ${formatDateBr(formData.get('dataValidadePassaporte'))}`); [cite: 127]
-                addText(`Local de Emissão do Passaporte: ${formData.get('localEmissaoPassaporte') || 'Não informado'}`); [cite: 127]
+                addText(`Nacionalidade: ${formData.get('nacionalidade') || 'Não informado'}`);
+                addText(`Outras Nacionalidades: ${formData.get('outrasNacionalidades') || 'Não informado'}`);
+                addText(`Número do Passaporte: ${formData.get('passaporte') || 'Não informado'}`);
+                addText(`Data de Emissão do Passaporte: ${formatDateBr(formData.get('dataEmissaoPassaporte'))}`);
+                addText(`Data de Validade do Passaporte: ${formatDateBr(formData.get('dataValidadePassaporte'))}`);
+                addText(`Local de Emissão do Passaporte: ${formData.get('localEmissaoPassaporte') || 'Não informado'}`);
 
-                addSectionTitle("Informações de Contato"); [cite: 127, 128]
-                addText(`CEP: ${formData.get('cep') || 'Não informado'}`); [cite: 128]
-                addText(`Endereço: ${formData.get('endereco') || 'Não informado'}`); [cite: 128]
-                addText(`Cidade: ${formData.get('cidade') || 'Não informado'}`); [cite: 128]
-                addText(`Estado: ${formData.get('estado') || 'Não informado'}`); [cite: 129]
-                addText(`País: ${formData.get('pais') || 'Não informado'}`); [cite: 129]
-                addText(`Telefone: ${formData.get('telefone') || 'Não informado'}`); [cite: 129]
-                addText(`E-mail: ${formData.get('email') || 'Não informado'}`); [cite: 129]
+                addSectionTitle("Informações de Contato");
+                addText(`CEP: ${formData.get('cep') || 'Não informado'}`);
+                addText(`Endereço: ${formData.get('endereco') || 'Não informado'}`);
+                addText(`Cidade: ${formData.get('cidade') || 'Não informado'}`);
+                addText(`Estado: ${formData.get('estado') || 'Não informado'}`);
+                addText(`País: ${formData.get('pais') || 'Não informado'}`);
+                addText(`Telefone: ${formData.get('telefone') || 'Não informado'}`);
+                addText(`E-mail: ${formData.get('email') || 'Não informado'}`);
 
-                addSectionTitle("Informações Familiares"); [cite: 129, 130]
-                addText(`Pais Vivos: ${formData.get('temPaisVivos') || 'Não informado'}`); [cite: 130]
-                if (formData.get('temPaisVivos') === 'Sim') { [cite: 130]
-                    addText(`Nome do Pai: ${formData.get('nomePai') || 'Não informado'}`); [cite: 130, 131]
-                    addText(`Data de Nascimento do Pai: ${formatDateBr(formData.get('nascimentoPai'))}`); [cite: 131]
-                    addText(`Nome da Mãe: ${formData.get('nomeMae') || 'Não informado'}`); [cite: 131]
-                    addText(`Data de Nascimento da Mãe: ${formatDateBr(formData.get('nascimentoMae'))}`); [cite: 131, 132]
-                    addText(`Pais nos EUA: ${formData.get('paisNosEUA') || 'Não informado'}`); [cite: 132]
-                    if (formData.get('paisNosEUA') === 'Sim') { [cite: 132]
-                        addText(`Explicação sobre Pais nos EUA: ${formData.get('explicacaoPaisEUA') || 'Não informado'}`); [cite: 133]
+                addSectionTitle("Informações Familiares");
+                addText(`Pais Vivos: ${formData.get('temPaisVivos') || 'Não informado'}`);
+                if (formData.get('temPaisVivos') === 'Sim') {
+                    addText(`Nome do Pai: ${formData.get('nomePai') || 'Não informado'}`);
+                    addText(`Data de Nascimento do Pai: ${formatDateBr(formData.get('nascimentoPai'))}`);
+                    addText(`Nome da Mãe: ${formData.get('nomeMae') || 'Não informado'}`);
+                    addText(`Data de Nascimento da Mãe: ${formatDateBr(formData.get('nascimentoMae'))}`);
+                    addText(`Pais nos EUA: ${formData.get('paisNosEUA') || 'Não informado'}`);
+                    if (formData.get('paisNosEUA') === 'Sim') {
+                        addText(`Explicação sobre Pais nos EUA: ${formData.get('explicacaoPaisEUA') || 'Não informado'}`);
                     }
                 }
-                addText(`Conhecidos nos EUA: ${formData.get('temConhecidosEUA') || 'Não informado'}`); [cite: 133, 134]
-                if (formData.get('temConhecidosEUA') === 'Sim') { [cite: 134]
-                    addText(`Nome do Conhecido: ${formData.get('nomeConhecido') || 'Não informado'}`); [cite: 134, 135]
-                    addText(`Telefone do Conhecido: ${formData.get('telefoneConhecido') || 'Não informado'}`); [cite: 135]
-                    addText(`E-mail do Conhecido: ${formData.get('emailConhecido') || 'Não informado'}`); [cite: 135, 136]
-                    addText(`Vínculo com o Conhecido: ${formData.get('vinculoConhecido') || 'Não informado'}`); [cite: 136]
+                addText(`Conhecidos nos EUA: ${formData.get('temConhecidosEUA') || 'Não informado'}`);
+                if (formData.get('temConhecidosEUA') === 'Sim') {
+                    addText(`Nome do Conhecido: ${formData.get('nomeConhecido') || 'Não informado'}`);
+                    addText(`Telefone do Conhecido: ${formData.get('telefoneConhecido') || 'Não informado'}`);
+                    addText(`E-mail do Conhecido: ${formData.get('emailConhecido') || 'Não informado'}`);
+                    addText(`Vínculo com o Conhecido: ${formData.get('vinculoConhecido') || 'Não informado'}`);
                 }
 
-                addSectionTitle("Detalhes da Viagem"); [cite: 136, 137]
-                addText(`Objetivo da Viagem: ${formData.get('objetivo') || 'Não informado'}`); [cite: 137]
-                addText(`Data de Chegada: ${formatDateBr(formData.get('chegada'))}`); [cite: 137]
-                addText(`Tempo de Estadia: ${formData.get('tempo') || 'Não informado'}`); [cite: 137, 138]
-                addText(`Endereço nos EUA: ${formData.get('enderecoEUA') || 'Não informado'}`); [cite: 138]
-                addText(`Quem Paga a Viagem: ${formData.get('quemPaga') || 'Não informado'}`); [cite: 138, 139]
-                if (formData.get('quemPaga') === 'Outra pessoa') { [cite: 139]
-                    addText(`Nome do Pagante: ${formData.get('payerNome') || 'Não informado'}`); [cite: 139, 140]
-                    addText(`Endereço Igual ao Solicitante: ${formData.get('payerSameAddress') || 'Não informado'}`); [cite: 140]
-                    if (formData.get('payerSameAddress') === 'Não') { [cite: 140]
-                        addText(`CEP do Pagante: ${formData.get('payerCEP') || 'Não informado'}`); [cite: 140, 141]
-                        addText(`Endereço do Pagante: ${formData.get('payerEndereco') || 'Não informado'}`); [cite: 141]
-                        addText(`Cidade do Pagante: ${formData.get('payerCidade') || 'Não informado'}`); [cite: 141, 142]
-                        addText(`Estado do Pagante: ${formData.get('payerEstado') || 'Não informado'}`); [cite: 142]
-                        addText(`País do Pagante: ${formData.get('payerPais') || 'Não informado'}`); [cite: 142, 143]
+                addSectionTitle("Detalhes da Viagem");
+                addText(`Objetivo da Viagem: ${formData.get('objetivo') || 'Não informado'}`);
+                addText(`Data de Chegada: ${formatDateBr(formData.get('chegada'))}`);
+                addText(`Tempo de Estadia: ${formData.get('tempo') || 'Não informado'}`);
+                addText(`Endereço nos EUA: ${formData.get('enderecoEUA') || 'Não informado'}`);
+                addText(`Quem Paga a Viagem: ${formData.get('quemPaga') || 'Não informado'}`);
+                if (formData.get('quemPaga') === 'Outra pessoa') {
+                    addText(`Nome do Pagante: ${formData.get('payerNome') || 'Não informado'}`);
+                    addText(`Endereço Igual ao Solicitante: ${formData.get('payerSameAddress') || 'Não informado'}`);
+                    if (formData.get('payerSameAddress') === 'Não') {
+                        addText(`CEP do Pagante: ${formData.get('payerCEP') || 'Não informado'}`);
+                        addText(`Endereço do Pagante: ${formData.get('payerEndereco') || 'Não informado'}`);
+                        addText(`Cidade do Pagante: ${formData.get('payerCidade') || 'Não informado'}`);
+                        addText(`Estado do Pagante: ${formData.get('payerEstado') || 'Não informado'}`);
+                        addText(`País do Pagante: ${formData.get('payerPais') || 'Não informado'}`);
                     }
-                    addText(`E-mail do Pagante: ${formData.get('payerEmail') || 'Não informado'}`); [cite: 143, 144]
-                    addText(`Telefone do Pagante: ${formData.get('payerTelefone') || 'Não informado'}`); [cite: 144]
-                    addText(`Vínculo com o Pagante: ${formData.get('payerVinculo') || 'Não informado'}`); [cite: 144, 145]
+                    addText(`E-mail do Pagante: ${formData.get('payerEmail') || 'Não informado'}`);
+                    addText(`Telefone do Pagante: ${formData.get('payerTelefone') || 'Não informado'}`);
+                    addText(`Vínculo com o Pagante: ${formData.get('payerVinculo') || 'Não informado'}`);
                 }
-                addText(`Companheiros de Viagem: ${formData.get('temCompanheiros') || 'Não informado'}`); [cite: 145, 146]
-                if (formData.get('temCompanheiros') === 'Sim') { [cite: 146]
-                    addText(`Nome do(s) Companheiro(s): ${formData.get('nomeCompanheiro') || 'Não informado'}`); [cite: 146, 147]
-                    addText(`Relação com o(s) Companheiro(s): ${formData.get('relacaoCompanheiro') || 'Não informado'}`); [cite: 147]
-                }
-
-                addSectionTitle("Informações de Trabalho"); [cite: 147, 148]
-                addText(`Ocupação: ${formData.get('ocupacao') || 'Não informado'}`); [cite: 148]
-                addText(`Empregador: ${formData.get('empregador') || 'Não informado'}`); [cite: 148]
-                addText(`Endereço do Empregador: ${formData.get('enderecoEmpregador') || 'Não informado'}`); [cite: 148, 149]
-                addText(`Telefone do Empregador: ${formData.get('telefoneEmpregador') || 'Não informado'}`); [cite: 149]
-                addText(`Data de Início no Trabalho: ${formatDateBr(formData.get('dataInicioTrabalho'))}`); [cite: 149]
-                addText(`Renda Mensal: ${formData.get('rendaMensal') || 'Não informado'}`); [cite: 149, 150]
-                addSectionTitle("Informações de Educação"); [cite: 150]
-                addText(`Nível de Educação: ${formData.get('nivelEducacao') || 'Não informado'}`); [cite: 150]
-                addText(`Instituição: ${formData.get('instituicao') || 'Não informado'}`); [cite: 150, 151]
-                addText(`Endereço da Instituição: ${formData.get('enderecoInstituicao') || 'Não informado'}`); [cite: 151]
-                addText(`Data de Início do Curso: ${formatDateBr(formData.get('dataInicioEducacao'))}`); [cite: 151]
-                addText(`Data de Conclusão do Curso: ${formatDateBr(formData.get('dataFimEducacao'))}`); [cite: 151, 152]
-                addSectionTitle("Histórico de Viagens"); [cite: 152]
-                addText(`Primeiro Visto ou Renovação: ${formData.get('primeiroVisto') || 'Não informado'}`); [cite: 152, 153]
-                if (formData.get('primeiroVisto') === 'Renovação') { [cite: 153]
-                    addText(`Número do Visto Anterior: ${formData.get('numeroVistoAnteriorRenovacao') || 'Não informado'}`); [cite: 153, 154]
-                    addText(`Data de Emissão do Visto Anterior: ${formatDateBr(formData.get('dataEmissaoVistoAnterior'))}`); [cite: 154]
-                    addText(`Data de Validade do Visto Anterior: ${formatDateBr(formData.get('dataValidadeVistoAnterior'))}`); [cite: 154, 155]
-                    addText(`Local de Emissão do Visto Anterior: ${formData.get('localEmissaoVistoAnterior') || 'Não informado'}`); [cite: 155, 156]
-                }
-                addText(`Já Visitou os EUA: ${formData.get('visitouEUA') || 'Não informado'}`); [cite: 156, 157]
-                if (formData.get('visitouEUA') === 'Sim') { [cite: 157]
-                    addText(`Data da Última Visita: ${formatDateBr(formData.get('dataUltimaVisita'))}`); [cite: 157, 158]
-                    addText(`Tempo da Última Visita: ${formData.get('tempoUltimaVisita') || 'Não informado'}`); [cite: 158]
-                    addText(`Número do Visto Anterior: ${formData.get('numeroVistoAnterior') || 'Não informado'}`); [cite: 158, 159]
-                }
-                addText(`Impressão Digital Coletada: ${formData.get('impressaoDigital') || 'Não informado'}`); [cite: 159, 160]
-                addText(`Países Visitados (Últimos 5 Anos): ${formData.get('outrosPaises') || 'Não informado'}`); [cite: 160]
-                addText(`Visto Negado: ${formData.get('vistoNegado') || 'Não informado'}`); [cite: 160, 161]
-                addText(`Entrada Recusada nos EUA: ${formData.get('entradaRecusada') || 'Não informado'}`); [cite: 161]
-
-                if (formData.get('vistoNegado') === 'Sim' || formData.get('entradaRecusada') === 'Sim') { [cite: 161]
-                    addText(`Detalhes da Negativa: ${formData.get('detalhesVistoNegado') || 'Não informado'}`); [cite: 162]
+                addText(`Companheiros de Viagem: ${formData.get('temCompanheiros') || 'Não informado'}`);
+                if (formData.get('temCompanheiros') === 'Sim') {
+                    addText(`Nome do(s) Companheiro(s): ${formData.get('nomeCompanheiro') || 'Não informado'}`);
+                    addText(`Relação com o(s) Companheiro(s): ${formData.get('relacaoCompanheiro') || 'Não informado'}`);
                 }
 
-                addSectionTitle("Declaração"); [cite: 162]
-                addText(`Nome: ${solicitanteNome}`, true); [cite: 162, 163]
-                addText(`Local: ${formData.get('declaracaoLocal') || 'Não informado'}`); [cite: 163]
-                addText(`Data: ${formatDateBr(formData.get('declaracaoData'))}`); [cite: 163]
-                addText(`Aceite dos Termos: ${formData.get('aceiteDeclaracao') ? 'Sim' : 'Não'}`); [cite: 163, 164]
-                addJustifiedText(`Eu, ${solicitanteNome}, declaro, sob as penas da lei, que li e compreendi integralmente todas as questões contidas nesta solicitação de visto e afirmo que as respostas por mim fornecidas são verdadeiras, completas e corretas, conforme o meu melhor conhecimento e convicção.`); [cite: 164]
-                addJustifiedText("Declaro estar ciente de que:"); [cite: 165]
-                addJustifiedText("1. Qualquer declaração falsa, incompleta ou enganosa poderá resultar na recusa permanente do visto ou na negativa de admissão nos Estados Unidos, conforme disposto na legislação aplicável."); [cite: 165, 166]
-                addJustifiedText("2. Todas as informações prestadas nesta solicitação constituem declarações juramentadas, realizadas sob pena de perjúrio, nos termos do disposto no _28 U.S.C. § 1746_."); [cite: 166]
-                addJustifiedText("3. Informações adicionais poderão ser requisitadas pelas autoridades competentes após a análise desta solicitação, sendo minha responsabilidade fornecê-las tempestivamente."); [cite: 167]
-                addJustifiedText("4. As informações contidas nesta solicitação poderão ser compartilhadas com outras agências governamentais dos Estados Unidos, que possuem autoridade legal para utilizá-las para fins de aplicação da lei ou para propósitos imigratórios, conforme permitido pela legislação vigente."); [cite: 168]
-                addJustifiedText("5. A fotografia fornecida com esta solicitação poderá ser utilizada pelas autoridades americanas para fins de verificação de identidade, empregabilidade ou outros objetivos legais previstos na legislação dos Estados Unidos."); [cite: 169]
-                addJustifiedText("Declaro ainda:"); [cite: 170]
-                addJustifiedText("6. Que sou exclusivamente responsável pela autenticidade e exatidão dos documentos apresentados e das informações prestadas nesta solicitação."); [cite: 170, 171]
-                addJustifiedText("7. Que tenho pleno conhecimento de que a concessão ou negativa do visto é prerrogativa exclusiva da Autoridade Consular Americana, não cabendo a terceiros qualquer ingerência sobre tal decisão."); [cite: 171, 172]
-                addJustifiedText("8. Que estou ciente de que, em processos de renovação de visto, entrevistas presenciais poderão ser exigidas a critério exclusivo da Autoridade Consular Americana."); [cite: 172, 173]
-                addJustifiedText("9. Que reconheço que o serviço contratado constitui assessoria relacionada ao processo de preenchimento de documentação, agendamento de biometria e entrevista, não abrangendo serviços de entrega ou retirada de documentos no Centro de Atendimento ao Solicitante de Visto (CASV), sendo necessária a contratação de um agente colaborador, caso eu deseje tais serviços adicionais."); [cite: 173, 174]
-                addJustifiedText("10. Que a aposição de minha assinatura eletrônica neste documento possui validade jurídica, conforme a legislação aplicável, e representa meu reconhecimento expresso dos serviços contratados."); [cite: 174, 175]
-                addJustifiedText("Autorização:"); [cite: 175]
-                addJustifiedText(`Declaro, por fim, ter revisado e conferido todos os dados por mim apresentados, autorizando expressamente a empresa Objetivo Turismo Ltda., contratada diretamente por mim ou por intermédio de minha agência, a proceder com o envio eletrônico do Formulário DS-160 ao Consulado Americano, bem como a realizar o pagamento das taxas e o agendamento necessários à tramitação do meu pedido de visto.`); [cite: 175]
+                addSectionTitle("Informações de Trabalho");
+                addText(`Ocupação: ${formData.get('ocupacao') || 'Não informado'}`);
+                addText(`Empregador: ${formData.get('empregador') || 'Não informado'}`);
+                addText(`Endereço do Empregador: ${formData.get('enderecoEmpregador') || 'Não informado'}`);
+                addText(`Telefone do Empregador: ${formData.get('telefoneEmpregador') || 'Não informado'}`);
+                addText(`Data de Início no Trabalho: ${formatDateBr(formData.get('dataInicioTrabalho'))}`);
+                addText(`Renda Mensal: ${formData.get('rendaMensal') || 'Não informado'}`);
+                addSectionTitle("Informações de Educação");
+                addText(`Nível de Educação: ${formData.get('nivelEducacao') || 'Não informado'}`);
+                addText(`Instituição: ${formData.get('instituicao') || 'Não informado'}`);
+                addText(`Endereço da Instituição: ${formData.get('enderecoInstituicao') || 'Não informado'}`);
+                addText(`Data de Início do Curso: ${formatDateBr(formData.get('dataInicioEducacao'))}`);
+                addText(`Data de Conclusão do Curso: ${formatDateBr(formData.get('dataFimEducacao'))}`);
+                addSectionTitle("Histórico de Viagens");
+                addText(`Primeiro Visto ou Renovação: ${formData.get('primeiroVisto') || 'Não informado'}`);
+                if (formData.get('primeiroVisto') === 'Renovação') {
+                    addText(`Número do Visto Anterior: ${formData.get('numeroVistoAnteriorRenovacao') || 'Não informado'}`);
+                    addText(`Data de Emissão do Visto Anterior: ${formatDateBr(formData.get('dataEmissaoVistoAnterior'))}`);
+                    addText(`Data de Validade do Visto Anterior: ${formatDateBr(formData.get('dataValidadeVistoAnterior'))}`);
+                    addText(`Local de Emissão do Visto Anterior: ${formData.get('localEmissaoVistoAnterior') || 'Não informado'}`);
+                }
+                addText(`Já Visitou os EUA: ${formData.get('visitouEUA') || 'Não informado'}`);
+                if (formData.get('visitouEUA') === 'Sim') {
+                    addText(`Data da Última Visita: ${formatDateBr(formData.get('dataUltimaVisita'))}`);
+                    addText(`Tempo da Última Visita: ${formData.get('tempoUltimaVisita') || 'Não informado'}`);
+                    addText(`Número do Visto Anterior: ${formData.get('numeroVistoAnterior') || 'Não informado'}`);
+                }
+                addText(`Impressão Digital Coletada: ${formData.get('impressaoDigital') || 'Não informado'}`);
+                addText(`Países Visitados (Últimos 5 Anos): ${formData.get('outrosPaises') || 'Não informado'}`);
+                addText(`Visto Negado: ${formData.get('vistoNegado') || 'Não informado'}`);
+                addText(`Entrada Recusada nos EUA: ${formData.get('entradaRecusada') || 'Não informado'}`);
+
+                if (formData.get('vistoNegado') === 'Sim' || formData.get('entradaRecusada') === 'Sim') {
+                    addText(`Detalhes da Negativa: ${formData.get('detalhesVistoNegado') || 'Não informado'}`);
+                }
+
+                addSectionTitle("Declaração");
+                addText(`Nome: ${solicitanteNome}`, true);
+                addText(`Local: ${formData.get('declaracaoLocal') || 'Não informado'}`);
+                addText(`Data: ${formatDateBr(formData.get('declaracaoData'))}`);
+                addText(`Aceite dos Termos: ${formData.get('aceiteDeclaracao') ? 'Sim' : 'Não'}`);
+                addJustifiedText(`Eu, ${solicitanteNome}, declaro, sob as penas da lei, que li e compreendi integralmente todas as questões contidas nesta solicitação de visto e afirmo que as respostas por mim fornecidas são verdadeiras, completas e corretas, conforme o meu melhor conhecimento e convicção.`);
+                addJustifiedText("Declaro estar ciente de que:");
+                addJustifiedText("1. Qualquer declaração falsa, incompleta ou enganosa poderá resultar na recusa permanente do visto ou na negativa de admissão nos Estados Unidos, conforme disposto na legislação aplicável.");
+                addJustifiedText("2. Todas as informações prestadas nesta solicitação constituem declarações juramentadas, realizadas sob pena de perjúrio, nos termos do disposto no _28 U.S.C. § 1746_.");
+                addJustifiedText("3. Informações adicionais poderão ser requisitadas pelas autoridades competentes após a análise desta solicitação, sendo minha responsabilidade fornecê-las tempestivamente.");
+                addJustifiedText("4. As informações contidas nesta solicitação poderão ser compartilhadas com outras agências governamentais dos Estados Unidos, que possuem autoridade legal para utilizá-las para fins de aplicação da lei ou para propósitos imigratórios, conforme permitido pela legislação vigente.");
+                addJustifiedText("5. A fotografia fornecida com esta solicitação poderá ser utilizada pelas autoridades americanas para fins de verificação de identidade, empregabilidade ou outros objetivos legais previstos na legislação dos Estados Unidos.");
+                addJustifiedText("Declaro ainda:");
+                addJustifiedText("6. Que sou exclusivamente responsável pela autenticidade e exatidão dos documentos apresentados e das informações prestadas nesta solicitação.");
+                addJustifiedText("7. Que tenho pleno conhecimento de que a concessão ou negativa do visto é prerrogativa exclusiva da Autoridade Consular Americana, não cabendo a terceiros qualquer ingerência sobre tal decisão.");
+                addJustifiedText("8. Que estou ciente de que, em processos de renovação de visto, entrevistas presenciais poderão ser exigidas a critério exclusivo da Autoridade Consular Americana.");
+                addJustifiedText("9. Que reconheço que o serviço contratado constitui assessoria relacionada ao processo de preenchimento de documentação, agendamento de biometria e entrevista, não abrangendo serviços de entrega ou retirada de documentos no Centro de Atendimento ao Solicitante de Visto (CASV), sendo necessária a contratação de um agente colaborador, caso eu deseje tais serviços adicionais.");
+                addJustifiedText("10. Que a aposição de minha assinatura eletrônica neste documento possui validade jurídica, conforme a legislação aplicável, e representa meu reconhecimento expresso dos serviços contratados.");
+                addJustifiedText("Autorização:");
+                addJustifiedText(`Declaro, por fim, ter revisado e conferido todos os dados por mim apresentados, autorizando expressamente a empresa **Objetivo Turismo Ltda.**, contratada diretamente por mim ou por intermédio de minha agência, a proceder com o envio eletrônico do Formulário DS-160 ao Consulado Americano, bem como a realizar o pagamento das taxas e o agendamento necessários à tramitação do meu pedido de visto.`);
                 
                 // Salva o PDF no navegador
                 const fileName = `Formulario_Visto_Americano_${solicitanteNome.replace(/\s+/g, '_')}.pdf`;
-                doc.save(fileName); [cite: 176]
+                doc.save(fileName);
 
-                const pdfBlob = doc.output('blob'); [cite: 176]
-                const timestamp = Date.now(); [cite: 176]
+                const pdfBlob = doc.output('blob');
+                const timestamp = Date.now();
                 const firebaseFileName = `pdfs/formulario_visto_${formData.get('nome') || 'sem_nome'}_${timestamp}.pdf`;
-                const storageRef = ref(storage, firebaseFileName); [cite: 176]
+                const storageRef = ref(storage, firebaseFileName);
 
-                await uploadBytes(storageRef, pdfBlob); [cite: 177]
-                const downloadUrl = await getDownloadURL(storageRef); [cite: 177]
+                await uploadBytes(storageRef, pdfBlob);
+                const downloadUrl = await getDownloadURL(storageRef);
 
-                const whatsappMessage = `Formulário de Visto Americano preenchido por ${formData.get('nome') || 'Não informado'}.\nPassaporte: ${formData.get('passaporte') || 'Não informado'}\nClique no link para visualizar e baixar o PDF: ${downloadUrl}`; [cite: 177, 178]
-                const whatsappUrl = `https://api.whatsapp.com/send?phone=${fixedWhatsAppNumber}&text=${encodeURIComponent(whatsappMessage)}`; [cite: 178]
-                window.open(whatsappUrl, '_blank'); [cite: 179]
+                const whatsappMessage = `Formulário de Visto Americano preenchido por ${formData.get('nome') || 'Não informado'}.\nPassaporte: ${formData.get('passaporte') || 'Não informado'}\nClique no link para visualizar e baixar o PDF: ${downloadUrl}`;
+                const whatsappUrl = `https://api.whatsapp.com/send?phone=${fixedWhatsAppNumber}&text=${encodeURIComponent(whatsappMessage)}`;
+                window.open(whatsappUrl, '_blank');
 
-                alert('Formulário enviado com sucesso! O PDF foi baixado e uma mensagem com o link foi enviada ao WhatsApp.'); [cite: 179]
+                alert('Formulário enviado com sucesso! O PDF foi baixado e uma mensagem com o link foi enviada ao WhatsApp.');
 
             } catch (error) {
-                console.error('Erro ao gerar PDF ou enviar para o WhatsApp:', error); [cite: 180]
-                alert('Erro ao processar o formulário. Verifique o console para mais detalhes.'); [cite: 181]
+                console.error('Erro ao gerar PDF ou enviar para o WhatsApp:', error);
+                alert('Erro ao processar o formulário. Verifique o console para mais detalhes.');
             }
         }
     </script>
