@@ -3,20 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Formulário com Geração de PDF e Envio</title>
+    <title>Formulário Completo com PDF e WhatsApp</title>
     
     <style>
         body { font-family: Arial, sans-serif; margin: 20px; background-color: #f4f4f4; }
         .container { max-width: 800px; margin: auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-        h1, h2 { color: #333; }
+        h1 { color: #333; margin-bottom: 25px; }
         label { display: block; margin-bottom: 5px; font-weight: bold; }
-        input[type="text"], input[type="tel"] { width: calc(100% - 22px); padding: 10px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 4px; }
-        button { background-color: #4CAF50; color: white; padding: 12px 20px; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; }
+        input[type="text"], input[type="email"], input[type="tel"], textarea, select {
+            width: calc(100% - 22px); /* Ajuste para padding */
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box; /* Garante que padding e border não aumentem a largura */
+        }
+        input[type="radio"], input[type="checkbox"] { margin-right: 5px; margin-bottom: 10px; }
+        .radio-group label, .checkbox-group label { display: inline-block; margin-right: 15px; font-weight: normal; }
+        button { background-color: #4CAF50; color: white; padding: 12px 20px; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; margin-top: 20px; }
         button:hover { background-color: #45a049; }
-        #conteudo-para-pdf { border: 1px dashed #ccc; padding: 20px; margin-top: 20px; background-color: #f9f9f9; }
         .message { margin-top: 20px; padding: 10px; border-radius: 4px; }
         .message.success { background-color: #d4edda; color: #155724; border-color: #c3e6cb; }
         .message.error { background-color: #f8d7da; color: #721c24; border-color: #f5c6cb; }
+
+        /* Estilos específicos para o conteúdo do PDF (opcional, se quiser uma versão de impressão diferente) */
+        /* Geralmente, html2pdf.js renderiza o que está na tela, mas você pode usar @media print se quiser */
+        /* @media print {
+            .container, button, .message { display: none; }
+            #form-container { display: block !important; margin: 0; padding: 0; border: none; box-shadow: none; }
+        } */
     </style>
 
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
@@ -26,27 +41,58 @@
 </head>
 <body>
     <div class="container">
-        <h1>Preencha o Formulário</h1>
+        <h1>Preencha o Formulário de Solicitação</h1>
 
-        <form id="meuFormulario">
-            <label for="nomeCliente">Nome Completo:</label>
-            <input type="text" id="nomeCliente" placeholder="Ex: João da Silva" required>
+        <div id="form-container">
+            <h2>Dados Pessoais</h2>
+            <label for="nomeCompleto">Nome Completo:</label>
+            <input type="text" id="nomeCompleto" placeholder="Ex: João da Silva" required>
 
-            <label for="telefoneCliente">Telefone (com DDD e código do país, ex: 5511987654321):</label>
-            <input type="tel" id="telefoneCliente" placeholder="Ex: 5511987654321" required>
+            <label for="email">E-mail:</label>
+            <input type="email" id="email" placeholder="exemplo@dominio.com" required>
 
-            <button type="button" id="btnProcessar">Gerar PDF, Download e Enviar WhatsApp</button>
-        </form>
+            <label for="telefoneContato">Telefone (com DDD e código do país, ex: 5511987654321):</label>
+            <input type="tel" id="telefoneContato" placeholder="Ex: 5511987654321" required>
 
-        <div class="message" id="statusMessage"></div>
+            <h2>Informações do Visto</h2>
+            <label for="tipoVisto">Tipo de Visto Desejado:</label>
+            <select id="tipoVisto" required>
+                <option value="">Selecione</option>
+                <option value="Turismo">Turismo</option>
+                <option value="Estudo">Estudo</option>
+                <option value="Trabalho">Trabalho</option>
+                <option value="Outro">Outro</option>
+            </select>
 
-        <div id="conteudo-para-pdf">
-            <h2>Dados do Formulário (Conteúdo do PDF)</h2>
-            <p>Este é um exemplo do conteúdo que será transformado em PDF.</p>
-            <p><strong>Nome:</strong> <span id="pdfNome"></span></p>
-            <p><strong>Telefone:</strong> <span id="pdfTelefone"></span></p>
-            <p>Data de Geração: <span id="pdfData"></span></p>
+            <label>Já Viajou para o Exterior antes?</label>
+            <div class="radio-group">
+                <input type="radio" id="viagemSim" name="viagemExterior" value="Sim" required>
+                <label for="viagemSim">Sim</label>
+                <input type="radio" id="viagemNao" name="viagemExterior" value="Não">
+                <label for="viagemNao">Não</label>
             </div>
+
+            <label for="motivoViagem">Motivo da Viagem (detalhes):</label>
+            <textarea id="motivoViagem" rows="5" placeholder="Descreva brevemente o motivo da sua viagem e seus planos..."></textarea>
+
+            <label>Documentos Anexados (exemplo de checkbox):</label>
+            <div class="checkbox-group">
+                <input type="checkbox" id="passaporteCopia" value="Passaporte">
+                <label for="passaporteCopia">Cópia do Passaporte</label><br>
+                <input type="checkbox" id="extratoBancario" value="Extrato">
+                <label for="extratoBancario">Extrato Bancário</label><br>
+                <input type="checkbox" id="cartaConvite" value="Carta">
+                <label for="cartaConvite">Carta Convite</label>
+            </div>
+
+            <p style="margin-top: 30px; font-size: 0.9em; color: #555;">
+                <em>Ao clicar em "Gerar PDF...", você concorda com os termos de serviço.</em>
+            </p>
+        </div>
+
+        <button type="button" id="btnProcessar">Gerar PDF, Download e Enviar WhatsApp</button>
+        
+        <div class="message" id="statusMessage"></div>
     </div>
 
     <script>
@@ -71,29 +117,32 @@
         function showMessage(message, type = 'info') {
             statusMessageDiv.textContent = message;
             statusMessageDiv.className = `message ${type}`;
+            statusMessageDiv.style.display = 'block'; // Garante que a mensagem seja visível
         }
 
         async function processarFormularioEEnviar() {
             showMessage("Iniciando processo...");
 
-            // 1. Obter os dados do formulário
-            const nomeCliente = document.getElementById('nomeCliente').value.trim();
-            const telefoneCliente = document.getElementById('telefoneCliente').value.trim();
+            // 1. Obter os dados principais do formulário para nomear o arquivo e enviar no WhatsApp
+            const nomeCompleto = document.getElementById('nomeCompleto').value.trim();
+            const telefoneContato = document.getElementById('telefoneContato').value.trim();
 
-            if (!nomeCliente || !telefoneCliente) {
-                showMessage("Por favor, preencha todos os campos do formulário.", "error");
+            if (!nomeCompleto || !telefoneContato) {
+                showMessage("Por favor, preencha o Nome Completo e o Telefone de Contato.", "error");
                 return;
             }
 
-            // 2. Preencher a área do PDF com os dados do formulário
-            const elementToPrint = document.getElementById('conteudo-para-pdf');
-            document.getElementById('pdfNome').textContent = nomeCliente;
-            document.getElementById('pdfTelefone').textContent = telefoneCliente;
-            document.getElementById('pdfData').textContent = new Date().toLocaleString();
+            // 2. Definir o elemento que será convertido em PDF (TODO O FORMULÁRIO)
+            const formContainer = document.getElementById('form-container');
+            if (!formContainer) {
+                console.error("Erro: Elemento com ID 'form-container' não encontrado.");
+                showMessage("Erro interno: Não foi possível encontrar o conteúdo do formulário para gerar o PDF. Por favor, contate o suporte.", "error");
+                return;
+            }
 
             const timestamp = new Date().getTime(); // Para garantir nome de arquivo único
             // Formatar o nome do arquivo para ser mais amigável (sem espaços ou caracteres especiais)
-            const nomeFormatado = nomeCliente.replace(/[^a-zA-Z0-9_]/g, '_').replace(/__/g, '_');
+            const nomeFormatado = nomeCompleto.replace(/[^a-zA-Z0-9_]/g, '_').replace(/_+/g, '_'); // Substitui não-alfanuméricos por _ e múltiplos _ por um só
             const pdfFileName = `VistoAmericano_${nomeFormatado}_${timestamp}.pdf`; 
 
             // --- Opções para html2pdf ---
@@ -101,68 +150,78 @@
                 margin: 10,
                 filename: pdfFileName,
                 image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2, logging: false, dpi: 192, letterRendering: true },
+                html2canvas: { 
+                    scale: 2, 
+                    logging: false, 
+                    dpi: 192, 
+                    letterRendering: true,
+                    useCORS: true // Importante se você tiver imagens de domínios diferentes
+                },
                 jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-                pagebreak: { avoid: ['p', 'img', 'h2'] }
+                pagebreak: { mode: 'avoid-all' } // Tenta evitar quebras no meio de elementos grandes
             };
 
             try {
                 showMessage("Gerando PDF e preparando download local...", "info");
                 
-                // 3. Gerar o PDF como Blob e forçar o download localmente
-                const pdfBlob = await html2pdf().set(pdfOptions).from(elementToPrint).output('blob');
+                // 3. Gerar o PDF como Blob (Binary Large Object)
+                // html2pdf renderiza o elemento 'form-container' como está na tela
+                const pdfBlob = await html2pdf().set(pdfOptions).from(formContainer).output('blob');
 
-                // Força o download do arquivo no navegador do cliente
+                // 4. Forçar o download do arquivo no navegador do cliente
                 const url = URL.createObjectURL(pdfBlob);
                 const a = document.createElement('a');
                 a.href = url;
-                a.download = pdfFileName; // Nome do arquivo para download
+                a.download = pdfFileName; // Nome do arquivo para o download
                 document.body.appendChild(a);
                 a.click(); // Simula o clique para iniciar o download
-                document.body.removeChild(a);
-                URL.revokeObjectURL(url); // Libera a URL do objeto
+                document.body.removeChild(a); // Remove o link temporário
+                URL.revokeObjectURL(url); // Libera a URL do objeto para evitar vazamento de memória
                 
                 showMessage("PDF gerado e download local iniciado.", "success");
 
-                // 4. Fazer o upload do PDF para o Firebase Storage
+                // 5. Fazer o upload do PDF para o Firebase Storage
                 showMessage("Iniciando upload para Firebase Storage...", "info");
-                const storageRef = storage.ref().child('visto_forms/' + pdfFileName); // Caminho para o Storage
+                // Importante: use storage.ref().child() para compatibilidade com o Firebase SDK v9 compat
+                const storageRef = storage.ref().child('visto_forms/' + pdfFileName); // Caminho para a pasta 'visto_forms' (minúsculas!)
                 const snapshot = await storageRef.put(pdfBlob);
                 
                 showMessage('Upload para Firebase Storage bem-sucedido!', "success");
 
-                // 5. Obter a URL de download do PDF
+                // 6. Obter a URL de download do PDF
                 const pdfDownloadURL = await snapshot.ref.getDownloadURL();
                 console.log('PDF disponível em:', pdfDownloadURL);
 
-                // 6. Abrir o link do WhatsApp com a URL do PDF
+                // 7. Abrir o link do WhatsApp com a URL do PDF
                 showMessage("Preparando link para WhatsApp...", "info");
-                const encodedMessage = encodeURIComponent(`Olá, ${nomeCliente}! Seu formulário preenchido está pronto. Você pode baixá-lo aqui: ${pdfDownloadURL}`);
-                const whatsappLink = `https://wa.me/${telefoneCliente}?text=${encodedMessage}`;
+                // Usamos o nomeCompleto do input, não do span
+                const encodedMessage = encodeURIComponent(`Olá, ${nomeCompleto}! Seu formulário preenchido está pronto. Você pode baixá-lo aqui: ${pdfDownloadURL}`);
+                const whatsappLink = `https://wa.me/${telefoneContato}?text=${encodedMessage}`;
 
                 // Abre o link do WhatsApp em uma nova aba/janela.
-                // Navegadores modernos exigem interação do usuário para abrir pop-ups.
-                // O clique do botão já é considerado essa interação.
+                // O navegador tenta abrir o aplicativo se disponível, ou o WhatsApp Web.
+                // O clique do botão já é a "interação do usuário" necessária para evitar bloqueio de pop-ups.
                 window.open(whatsappLink, '_blank'); 
                 
                 showMessage("Processo concluído! PDF baixado, enviado ao Firebase e link do WhatsApp aberto.", "success");
 
             } catch (error) {
                 console.error("Ocorreu um erro durante o processo:", error);
-                showMessage(`Erro: ${error.message}. Por favor, verifique o console para mais detalhes.`, "error");
+                showMessage(`Erro: ${error.message}. Por favor, verifique o console do navegador para mais detalhes.`, "error");
             }
         }
 
-        // Adiciona o evento de clique ao botão
+        // Adiciona o evento de clique ao botão principal
         document.getElementById('btnProcessar').addEventListener('click', processarFormularioEEnviar);
 
         // --- ALERTA DE SEGURANÇA CRÍTICO! ---
         // Lembre-se: As regras do seu Firebase Storage que permitem acesso a 'visto_forms'
         // (allow read: if true; allow write: if request.auth == null;) tornam sua pasta
         // PUBLICAMENTE ACESSÍVEL para leitura e/ou escrita por qualquer pessoa.
-        // Isso é ALTAMENTE NÃO RECOMENDADO para ambientes de produção.
-        // Considere implementar autenticação de usuário e regras mais restritas
-        // para proteger os dados dos seus clientes.
+        // Isso é ALTAMENTE NÃO RECOMENDADO para ambientes de produção reais.
+        // Considere implementar autenticação de usuário (Firebase Authentication)
+        // e regras mais restritas para proteger os dados dos seus clientes.
+        // Ex: allow read, write: if request.auth != null; (apenas usuários logados)
     </script>
 </body>
 </html>
