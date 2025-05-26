@@ -13,16 +13,17 @@
             color: #333;
             line-height: 1.6;
             margin: 0;
-            padding: 20px;
+            padding: 20px; /* Padding padrão para desktop */
             display: flex;
             justify-content: center;
             align-items: flex-start;
             min-height: 100vh; /* Altura mínima da tela */
+            box-sizing: border-box; /* Inclui padding e border na largura total */
         }
 
         .container {
             background-color: #ffffff;
-            padding: 40px;
+            padding: 40px; /* Padding padrão para desktop */
             border-radius: 12px;
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1); /* Sombra mais suave */
             max-width: 850px; /* Largura máxima para melhor leitura */
@@ -140,7 +141,6 @@
         }
 
         /* Estilos para seções que podem ser ocultadas/exibidas (mantendo display: none) */
-        /* Nenhuma transição suave aqui, apenas aparecer/desaparecer */
         .hidden-section {
             display: none;
         }
@@ -207,6 +207,151 @@
         .declaration-section label input[type="checkbox"] {
             vertical-align: middle;
             margin-top: -2px; /* Ajuste fino para alinhamento */
+        }
+
+        /* *********************************************************************************** */
+        /* Estilos para Responsividade (Mobile First) */
+        /* Aplicados a partir de telas menores e sobrescritos por telas maiores se necessário */
+        /* *********************************************************************************** */
+
+        /* Ajustes gerais para telas pequenas */
+        body {
+            padding: 10px; /* Menor padding nas bordas para celulares */
+        }
+
+        .container {
+            padding: 20px; /* Menor padding interno para celulares */
+            margin-top: 10px;
+            margin-bottom: 10px;
+            border-radius: 8px; /* Borda menos arredondada para mobile */
+        }
+
+        h1 {
+            font-size: 1.8em; /* Título principal menor em mobile */
+            margin-bottom: 20px;
+        }
+
+        h3 {
+            font-size: 1.4em; /* Títulos de seção menores em mobile */
+            margin-top: 25px;
+            margin-bottom: 20px;
+            border-bottom-width: 2px; /* Borda ligeiramente mais fina */
+        }
+
+        h4 {
+            font-size: 1.2em; /* Subtítulos menores em mobile */
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        p, label {
+            font-size: 0.95em; /* Texto ligeiramente menor */
+        }
+
+        input[type="text"],
+        input[type="date"],
+        input[type="tel"],
+        input[type="email"],
+        textarea,
+        select {
+            width: calc(100% - 20px); /* Ajuste para padding menor (10px + 10px) */
+            padding: 10px; /* Padding menor para inputs em mobile */
+            margin-bottom: 15px; /* Menor espaço abaixo */
+            font-size: 0.95em;
+        }
+
+        button[type="submit"] {
+            padding: 12px 20px; /* Padding menor para o botão */
+            font-size: 1em; /* Texto menor no botão */
+            margin-top: 30px; /* Menor espaço antes do botão */
+        }
+
+        /* Ajustes específicos para a seção de declaração em mobile */
+        .declaration-section {
+            padding: 15px; /* Menor padding */
+            margin-top: 30px;
+        }
+        .declaration-section ol {
+            padding-left: 20px; /* Ajuste do padding da lista */
+            font-size: 0.9em;
+        }
+        .declaration-section p {
+            font-size: 0.9em;
+        }
+        .declaration-section input[type="text"][name="declaracaoNome"],
+        .declaration-section input[type="text"][name="declaracaoLocal"],
+        .declaration-section input[type="date"][name="declaracaoData"] {
+            width: 100%; /* Ocupa a largura total para melhor preenchimento */
+            display: block; /* Cada um em sua própria linha */
+            margin-left: 0;
+            margin-top: 5px; /* Espaçamento entre eles */
+            margin-bottom: 10px;
+        }
+        .declaration-section label input[type="checkbox"] {
+            margin-left: 0; /* Alinha o checkbox */
+        }
+
+        /* Media Query para telas menores que 600px (smartphones) */
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+            .container {
+                padding: 15px;
+                margin-top: 10px;
+                margin-bottom: 10px;
+            }
+            h1 {
+                font-size: 1.6em;
+            }
+            h3 {
+                font-size: 1.3em;
+                margin-top: 20px;
+                margin-bottom: 15px;
+            }
+            h4 {
+                font-size: 1.1em;
+            }
+            p, label {
+                font-size: 0.9em;
+            }
+            input[type="text"],
+            input[type="date"],
+            input[type="tel"],
+            input[type="email"],
+            textarea,
+            select {
+                padding: 8px;
+                font-size: 0.9em;
+            }
+            button[type="submit"] {
+                padding: 10px 15px;
+                font-size: 0.95em;
+            }
+            .declaration-section ol li {
+                margin-bottom: 8px;
+            }
+        }
+
+        /* Media Query para telas muito pequenas, caso necessário (ex: 320px de largura) */
+        @media (max-width: 320px) {
+            h1 {
+                font-size: 1.4em;
+            }
+            h3 {
+                font-size: 1.2em;
+            }
+            input[type="text"],
+            input[type="date"],
+            input[type="tel"],
+            input[type="email"],
+            textarea,
+            select {
+                font-size: 0.85em;
+            }
+            button[type="submit"] {
+                font-size: 0.9em;
+            }
         }
 
     </style>
