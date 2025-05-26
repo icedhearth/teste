@@ -121,84 +121,106 @@
         .message.error { background-color: #f8d7da; color: #721c24; border-color: #f5c6cb; }
         .message.info { background-color: #d1ecf1; color: #0c5460; border-color: #bee5eb; }
 
-        /* Estilos para o conteúdo do PDF (para que pareça um documento, não um formulário interativo) */
+        /* --- ESTILOS EXCLUSIVOS PARA O CONTEÚDO DO PDF --- */
         .pdf-content {
-            font-family: 'Times New Roman', serif; /* Fonte mais formal para documentos */
-            font-size: 11pt; /* Tamanho de fonte padrão para a maioria dos documentos */
-            line-height: 1.5; /* Espaçamento entre linhas para melhor leitura */
-            color: #333;
+            font-family: 'Times New Roman', serif; /* Fonte mais formal, como documentos oficiais */
+            font-size: 10pt; /* Tamanho da fonte menor para mais conteúdo por página */
+            line-height: 1.4; /* Espaçamento entre linhas */
+            color: #000; /* Texto preto */
             padding: 15mm 20mm; /* Margens internas para o PDF */
-            box-sizing: border-box; /* Garante que padding não estoure o tamanho da página */
+            box-sizing: border-box; 
             width: 210mm; /* Largura de uma folha A4 */
             min-height: 297mm; /* Altura de uma folha A4 */
+            background-color: #fff; /* Fundo branco para o PDF */
         }
         .pdf-content h1 {
-            color: #003087;
+            font-family: Arial, sans-serif;
+            color: #003087; /* Azul escuro */
             text-align: center;
-            margin-bottom: 20px;
-            font-size: 20pt;
-            page-break-after: avoid; /* Evita quebras de página imediatamente após títulos */
+            margin-bottom: 25px;
+            font-size: 18pt;
+            border-bottom: 2px solid #003087;
+            padding-bottom: 10px;
+            page-break-after: avoid; 
         }
         .pdf-content h3 {
-            font-size: 14pt;
-            color: #C8102E;
-            border-bottom: 1px solid #ccc;
+            font-family: Arial, sans-serif;
+            font-size: 13pt;
+            color: #C8102E; /* Vermelho */
+            border-bottom: 1px solid #C8102E;
             padding-bottom: 5px;
             margin-top: 25px;
             margin-bottom: 15px;
-            page-break-before: auto; /* Permite quebrar antes se necessário */
+            page-break-before: auto; 
             page-break-after: avoid;
         }
         .pdf-content h4 {
-            font-size: 12pt;
-            color: #333;
+            font-family: Arial, sans-serif;
+            font-size: 11pt;
+            color: #555;
             margin-top: 15px;
-            margin-bottom: 10px;
-            border-bottom: 1px dashed #eee;
+            margin-bottom: 8px;
+            border-bottom: 1px dashed #bbb;
             padding-bottom: 3px;
             page-break-after: avoid;
         }
+        .pdf-content .data-item {
+            margin-bottom: 4px; /* Espaço entre os itens de dado */
+            display: block; /* Cada item ocupa sua própria linha */
+            padding: 2px 0;
+            border-bottom: 1px dotted #eee; /* Linha tracejada suave para separar dados */
+        }
+        .pdf-content .data-item:last-child {
+            border-bottom: none; /* Remove a linha do último item de cada bloco */
+        }
+        .pdf-content .data-item strong {
+            display: inline-block; /* Ocupa apenas o espaço necessário */
+            width: 140px; /* Largura para o label, ajuste se precisar */
+            font-weight: bold;
+            color: #333;
+            vertical-align: top; /* Garante que o label e o valor fiquem alinhados no topo */
+        }
+        .pdf-content .data-item span {
+            display: inline-block; /* Ocupa o restante da linha */
+            width: calc(100% - 150px); /* Largura total - largura do strong - margem */
+            font-weight: normal;
+            color: #000;
+            word-wrap: break-word; /* Permite quebrar palavras longas */
+            vertical-align: top;
+        }
+        /* Para seções que podem ter vários itens em uma linha (como países visitados, etc.) */
         .pdf-content p {
             margin-bottom: 5px;
         }
         .pdf-content ul, .pdf-content ol {
-            margin-left: 25px;
+            margin-left: 20px;
             margin-bottom: 10px;
+            font-size: 9.5pt; /* Menor para as listas de declaração */
+            line-height: 1.3;
         }
         .pdf-content li {
             margin-bottom: 3px;
         }
-        .pdf-content .data-item {
-            margin-bottom: 4px;
-            /* Usar float ou inline-block é mais seguro que flexbox para html2canvas */
-            overflow: hidden; /* Para conter os floats */
-        }
-        .pdf-content .data-item strong {
-            display: inline-block; /* Ou float: left; */
-            width: 180px; /* Largura fixa para os labels, ajuste conforme necessário */
-            font-weight: bold;
-            color: #555; /* Cor mais suave para os labels */
-            vertical-align: top; /* Alinha o texto no topo se a linha quebrar */
-        }
-        .pdf-content .data-item span {
-            display: inline-block; /* Ou float: left; */
-            width: calc(100% - 190px); /* Ajusta a largura para o restante da linha */
-            font-weight: normal;
-            color: #000;
-            word-wrap: break-word; /* Garante que o texto longo quebre a linha */
-            vertical-align: top;
-        }
         .pdf-content hr {
             border: none;
-            border-top: 1px solid #ddd;
+            border-top: 1px solid #ccc;
             margin: 20px 0;
-            page-break-before: avoid; /* Evita quebra de página logo antes do HR */
+            page-break-before: avoid; 
             page-break-after: avoid;
         }
         .pdf-content .declaration-text {
             text-align: justify;
-            margin-top: 20px;
+            margin-top: 15px;
             margin-bottom: 10px;
+            font-size: 9.5pt;
+        }
+        .pdf-content .footer-info {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 8pt;
+            color: #777;
+            border-top: 1px solid #eee;
+            padding-top: 10px;
         }
     </style>
 </head>
@@ -647,178 +669,184 @@
 
         // Função principal para gerar o conteúdo HTML do PDF a partir dos dados do formulário
         function generatePdfContent(formData) {
+            // Helper para obter valor formatado, com fallback "Não informado"
+            const getVal = (key, formatter = (v) => v) => {
+                const val = formData.get(key);
+                return val ? formatter(val) : 'Não informado';
+            };
+
             let content = `
                 <div class="pdf-content">
                     <h1>Formulário de Solicitação de Visto Americano</h1>
                     
                     <h3>Informações Pessoais</h3>
-                    <div class="data-item"><strong>Nome Completo:</strong> <span>${formData.get('nome') || 'Não informado'} ${formData.get('sobrenome') || ''}</span></div>
-                    <div class="data-item"><strong>Outros Nomes Utilizados:</strong> <span>${formData.get('outrosNomes') || 'Não'}</span></div>
-                    <div class="data-item"><strong>CPF:</strong> <span>${formData.get('cpf') || 'Não informado'}</span></div>
-                    <div class="data-item"><strong>Data de Nascimento:</strong> <span>${formatDateForDisplay(formData.get('nascimento'))}</span></div>
-                    <div class="data-item"><strong>Local de Nascimento:</strong> <span>${formData.get('localNascimento') || 'Não informado'}</span></div>
-                    <div class="data-item"><strong>Sexo:</strong> <span>${formData.get('sexo') || 'Não informado'}</span></div>
-                    <div class="data-item"><strong>Estado Civil:</strong> <span>${formData.get('estadoCivil') || 'Não informado'}</span></div>
+                    <div class="data-item"><strong>Nome Completo:</strong> <span>${getVal('nome')} ${getVal('sobrenome')}</span></div>
+                    <div class="data-item"><strong>Outros Nomes Utilizados:</strong> <span>${getVal('outrosNomes', v => v || 'Não')}</span></div>
+                    <div class="data-item"><strong>CPF:</strong> <span>${getVal('cpf')}</span></div>
+                    <div class="data-item"><strong>Data de Nascimento:</strong> <span>${getVal('nascimento', formatDateForDisplay)}</span></div>
+                    <div class="data-item"><strong>Local de Nascimento:</strong> <span>${getVal('localNascimento')}</span></div>
+                    <div class="data-item"><strong>Sexo:</strong> <span>${getVal('sexo')}</span></div>
+                    <div class="data-item"><strong>Estado Civil:</strong> <span>${getVal('estadoCivil')}</span></div>
             `;
 
             if (['Casado', 'Divorciado', 'Viúvo', 'União Estável'].includes(formData.get('estadoCivil'))) {
                 content += `
                     <h4>Dados do Cônjuge</h4>
-                    <div class="data-item"><strong>Nome do Cônjuge:</strong> <span>${formData.get('spouseNome') || 'Não informado'}</span></div>
-                    <div class="data-item"><strong>Data de Nascimento do Cônjuge:</strong> <span>${formatDateForDisplay(formData.get('spouseNascimento'))}</span></div>
-                    <div class="data-item"><strong>Local de Nascimento do Cônjuge:</strong> <span>${formData.get('spouseLocalNascimento') || 'Não informado'}</span></div>
+                    <div class="data-item"><strong>Nome do Cônjuge:</strong> <span>${getVal('spouseNome')}</span></div>
+                    <div class="data-item"><strong>Data de Nascimento do Cônjuge:</strong> <span>${getVal('spouseNascimento', formatDateForDisplay)}</span></div>
+                    <div class="data-item"><strong>Local de Nascimento do Cônjuge:</strong> <span>${getVal('spouseLocalNascimento')}</span></div>
                 `;
                 if (formData.get('estadoCivil') === 'Viúvo') {
-                    content += `<div class="data-item"><strong>Data de Falecimento do Cônjuge:</strong> <span>${formatDateForDisplay(formData.get('spouseFalecimento'))}</span></div>`;
+                    content += `<div class="data-item"><strong>Data de Falecimento do Cônjuge:</strong> <span>${getVal('spouseFalecimento', formatDateForDisplay)}</span></div>`;
                 }
             }
 
             content += `
                     <hr>
-                    <div class="data-item"><strong>Nacionalidade Atual:</strong> <span>${formData.get('nacionalidade') || 'Não informado'}</span></div>
-                    <div class="data-item"><strong>Outras Nacionalidades:</strong> <span>${formData.get('outrasNacionalidades') || 'Não possui'}</span></div>
-                    <div class="data-item"><strong>Número do Passaporte:</strong> <span>${formData.get('passaporte') || 'Não informado'}</span></div>
-                    <div class="data-item"><strong>Data de Emissão do Passaporte:</strong> <span>${formatDateForDisplay(formData.get('dataEmissaoPassaporte'))}</span></div>
-                    <div class="data-item"><strong>Data de Validade do Passaporte:</strong> <span>${formatDateForDisplay(formData.get('dataValidadePassaporte'))}</span></div>
-                    <div class="data-item"><strong>Local de Emissão do Passaporte:</strong> <span>${formData.get('localEmissaoPassaporte') || 'Não informado'}</span></div>
+                    <div class="data-item"><strong>Nacionalidade Atual:</strong> <span>${getVal('nacionalidade')}</span></div>
+                    <div class="data-item"><strong>Outras Nacionalidades:</strong> <span>${getVal('outrasNacionalidades', v => v || 'Não possui')}</span></div>
+                    <div class="data-item"><strong>Número do Passaporte:</strong> <span>${getVal('passaporte')}</span></div>
+                    <div class="data-item"><strong>Data de Emissão do Passaporte:</strong> <span>${getVal('dataEmissaoPassaporte', formatDateForDisplay)}</span></div>
+                    <div class="data-item"><strong>Data de Validade do Passaporte:</strong> <span>${getVal('dataValidadePassaporte', formatDateForDisplay)}</span></div>
+                    <div class="data-item"><strong>Local de Emissão do Passaporte:</strong> <span>${getVal('localEmissaoPassaporte')}</span></div>
 
                     <h3>Informações de Contato</h3>
-                    <div class="data-item"><strong>CEP:</strong> <span>${formData.get('cep') || 'Não informado'}</span></div>
-                    <div class="data-item"><strong>Endereço Completo:</strong> <span>${formData.get('endereco') || 'Não informado'}</span></div>
-                    <div class="data-item"><strong>Cidade:</strong> <span>${formData.get('cidade') || 'Não informado'}</span></div>
-                    <div class="data-item"><strong>Estado/Província:</strong> <span>${formData.get('estado') || 'Não informado'}</span></div>
-                    <div class="data-item"><strong>País:</strong> <span>${formData.get('pais') || 'Não informado'}</span></div>
-                    <div class="data-item"><strong>Telefone:</strong> <span>${formData.get('telefone') || 'Não informado'}</span></div>
-                    <div class="data-item"><strong>E-mail:</strong> <span>${formData.get('emailContato') || 'Não informado'}</span></div>
+                    <div class="data-item"><strong>CEP:</strong> <span>${getVal('cep')}</span></div>
+                    <div class="data-item"><strong>Endereço Completo:</strong> <span>${getVal('endereco')}</span></div>
+                    <div class="data-item"><strong>Cidade:</strong> <span>${getVal('cidade')}</span></div>
+                    <div class="data-item"><strong>Estado/Província:</strong> <span>${getVal('estado')}</span></div>
+                    <div class="data-item"><strong>País:</strong> <span>${getVal('pais')}</span></div>
+                    <div class="data-item"><strong>Telefone:</strong> <span>${getVal('telefone')}</span></div>
+                    <div class="data-item"><strong>E-mail:</strong> <span>${getVal('emailContato')}</span></div>
 
                     <h3>Informações Familiares</h3>
-                    <div class="data-item"><strong>Seus Pais Estão Vivos?:</strong> <span>${formData.get('temPaisVivos') || 'Não informado'}</span></div>
+                    <div class="data-item"><strong>Seus Pais Estão Vivos?:</strong> <span>${getVal('temPaisVivos')}</span></div>
             `;
 
             if (formData.get('temPaisVivos') === 'Sim') {
                 content += `
-                    <div class="data-item"><strong>Nome do Pai:</strong> <span>${formData.get('nomePai') || 'Não informado'}</span></div>
-                    <div class="data-item"><strong>Data de Nascimento do Pai:</strong> <span>${formatDateForDisplay(formData.get('nascimentoPai'))}</span></div>
-                    <div class="data-item"><strong>Nome da Mãe:</strong> <span>${formData.get('nomeMae') || 'Não informado'}</span></div>
-                    <div class="data-item"><strong>Data de Nascimento da Mãe:</strong> <span>${formatDateForDisplay(formData.get('nascimentoMae'))}</span></div>
-                    <div class="data-item"><strong>Pais nos EUA?:</strong> <span>${formData.get('paisNosEUA') || 'Não informado'}</span></div>
+                    <div class="data-item"><strong>Nome do Pai:</strong> <span>${getVal('nomePai')}</span></div>
+                    <div class="data-item"><strong>Data de Nascimento do Pai:</strong> <span>${getVal('nascimentoPai', formatDateForDisplay)}</span></div>
+                    <div class="data-item"><strong>Nome da Mãe:</strong> <span>${getVal('nomeMae')}</span></div>
+                    <div class="data-item"><strong>Data de Nascimento da Mãe:</strong> <span>${getVal('nascimentoMae', formatDateForDisplay)}</span></div>
+                    <div class="data-item"><strong>Pais nos EUA?:</strong> <span>${getVal('paisNosEUA')}</span></div>
                 `;
                 if (formData.get('paisNosEUA') === 'Sim') {
-                    content += `<div class="data-item"><strong>Explicação sobre Pais nos EUA:</strong> <span>${formData.get('explicacaoPaisEUA') || 'Não informado'}</span></div>`;
+                    content += `<div class="data-item"><strong>Explicação sobre Pais nos EUA:</strong> <span>${getVal('explicacaoPaisEUA')}</span></div>`;
                 }
             }
 
             content += `
-                    <div class="data-item"><strong>Tem Conhecidos nos EUA?:</strong> <span>${formData.get('temConhecidosEUA') || 'Não informado'}</span></div>
+                    <div class="data-item"><strong>Tem Conhecidos nos EUA?:</strong> <span>${getVal('temConhecidosEUA')}</span></div>
             `;
             if (formData.get('temConhecidosEUA') === 'Sim') {
                 content += `
                     <h4>Dados do Conhecido nos EUA</h4>
-                    <div class="data-item"><strong>Nome do Conhecido:</strong> <span>${formData.get('nomeConhecido') || 'Não informado'}</span></div>
-                    <div class="data-item"><strong>Telefone do Conhecido:</strong> <span>${formData.get('telefoneConhecido') || 'Não informado'}</span></div>
-                    <div class="data-item"><strong>E-mail do Conhecido:</strong> <span>${formData.get('emailConhecido') || 'Não informado'}</span></div>
-                    <div class="data-item"><strong>Vínculo com Solicitante:</strong> <span>${formData.get('vinculoConhecido') || 'Não informado'}</span></div>
+                    <div class="data-item"><strong>Nome do Conhecido:</strong> <span>${getVal('nomeConhecido')}</span></div>
+                    <div class="data-item"><strong>Telefone do Conhecido:</strong> <span>${getVal('telefoneConhecido')}</span></div>
+                    <div class="data-item"><strong>E-mail do Conhecido:</strong> <span>${getVal('emailConhecido')}</span></div>
+                    <div class="data-item"><strong>Vínculo com Solicitante:</strong> <span>${getVal('vinculoConhecido')}</span></div>
                 `;
             }
 
             content += `
                     <h3>Detalhes da Viagem</h3>
-                    <div class="data-item"><strong>Objetivo da Viagem:</strong> <span>${formData.get('objetivo') || 'Não informado'}</span></div>
-                    <div class="data-item"><strong>Data Prevista de Chegada:</strong> <span>${formatDateForDisplay(formData.get('chegada'))}</span></div>
-                    <div class="data-item"><strong>Tempo de Estadia Pretendido:</strong> <span>${formData.get('tempo') || 'Não informado'}</span></div>
-                    <div class="data-item"><strong>Endereço nos EUA:</strong> <span>${formData.get('enderecoEUA') || 'Não informado'}</span></div>
-                    <div class="data-item"><strong>Quem Paga pela Viagem:</strong> <span>${formData.get('quemPaga') || 'Não informado'}</span></div>
+                    <div class="data-item"><strong>Objetivo da Viagem:</strong> <span>${getVal('objetivo')}</span></div>
+                    <div class="data-item"><strong>Data Prevista de Chegada:</strong> <span>${getVal('chegada', formatDateForDisplay)}</span></div>
+                    <div class="data-item"><strong>Tempo de Estadia Pretendido:</strong> <span>${getVal('tempo')}</span></div>
+                    <div class="data-item"><strong>Endereço nos EUA:</strong> <span>${getVal('enderecoEUA')}</span></div>
+                    <div class="data-item"><strong>Quem Paga pela Viagem:</strong> <span>${getVal('quemPaga')}</span></div>
             `;
 
             if (formData.get('quemPaga') === 'Outra pessoa') {
                 content += `
                     <h4>Dados da Pessoa Pagante</h4>
-                    <div class="data-item"><strong>Nome da Pessoa Pagante:</strong> <span>${formData.get('payerNome') || 'Não informado'}</span></div>
+                    <div class="data-item"><strong>Nome da Pessoa Pagante:</strong> <span>${getVal('payerNome')}</span></div>
                 `;
                 if (formData.get('payerSameAddress') === 'Não') {
                     content += `
-                        <div class="data-item"><strong>CEP do Pagante:</strong> <span>${formData.get('payerCEP') || 'Não informado'}</span></div>
-                        <div class="data-item"><strong>Endereço do Pagante:</strong> <span>${formData.get('payerEndereco') || 'Não informado'}</span></div>
-                        <div class="data-item"><strong>Cidade do Pagante:</strong> <span>${formData.get('payerCidade') || 'Não informado'}</span></div>
-                        <div class="data-item"><strong>Estado/Província do Pagante:</strong> <span>${formData.get('payerEstado') || 'Não informado'}</span></div>
-                        <div class="data-item"><strong>País do Pagante:</strong> <span>${formData.get('payerPais') || 'Não informado'}</span></div>
+                        <div class="data-item"><strong>CEP do Pagante:</strong> <span>${getVal('payerCEP')}</span></div>
+                        <div class="data-item"><strong>Endereço do Pagante:</strong> <span>${getVal('payerEndereco')}</span></div>
+                        <div class="data-item"><strong>Cidade do Pagante:</strong> <span>${getVal('payerCidade')}</span></div>
+                        <div class="data-item"><strong>Estado/Província do Pagante:</strong> <span>${getVal('payerEstado')}</span></div>
+                        <div class="data-item"><strong>País do Pagante:</strong> <span>${getVal('payerPais')}</span></div>
                     `;
                 } else {
                     content += `<div class="data-item"><strong>Endereço do Pagante:</strong> <span>Mesmo do Solicitante</span></div>`;
                 }
                 content += `
-                    <div class="data-item"><strong>E-mail do Pagante:</strong> <span>${formData.get('payerEmail') || 'Não informado'}</span></div>
-                    <div class="data-item"><strong>Telefone do Pagante:</strong> <span>${formData.get('payerTelefone') || 'Não informado'}</span></div>
-                    <div class="data-item"><strong>Vínculo do Pagante:</strong> <span>${formData.get('payerVinculo') || 'Não informado'}</span></div>
+                    <div class="data-item"><strong>E-mail do Pagante:</strong> <span>${getVal('payerEmail')}</span></div>
+                    <div class="data-item"><strong>Telefone do Pagante:</strong> <span>${getVal('payerTelefone')}</span></div>
+                    <div class="data-item"><strong>Vínculo do Pagante:</strong> <span>${getVal('payerVinculo')}</span></div>
                 `;
             }
 
             content += `
-                    <div class="data-item"><strong>Vai viajar com alguém?:</strong> <span>${formData.get('temCompanheiros') || 'Não informado'}</span></div>
+                    <div class="data-item"><strong>Vai viajar com alguém?:</strong> <span>${getVal('temCompanheiros')}</span></div>
             `;
             if (formData.get('temCompanheiros') === 'Sim') {
                 content += `
-                    <div class="data-item"><strong>Nome do(s) Companheiro(s):</strong> <span>${formData.get('nomeCompanheiro') || 'Não informado'}</span></div>
-                    <div class="data-item"><strong>Relação com Companheiro(s):</strong> <span>${formData.get('relacaoCompanheiro') || 'Não informado'}</span></div>
+                    <div class="data-item"><strong>Nome do(s) Companheiro(s):</strong> <span>${getVal('nomeCompanheiro')}</span></div>
+                    <div class="data-item"><strong>Relação com Companheiro(s):</strong> <span>${getVal('relacaoCompanheiro')}</span></div>
                 `;
             }
 
             content += `
                     <h3>Informações de Trabalho</h3>
-                    <div class="data-item"><strong>Ocupação Atual:</strong> <span>${formData.get('ocupacao') || 'Não informado'}</span></div>
-                    <div class="data-item"><strong>Nome do Empregador:</strong> <span>${formData.get('empregador') || 'Não informado'}</span></div>
-                    <div class="data-item"><strong>Endereço do Empregador:</strong> <span>${formData.get('enderecoEmpregador') || 'Não informado'}</span></div>
-                    <div class="data-item"><strong>Telefone do Empregador:</strong> <span>${formData.get('telefoneEmpregador') || 'Não informado'}</span></div>
-                    <div class="data-item"><strong>Data de Início no Emprego:</strong> <span>${formatDateForDisplay(formData.get('dataInicioTrabalho'))}</span></div>
-                    <div class="data-item"><strong>Renda Mensal:</strong> <span>${formData.get('rendaMensal') ? `R$ ${formData.get('rendaMensal')}` : 'Não informado'}</span></div>
+                    <div class="data-item"><strong>Ocupação Atual:</strong> <span>${getVal('ocupacao')}</span></div>
+                    <div class="data-item"><strong>Nome do Empregador:</strong> <span>${getVal('empregador')}</span></div>
+                    <div class="data-item"><strong>Endereço do Empregador:</strong> <span>${getVal('enderecoEmpregador')}</span></div>
+                    <div class="data-item"><strong>Telefone do Empregador:</strong> <span>${getVal('telefoneEmpregador')}</span></div>
+                    <div class="data-item"><strong>Data de Início no Emprego:</strong> <span>${getVal('dataInicioTrabalho', formatDateForDisplay)}</span></div>
+                    <div class="data-item"><strong>Renda Mensal:</strong> <span>${getVal('rendaMensal', v => `R$ ${v}`)}</span></div>
 
                     <h3>Informações de Educação</h3>
-                    <div class="data-item"><strong>Nível Mais Alto de Educação:</strong> <span>${formData.get('nivelEducacao') || 'Não informado'}</span></div>
-                    <div class="data-item"><strong>Nome da Instituição:</strong> <span>${formData.get('instituicao') || 'Não informado'}</span></div>
-                    <div class="data-item"><strong>Endereço da Instituição:</strong> <span>${formData.get('enderecoInstituicao') || 'Não informado'}</span></div>
-                    <div class="data-item"><strong>Data de Início do Curso:</strong> <span>${formatDateForDisplay(formData.get('dataInicioEducacao'))}</span></div>
-                    <div class="data-item"><strong>Data de Conclusão do Curso:</strong> <span>${formatDateForDisplay(formData.get('dataFimEducacao'))}</span></div>
+                    <div class="data-item"><strong>Nível Mais Alto de Educação:</strong> <span>${getVal('nivelEducacao')}</span></div>
+                    <div class="data-item"><strong>Nome da Instituição:</strong> <span>${getVal('instituicao')}</span></div>
+                    <div class="data-item"><strong>Endereço da Instituição:</strong> <span>${getVal('enderecoInstituicao')}</span></div>
+                    <div class="data-item"><strong>Data de Início do Curso:</strong> <span>${getVal('dataInicioEducacao', formatDateForDisplay)}</span></div>
+                    <div class="data-item"><strong>Data de Conclusão do Curso:</strong> <span>${getVal('dataFimEducacao', formatDateForDisplay)}</span></div>
 
                     <h3>Histórico de Viagens</h3>
-                    <div class="data-item"><strong>É o Primeiro Visto ou Renovação?:</strong> <span>${formData.get('primeiroVisto') || 'Não informado'}</span></div>
+                    <div class="data-item"><strong>É o Primeiro Visto ou Renovação?:</strong> <span>${getVal('primeiroVisto')}</span></div>
             `;
 
             if (formData.get('primeiroVisto') === 'Renovação') {
                 content += `
                     <h4>Dados do Visto Anterior (Renovação)</h4>
-                    <div class="data-item"><strong>Número do Visto Anterior:</strong> <span>${formData.get('numeroVistoAnteriorRenovacao') || 'Não informado'}</span></div>
-                    <div class="data-item"><strong>Data de Emissão do Visto Anterior:</strong> <span>${formatDateForDisplay(formData.get('dataEmissaoVistoAnterior'))}</span></div>
-                    <div class="data-item"><strong>Data de Validade do Visto Anterior:</strong> <span>${formatDateForDisplay(formData.get('dataValidadeVistoAnterior'))}</span></div>
-                    <div class="data-item"><strong>Local de Emissão do Visto Anterior:</strong> <span>${formData.get('localEmissaoVistoAnterior') || 'Não informado'}</span></div>
+                    <div class="data-item"><strong>Número do Visto Anterior:</strong> <span>${getVal('numeroVistoAnteriorRenovacao')}</span></div>
+                    <div class="data-item"><strong>Data de Emissão do Visto Anterior:</strong> <span>${getVal('dataEmissaoVistoAnterior', formatDateForDisplay)}</span></div>
+                    <div class="data-item"><strong>Data de Validade do Visto Anterior:</strong> <span>${getVal('dataValidadeVistoAnterior', formatDateForDisplay)}</span></div>
+                    <div class="data-item"><strong>Local de Emissão do Visto Anterior:</strong> <span>${getVal('localEmissaoVistoAnterior')}</span></div>
                 `;
             }
 
             content += `
-                    <div class="data-item"><strong>Já Visitou os EUA Antes?:</strong> <span>${formData.get('visitouEUA') || 'Não informado'}</span></div>
+                    <div class="data-item"><strong>Já Visitou os EUA Antes?:</strong> <span>${getVal('visitouEUA')}</span></div>
             `;
             if (formData.get('visitouEUA') === 'Sim') {
                 content += `
                     <h4>Última Visita aos EUA</h4>
-                    <div class="data-item"><strong>Data da Última Visita:</strong> <span>${formatDateForDisplay(formData.get('dataUltimaVisita'))}</span></div>
-                    <div class="data-item"><strong>Tempo de Estadia na Última Visita:</strong> <span>${formData.get('tempoUltimaVisita') || 'Não informado'}</span></div>
-                    <div class="data-item"><strong>Número do Visto Anterior:</strong> <span>${formData.get('numeroVistoAnterior') || 'Não informado'}</span></div>
+                    <div class="data-item"><strong>Data da Última Visita:</strong> <span>${getVal('dataUltimaVisita', formatDateForDisplay)}</span></div>
+                    <div class="data-item"><strong>Tempo de Estadia na Última Visita:</strong> <span>${getVal('tempoUltimaVisita')}</span></div>
+                    <div class="data-item"><strong>Número do Visto Anterior:</strong> <span>${getVal('numeroVistoAnterior')}</span></div>
                 `;
             }
             content += `
-                    <div class="data-item"><strong>Já teve Impressão Digital Coletada?:</strong> <span>${formData.get('impressaoDigital') || 'Não informado'}</span></div>
-                    <div class="data-item"><strong>Países Visitados nos Últimos 5 Anos:</strong> <span>${formData.get('outrosPaises') || 'Não informado'}</span></div>
-                    <div class="data-item"><strong>Já teve Visto Americano Negado?:</strong> <span>${formData.get('vistoNegado') || 'Não informado'}</span></div>
-                    <div class="data-item"><strong>Já teve Entrada Recusada nos EUA?:</strong> <span>${formData.get('entradaRecusada') || 'Não informado'}</span></div>
+                    <div class="data-item"><strong>Já teve Impressão Digital Coletada?:</strong> <span>${getVal('impressaoDigital')}</span></div>
+                    <div class="data-item"><strong>Países Visitados nos Últimos 5 Anos:</strong> <span>${getVal('outrosPaises')}</span></div>
+                    <div class="data-item"><strong>Já teve Visto Americano Negado?:</strong> <span>${getVal('vistoNegado')}</span></div>
+                    <div class="data-item"><strong>Já teve Entrada Recusada nos EUA?:</strong> <span>${getVal('entradaRecusada')}</span></div>
             `;
             if (formData.get('vistoNegado') === 'Sim' || formData.get('entradaRecusada') === 'Sim') {
                 content += `
-                    <div class="data-item"><strong>Detalhes da Negativa/Recusa:</strong> <span>${formData.get('detalhesVistoNegado') || 'Não informado'}</span></div>
+                    <div class="data-item"><strong>Detalhes da Negativa/Recusa:</strong> <span>${getVal('detalhesVistoNegado')}</span></div>
                 `;
             }
 
             content += `
                     <h3>Declaração</h3>
-                    <p class="declaration-text">Eu, <strong>${formData.get('declaracaoNome') || '_________________________'}</strong>, declaro, sob as penas da lei, que li e compreendi integralmente todas as questões contidas nesta solicitação de visto e afirmo que as respostas por mim fornecidas são verdadeiras, completas e corretas, conforme o meu melhor conhecimento e convicção.</p>
+                    <p class="declaration-text">Eu, <strong>${getVal('declaracaoNome', v => v.toUpperCase())}</strong>, declaro, sob as penas da lei, que li e compreendi integralmente todas as questões contidas nesta solicitação de visto e afirmo que as respostas por mim fornecidas são verdadeiras, completas e corretas, conforme o meu melhor conhecimento e convicção.</p>
 
                     <p class="declaration-text"><strong>Declaro estar ciente de:</strong></p>
                     <ol>
@@ -841,14 +869,18 @@
                     <p class="declaration-text"><strong>Autorização:</strong></p>
                     <p class="declaration-text">Declaro, por fim, ter revisado e conferido todos os dados por mim apresentados, autorizando expressamente a empresa <strong>Objetivo Turismo Ltda.</strong>, contratada diretamente por mim ou por intermédio de minha agência, a proceder com o envio eletrônico do Formulário DS-160 ao Consulado Americano, bem como a realizar o pagamento das taxas e o agendamento necessários à tramitação do meu pedido de visto.</p>
 
-                    <div class="data-item"><strong>Local:</strong> <span>${formData.get('declaracaoLocal') || 'Não informado'}</span></div>
-                    <div class="data-item"><strong>Data da Declaração:</strong> <span>${formatDateForDisplay(formData.get('declaracaoData'))}</span></div>
+                    <div class="data-item"><strong>Local:</strong> <span>${getVal('declaracaoLocal')}</span></div>
+                    <div class="data-item"><strong>Data da Declaração:</strong> <span>${getVal('declaracaoData', formatDateForDisplay)}</span></div>
                     <div class="data-item"><strong>Concordo com os termos:</strong> <span>${formData.get('aceiteDeclaracao') === 'on' ? 'Sim' : 'Não'}</span></div>
+                    <div class="footer-info">
+                        Documento gerado em: ${new Date().toLocaleString('pt-BR')}
+                    </div>
                 </div>
             `;
             return content;
         }
 
+        // --- Resto do JavaScript (mesmo do arquivo anterior, com as funções de exibição de campo) ---
         // --- Event Listeners para Mostrar/Esconder Seções (Lógica original mantida) ---
         document.addEventListener('DOMContentLoaded', function() {
             const form = document.getElementById('visaForm');
@@ -895,7 +927,7 @@
             // Viagem
             toggleVisibility('quemPaga', 'payerInfo', ['Outra pessoa']);
             toggleVisibility('payerSameAddress', 'payerAddressInfo', ['Não']);
-            toggleVisibility('temCompanheiros', 'travelCompanionsInfo', ['Sim']);
+            toggleVisibility('temCompanheiros', 'travelCompanionsInfo', ['Sim');
             // Histórico
             toggleVisibility('primeiroVisto', 'renewalInfo', ['Renovação']);
             toggleVisibility('visitouEUA', 'previousUSVisaInfo', ['Sim']);
