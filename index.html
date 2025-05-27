@@ -178,19 +178,36 @@
             margin-bottom: 25px;
         }
 
-        .address-entry, .employment-entry, .travel-entry {
-            border: 1px solid #e0e0e0;
+        /* Estilo para o campo de entrada de novo histórico */
+        .new-entry-fields {
+            border: 1px solid #dcdcdc;
             padding: 15px;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             border-radius: 8px;
-            background-color: #fcfcfc;
-            position: relative; /* Para posicionar o botão de remover */
+            background-color: #f9f9f9;
         }
 
-        .address-entry label, .employment-entry label, .travel-entry label {
-            font-weight: normal; /* Labels dentro das entradas não tão fortes */
-            margin-top: 10px;
-            margin-bottom: 5px;
+        /* Estilo para cada item adicionado na lista */
+        .added-entry-item {
+            border: 1px solid #e0e0e0;
+            padding: 10px 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            background-color: #fcfcfc;
+            position: relative;
+            font-size: 0.95em;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .added-entry-item p {
+            margin: 5px 0;
+            color: #555;
+        }
+
+        .added-entry-item strong {
+            color: #333;
         }
 
         .add-button {
@@ -218,10 +235,11 @@
             border-radius: 5px;
             cursor: pointer;
             font-size: 0.85em;
-            position: absolute; /* Posição absoluta para o canto superior direito */
-            top: 10px;
-            right: 10px;
-            z-index: 10;
+            /* Posição absoluta para o canto superior direito se dentro do item */
+            /* position: absolute; */
+            /* top: 10px; */
+            /* right: 10px; */
+            /* z-index: 10; */
         }
 
         .remove-button:hover {
@@ -537,25 +555,87 @@
             <div class="form-section">
                 <h3>Histórico de Endereços (Últimos 5 anos)</h3>
                 <p>Liste todos os endereços onde você residiu nos últimos 5 anos. Comece pelo mais recente.</p>
-                <div id="addressHistoryContainer">
+                <div class="new-entry-fields" id="newAddressEntryFields">
+                    <div class="form-group">
+                        <label for="currentAddress">Endereço:</label>
+                        <input type="text" id="currentAddress" placeholder="Rua, Número, Complemento">
                     </div>
+                    <div class="form-group">
+                        <label for="currentCity">Cidade:</label>
+                        <input type="text" id="currentCity">
+                    </div>
+                    <div class="form-group">
+                        <label for="currentState">Estado/Província:</label>
+                        <input type="text" id="currentState">
+                    </div>
+                    <div class="form-group">
+                        <label for="currentCountry">País:</label>
+                        <input type="text" id="currentCountry">
+                    </div>
+                    <div class="form-group">
+                        <label for="currentAddressFrom">De (MM/AAAA):</label>
+                        <input type="month" id="currentAddressFrom">
+                    </div>
+                    <div class="form-group">
+                        <label for="currentAddressTo">Até (MM/AAAA):</label>
+                        <input type="month" id="currentAddressTo">
+                    </div>
+                </div>
                 <button type="button" id="addAddressBtn" class="add-button">Adicionar Endereço</button>
+                <div id="addedAddressesList">
+                    </div>
             </div>
 
             <div class="form-section">
                 <h3>Histórico de Emprego (Últimos 5 anos)</h3>
                 <p>Liste seu histórico de emprego nos últimos 5 anos. Comece pelo mais recente.</p>
-                <div id="employmentHistoryContainer">
+                <div class="new-entry-fields" id="newEmploymentEntryFields">
+                    <div class="form-group">
+                        <label for="currentEmployerName">Empregador:</label>
+                        <input type="text" id="currentEmployerName">
                     </div>
+                    <div class="form-group">
+                        <label for="currentOccupation">Cargo:</label>
+                        <input type="text" id="currentOccupation">
+                    </div>
+                    <div class="form-group">
+                        <label for="currentEmployerAddress">Endereço do Empregador:</label>
+                        <input type="text" id="currentEmployerAddress" placeholder="Rua, Número, Cidade, País">
+                    </div>
+                    <div class="form-group">
+                        <label for="currentEmploymentFrom">De (MM/AAAA):</label>
+                        <input type="month" id="currentEmploymentFrom">
+                    </div>
+                    <div class="form-group">
+                        <label for="currentEmploymentTo">Até (MM/AAAA):</label>
+                        <input type="month" id="currentEmploymentTo">
+                    </div>
+                </div>
                 <button type="button" id="addEmploymentBtn" class="add-button">Adicionar Emprego</button>
+                <div id="addedEmploymentList">
+                    </div>
             </div>
 
             <div class="form-section">
                 <h3>Histórico de Viagens aos EUA (Últimos 5 anos)</h3>
                 <p>Liste todas as suas viagens aos EUA nos últimos 5 anos.</p>
-                <div id="travelHistoryContainer">
+                <div class="new-entry-fields" id="newTravelEntryFields">
+                    <div class="form-group">
+                        <label for="currentTravelArrivalDate">Data de Chegada aos EUA:</label>
+                        <input type="date" id="currentTravelArrivalDate">
                     </div>
+                    <div class="form-group">
+                        <label for="currentTravelDepartureDate">Data de Saída dos EUA:</label>
+                        <input type="date" id="currentTravelDepartureDate">
+                    </div>
+                    <div class="form-group">
+                        <label for="currentTravelOriginCountry">País de Partida (para esta viagem):</label>
+                        <input type="text" id="currentTravelOriginCountry">
+                    </div>
+                </div>
                 <button type="button" id="addTravelBtn" class="add-button">Adicionar Viagem</button>
+                <div id="addedTravelList">
+                    </div>
             </div>
 
 
@@ -975,8 +1055,6 @@
         }
 
         // Funções de toggle (retornadas à lógica original com display: block/none)
-        // Adicionei uma classe 'conditional-section' e 'hidden-section' para estilizar
-        // e controlar a visibilidade de forma mais clara no CSS
         function toggleSpouseInfo() {
             const estadoCivil = document.getElementById('estadoCivil');
             const spouseInfo = document.getElementById('spouseInfo');
@@ -988,13 +1066,11 @@
                     spouseDeathInfo.classList.remove('hidden-section');
                 } else {
                     spouseDeathInfo.classList.add('hidden-section');
-                    // Limpa os campos quando ocultado
                     spouseDeathInfo.querySelectorAll('input, textarea, select').forEach(input => input.value = '');
                 }
             } else {
                 spouseInfo.classList.add('hidden-section');
-                spouseDeathInfo.classList.add('hidden-section'); // Garante que também seja oculto
-                // Limpa todos os campos da seção quando ela é ocultada
+                spouseDeathInfo.classList.add('hidden-section');
                 spouseInfo.querySelectorAll('input, textarea, select').forEach(input => input.value = '');
                 spouseDeathInfo.querySelectorAll('input, textarea, select').forEach(input => input.value = '');
             }
@@ -1006,11 +1082,10 @@
             
             if (temPaisVivos.value === 'Sim') {
                 parentsInfo.classList.remove('hidden-section');
-                toggleParentsInUSInfo(); // Reavalia a sub-seção
+                toggleParentsInUSInfo();
             } else {
                 parentsInfo.classList.add('hidden-section');
                 parentsInfo.querySelectorAll('input, textarea, select').forEach(input => input.value = '');
-                // Garante que a sub-seção também seja ocultada e limpa
                 document.getElementById('parentsInUSInfo').classList.add('hidden-section');
                 document.getElementById('parentsInUSInfo').querySelectorAll('input, textarea, select').forEach(input => input.value = '');
             }
@@ -1066,11 +1141,10 @@
             const payerInfo = document.getElementById('payerInfo');
             if (quemPaga.value === 'Outra pessoa') {
                 payerInfo.classList.remove('hidden-section');
-                togglePayerAddressInfo(); // Reavalia a sub-seção
+                togglePayerAddressInfo();
             } else {
                 payerInfo.classList.add('hidden-section');
                 payerInfo.querySelectorAll('input, textarea, select').forEach(input => input.value = '');
-                // Garante que a sub-seção também seja ocultada e limpa
                 document.getElementById('payerAddressInfo').classList.add('hidden-section');
                 document.getElementById('payerAddressInfo').querySelectorAll('input, textarea, select').forEach(input => input.value = '');
             }
@@ -1115,7 +1189,6 @@
             const globalEntryApplication = document.getElementById('globalEntryApplication');
             if (interessadoGlobalEntry.value === 'Sim') {
                 globalEntryApplication.classList.remove('hidden-section');
-                // Reavalia todas as sub-seções de "Global Entry Application"
                 document.querySelectorAll('#globalEntryApplication input[type="radio"]').forEach(radio => {
                     radio.addEventListener('change', (event) => {
                         const name = event.target.name;
@@ -1130,7 +1203,6 @@
                             }
                         }
                     });
-                    // Chamar o evento change para cada radio para inicializar a visibilidade
                     if (radio.checked) {
                         const name = radio.name;
                         const detailsDivId = name + 'Details';
@@ -1155,7 +1227,6 @@
             }
         }
 
-        // Função auxiliar para os selects do Global Entry
         function toggleConditionalGE(selectId, divId) {
             const selectElement = document.getElementById(selectId);
             const divElement = document.getElementById(divId);
@@ -1169,97 +1240,167 @@
             }
         }
         
-        // Funções para adicionar/remover histórico de endereços e empregos e VIAGENS (NOVO)
+        // NOVO: Funções para adicionar e gerenciar entradas dinâmicas
+        // Cada entrada será armazenada em um Array de objetos para facilitar a leitura no PDF
+        const addresses = [];
+        const employments = [];
+        const travels = [];
+
         function addAddressEntry() {
-            const container = document.getElementById('addressHistoryContainer');
-            const div = document.createElement('div');
-            div.classList.add('address-entry');
-            div.innerHTML = `
-                <button type="button" class="remove-button" onclick="this.closest('.address-entry').remove()">Remover</button>
-                <div class="form-group">
-                    <label>Endereço:</label>
-                    <input type="text" name="pastAddress[]" placeholder="Rua, Número, Complemento">
-                </div>
-                <div class="form-group">
-                    <label>Cidade:</label>
-                    <input type="text" name="pastCity[]">
-                </div>
-                <div class="form-group">
-                    <label>Estado/Província:</label>
-                    <input type="text" name="pastState[]">
-                </div>
-                <div class="form-group">
-                    <label>País:</label>
-                    <input type="text" name="pastCountry[]">
-                </div>
-                <div class="form-group">
-                    <label>De (MM/AAAA):</label>
-                    <input type="month" name="pastAddressFrom[]">
-                </div>
-                <div class="form-group">
-                    <label>Até (MM/AAAA):</label>
-                    <input type="month" name="pastAddressTo[]">
-                </div>
-            `;
-            container.appendChild(div);
+            const address = document.getElementById('currentAddress').value.trim();
+            const city = document.getElementById('currentCity').value.trim();
+            const state = document.getElementById('currentState').value.trim();
+            const country = document.getElementById('currentCountry').value.trim();
+            const from = document.getElementById('currentAddressFrom').value;
+            const to = document.getElementById('currentAddressTo').value;
+
+            if (address && city && state && country && from && to) {
+                const newAddress = { address, city, state, country, from, to };
+                addresses.push(newAddress);
+                renderAddresses();
+                clearAddressFields();
+            } else {
+                alert('Por favor, preencha todos os campos do endereço atual.');
+            }
+        }
+
+        function renderAddresses() {
+            const listContainer = document.getElementById('addedAddressesList');
+            listContainer.innerHTML = ''; // Limpa a lista existente
+
+            addresses.forEach((addr, index) => {
+                const div = document.createElement('div');
+                div.classList.add('added-entry-item');
+                div.innerHTML = `
+                    <div>
+                        <p><strong>Endereço:</strong> ${addr.address}, ${addr.city}, ${addr.state}, ${addr.country}</p>
+                        <p><strong>De:</strong> ${formatDateBr(addr.from)} <strong>Até:</strong> ${formatDateBr(addr.to)}</p>
+                    </div>
+                    <button type="button" class="remove-button" data-index="${index}" data-type="address">Remover</button>
+                `;
+                listContainer.appendChild(div);
+            });
+            addRemoveListeners();
+        }
+
+        function clearAddressFields() {
+            document.getElementById('currentAddress').value = '';
+            document.getElementById('currentCity').value = '';
+            document.getElementById('currentState').value = '';
+            document.getElementById('currentCountry').value = '';
+            document.getElementById('currentAddressFrom').value = '';
+            document.getElementById('currentAddressTo').value = '';
         }
 
         function addEmploymentEntry() {
-            const container = document.getElementById('employmentHistoryContainer');
-            const div = document.createElement('div');
-            div.classList.add('employment-entry');
-            div.innerHTML = `
-                <button type="button" class="remove-button" onclick="this.closest('.employment-entry').remove()">Remover</button>
-                <div class="form-group">
-                    <label>Empregador:</label>
-                    <input type="text" name="employerName[]">
-                </div>
-                <div class="form-group">
-                    <label>Cargo:</label>
-                    <input type="text" name="occupation[]">
-                </div>
-                <div class="form-group">
-                    <label>Endereço do Empregador:</label>
-                    <input type="text" name="employerAddress[]" placeholder="Rua, Número, Cidade, País">
-                </div>
-                <div class="form-group">
-                    <label>De (MM/AAAA):</label>
-                    <input type="month" name="employmentFrom[]">
-                </div>
-                <div class="form-group">
-                    <label>Até (MM/AAAA):</label>
-                    <input type="month" name="employmentTo[]">
-                </div>
-            `;
-            container.appendChild(div);
+            const employerName = document.getElementById('currentEmployerName').value.trim();
+            const occupation = document.getElementById('currentOccupation').value.trim();
+            const employerAddress = document.getElementById('currentEmployerAddress').value.trim();
+            const from = document.getElementById('currentEmploymentFrom').value;
+            const to = document.getElementById('currentEmploymentTo').value;
+
+            if (employerName && occupation && employerAddress && from && to) {
+                const newEmployment = { employerName, occupation, employerAddress, from, to };
+                employments.push(newEmployment);
+                renderEmployments();
+                clearEmploymentFields();
+            } else {
+                alert('Por favor, preencha todos os campos do histórico de emprego.');
+            }
+        }
+
+        function renderEmployments() {
+            const listContainer = document.getElementById('addedEmploymentList');
+            listContainer.innerHTML = '';
+
+            employments.forEach((job, index) => {
+                const div = document.createElement('div');
+                div.classList.add('added-entry-item');
+                div.innerHTML = `
+                    <div>
+                        <p><strong>Empregador:</strong> ${job.employerName}</p>
+                        <p><strong>Cargo:</strong> ${job.occupation}</p>
+                        <p><strong>Endereço:</strong> ${job.employerAddress}</p>
+                        <p><strong>De:</strong> ${formatDateBr(job.from)} <strong>Até:</strong> ${formatDateBr(job.to)}</p>
+                    </div>
+                    <button type="button" class="remove-button" data-index="${index}" data-type="employment">Remover</button>
+                `;
+                listContainer.appendChild(div);
+            });
+            addRemoveListeners();
+        }
+
+        function clearEmploymentFields() {
+            document.getElementById('currentEmployerName').value = '';
+            document.getElementById('currentOccupation').value = '';
+            document.getElementById('currentEmployerAddress').value = '';
+            document.getElementById('currentEmploymentFrom').value = '';
+            document.getElementById('currentEmploymentTo').value = '';
         }
 
         function addTravelEntry() {
-            const container = document.getElementById('travelHistoryContainer');
-            const div = document.createElement('div');
-            div.classList.add('travel-entry');
-            div.innerHTML = `
-                <button type="button" class="remove-button" onclick="this.closest('.travel-entry').remove()">Remover</button>
-                <div class="form-group">
-                    <label>Data de Chegada aos EUA:</label>
-                    <input type="date" name="travelArrivalDate[]">
-                </div>
-                <div class="form-group">
-                    <label>Data de Saída dos EUA:</label>
-                    <input type="date" name="travelDepartureDate[]">
-                </div>
-                <div class="form-group">
-                    <label>País de Partida (para esta viagem):</label>
-                    <input type="text" name="travelOriginCountry[]">
-                </div>
-            `;
-            container.appendChild(div);
+            const arrivalDate = document.getElementById('currentTravelArrivalDate').value;
+            const departureDate = document.getElementById('currentTravelDepartureDate').value;
+            const originCountry = document.getElementById('currentTravelOriginCountry').value.trim();
+
+            if (arrivalDate && departureDate && originCountry) {
+                const newTravel = { arrivalDate, departureDate, originCountry };
+                travels.push(newTravel);
+                renderTravels();
+                clearTravelFields();
+            } else {
+                alert('Por favor, preencha todos os campos da viagem.');
+            }
+        }
+
+        function renderTravels() {
+            const listContainer = document.getElementById('addedTravelList');
+            listContainer.innerHTML = '';
+
+            travels.forEach((travel, index) => {
+                const div = document.createElement('div');
+                div.classList.add('added-entry-item');
+                div.innerHTML = `
+                    <div>
+                        <p><strong>Chegada aos EUA:</strong> ${formatDateBr(travel.arrivalDate)}</p>
+                        <p><strong>Saída dos EUA:</strong> ${formatDateBr(travel.departureDate)}</p>
+                        <p><strong>País de Partida:</strong> ${travel.originCountry}</p>
+                    </div>
+                    <button type="button" class="remove-button" data-index="${index}" data-type="travel">Remover</button>
+                `;
+                listContainer.appendChild(div);
+            });
+            addRemoveListeners();
+        }
+
+        function clearTravelFields() {
+            document.getElementById('currentTravelArrivalDate').value = '';
+            document.getElementById('currentTravelDepartureDate').value = '';
+            document.getElementById('currentTravelOriginCountry').value = '';
+        }
+
+        function addRemoveListeners() {
+            document.querySelectorAll('.remove-button').forEach(button => {
+                button.onclick = function() {
+                    const index = parseInt(this.dataset.index);
+                    const type = this.dataset.type;
+                    if (type === 'address') {
+                        addresses.splice(index, 1);
+                        renderAddresses();
+                    } else if (type === 'employment') {
+                        employments.splice(index, 1);
+                        renderEmployments();
+                    } else if (type === 'travel') {
+                        travels.splice(index, 1);
+                        renderTravels();
+                    }
+                };
+            });
         }
 
 
         // Adicionando event listeners e chamadas iniciais
         document.addEventListener('DOMContentLoaded', () => {
-            // Adicionando listeners para os selects que controlam a visibilidade
             document.getElementById('estadoCivil').addEventListener('change', toggleSpouseInfo);
             document.getElementById('temPaisVivos').addEventListener('change', toggleParentsInfo);
             document.getElementById('paisNosEUA').addEventListener('change', toggleParentsInUSInfo);
@@ -1275,7 +1416,6 @@
             // Global Entry Listeners
             document.getElementById('interessadoGlobalEntry').addEventListener('change', toggleGlobalEntryApplication);
 
-            // Adiciona listeners para os radio buttons do Global Entry
             document.querySelectorAll('input[name="prisaoOuCondenacaoGE"]').forEach(radio => {
                 radio.addEventListener('change', () => toggleConditionalGEbyRadio('prisaoOuCondenacaoGE', 'prisaoOuCondenacaoGEDetails'));
             });
@@ -1292,14 +1432,13 @@
             document.getElementById('negadoTrustedTravelerGE').addEventListener('change', () => toggleConditionalGE('negadoTrustedTravelerGE', 'negadoTrustedTravelerGEDetails'));
             document.getElementById('serviuMilitarGE').addEventListener('change', () => toggleConditionalGE('serviuMilitarGE', 'serviuMilitarGEDetails'));
 
-            // LISTENERS PARA OS BOTÕES DE ADICIONAR ENTRADAS DINÂMICAS (Corrigido para tipo module)
+            // LISTENERS PARA OS BOTÕES DE ADICIONAR ENTRADAS DINÂMICAS
             document.getElementById('addAddressBtn').addEventListener('click', addAddressEntry);
             document.getElementById('addEmploymentBtn').addEventListener('click', addEmploymentEntry);
-            document.getElementById('addTravelBtn').addEventListener('click', addTravelEntry); // Novo botão de viagem
+            document.getElementById('addTravelBtn').addEventListener('click', addTravelEntry);
 
             document.getElementById('visaForm').addEventListener('submit', generatePDF);
 
-            // Chamadas iniciais para definir o estado correto no carregamento da página
             toggleSpouseInfo();
             toggleParentsInfo();
             toggleAcquaintancesInfo();
@@ -1308,14 +1447,13 @@
             toggleRenewalInfo();
             togglePreviousUSVisaInfo();
             toggleVisaDeniedDetails();
-            toggleGlobalEntryApplication(); // Chamar esta função na inicialização
+            toggleGlobalEntryApplication();
 
-            // Adicionar uma entrada de endereço, emprego e viagem ao carregar a página para que já apareça um campo
-            addAddressEntry();
-            addEmploymentEntry();
-            addTravelEntry(); // Adiciona uma entrada de viagem inicial
+            // Renderiza as listas vazias no início para garantir que os contêineres estejam lá.
+            renderAddresses();
+            renderEmployments();
+            renderTravels();
 
-            // Função para controlar a visibilidade de detalhes com base em radio buttons
             function toggleConditionalGEbyRadio(name, divId) {
                 const radios = document.querySelectorAll(`input[name="${name}"]`);
                 const detailsDiv = document.getElementById(divId);
@@ -1332,7 +1470,6 @@
                     }
                 }
             }
-            // Chamada inicial para os radio buttons do Global Entry
             toggleConditionalGEbyRadio('prisaoOuCondenacaoGE', 'prisaoOuCondenacaoGEDetails');
             toggleConditionalGEbyRadio('violacaoLeiAduaneiraGE', 'violacaoLeiAduaneiraGEDetails');
             toggleConditionalGEbyRadio('investigacaoFederalGE', 'investigacaoFederalGEDetails');
@@ -1523,91 +1660,42 @@
                 addText(`Telefone: ${formData.get('telefone') || 'Não informado'}`);
                 addText(`E-mail: ${formData.get('email') || 'Não informado'}`);
 
+                // Histórico de Endereços
                 addSectionTitle("Histórico de Endereços (Últimos 5 anos)");
-                const enderecos = [];
-                // Use os nomes dos campos do anexo
-                const pastAddresses = formData.getAll('pastAddress[]');
-                if (pastAddresses.length > 0) {
-                    for (let i = 0; i < pastAddresses.length; i++) {
-                        const endereco = pastAddresses[i];
-                        // Certifique-se de que o campo de endereço não está vazio antes de adicionar
-                        if (endereco && endereco.trim() !== '') {
-                            enderecos.push({
-                                endereco: endereco,
-                                cidade: formData.getAll('pastCity[]')[i] || 'Não informado',
-                                estado: formData.getAll('pastState[]')[i] || 'Não informado',
-                                pais: formData.getAll('pastCountry[]')[i] || 'Não informado',
-                                data_de: formatDateBr(formData.getAll('pastAddressFrom[]')[i]),
-                                data_ate: formatDateBr(formData.getAll('pastAddressTo[]')[i])
-                            });
-                        }
-                    }
-                }
-                if (enderecos.length > 0) {
-                    enderecos.forEach((addr, index) => {
-                        addText(`Endereço ${index + 1}: ${addr.endereco}, ${addr.cidade}, ${addr.estado}, ${addr.pais}`);
-                        addText(`  De: ${addr.data_de} Até: ${addr.data_ate}`);
-                        yPosition += 2; // Espaçamento extra entre endereços
+                if (addresses.length > 0) {
+                    addresses.forEach((addr, index) => {
+                        addText(`Endereço ${index + 1}: ${addr.address}, ${addr.city}, ${addr.state}, ${addr.country}`);
+                        addText(`  De: ${formatDateBr(addr.from)} Até: ${formatDateBr(addr.to)}`);
+                        yPosition += 2;
                     });
                 } else {
                     addText('Nenhum endereço adicional informado nos últimos 5 anos.');
                 }
 
+                // Histórico de Emprego
                 addSectionTitle("Histórico de Emprego (Últimos 5 anos)");
-                const empregos = [];
-                // Use os nomes dos campos do anexo
-                const employerNames = formData.getAll('employerName[]');
-                if (employerNames.length > 0) {
-                    for (let i = 0; i < employerNames.length; i++) {
-                        const empregador = employerNames[i];
-                        // Certifique-se de que o campo de empregador não está vazio antes de adicionar
-                        if (empregador && empregador.trim() !== '') {
-                            empregos.push({
-                                empregador: empregador,
-                                cargo: formData.getAll('occupation[]')[i] || 'Não informado',
-                                endereco: formData.getAll('employerAddress[]')[i] || 'Não informado',
-                                data_de: formatDateBr(formData.getAll('employmentFrom[]')[i]),
-                                data_ate: formatDateBr(formData.getAll('employmentTo[]')[i])
-                            });
-                        }
-                    }
-                }
-                if (empregos.length > 0) {
-                    empregos.forEach((job, index) => {
+                if (employments.length > 0) {
+                    employments.forEach((job, index) => {
                         addText(`Emprego ${index + 1}:`);
-                        addText(`  Empregador: ${job.empregador}`);
-                        addText(`  Cargo: ${job.cargo}`);
-                        addText(`  Endereço: ${job.endereco}`);
-                        addText(`  De: ${job.data_de} Até: ${job.data_ate}`);
-                        yPosition += 2; // Espaçamento extra entre empregos
+                        addText(`  Empregador: ${job.employerName}`);
+                        addText(`  Cargo: ${job.occupation}`);
+                        addText(`  Endereço: ${job.employerAddress}`);
+                        addText(`  De: ${formatDateBr(job.from)} Até: ${formatDateBr(job.to)}`);
+                        yPosition += 2;
                     });
                 } else {
                     addText('Nenhum histórico de emprego nos últimos 5 anos informado.');
                 }
 
-                // Adição do Histórico de Viagens ao PDF (NOVO)
+                // Histórico de Viagens
                 addSectionTitle("Histórico de Viagens aos EUA (Últimos 5 anos)");
-                const viagens = [];
-                const travelArrivalDates = formData.getAll('travelArrivalDate[]');
-                if (travelArrivalDates.length > 0) {
-                    for (let i = 0; i < travelArrivalDates.length; i++) {
-                        const arrivalDate = travelArrivalDates[i];
-                        if (arrivalDate && arrivalDate.trim() !== '') {
-                            viagens.push({
-                                chegada: formatDateBr(arrivalDate),
-                                saida: formatDateBr(formData.getAll('travelDepartureDate[]')[i]),
-                                pais_origem: formData.getAll('travelOriginCountry[]')[i] || 'Não informado'
-                            });
-                        }
-                    }
-                }
-                if (viagens.length > 0) {
-                    viagens.forEach((travel, index) => {
+                if (travels.length > 0) {
+                    travels.forEach((travel, index) => {
                         addText(`Viagem ${index + 1}:`);
-                        addText(`  Chegada: ${travel.chegada}`);
-                        addText(`  Saída: ${travel.saida}`);
-                        addText(`  País de Origem: ${travel.pais_origem}`);
-                        yPosition += 2; // Espaçamento extra entre viagens
+                        addText(`  Chegada: ${formatDateBr(travel.arrivalDate)}`);
+                        addText(`  Saída: ${formatDateBr(travel.departureDate)}`);
+                        addText(`  País de Partida: ${travel.originCountry}`);
+                        yPosition += 2;
                     });
                 } else {
                     addText('Nenhuma viagem aos EUA nos últimos 5 anos informada.');
