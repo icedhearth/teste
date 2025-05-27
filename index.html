@@ -75,6 +75,7 @@
 
         input[type="text"],
         input[type="date"],
+        input[type="month"], /* Adicionado para input type="month" */
         input[type="tel"],
         input[type="email"],
         textarea,
@@ -91,6 +92,7 @@
 
         input[type="text"]:focus,
         input[type="date"]:focus,
+        input[type="month"]:focus, /* Adicionado para input type="month" */
         input[type="tel"]:focus,
         input[type="email"]:focus,
         textarea:focus,
@@ -112,6 +114,28 @@
             vertical-align: middle; /* Alinha com o texto */
             margin-top: -3px; /* Pequeno ajuste para alinhamento visual */
         }
+        
+        /* Estilo para radio buttons */
+        .radio-group {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .radio-group label {
+            display: inline-block;
+            margin-right: 20px;
+            margin-bottom: 0;
+            font-weight: normal;
+        }
+
+        .radio-group input[type="radio"] {
+            margin-right: 5px;
+            vertical-align: middle;
+            width: auto; /* Garante que o radio button não ocupe toda a largura */
+        }
+
 
         button[type="submit"] {
             background-color: #28a745; /* Verde vibrante */
@@ -154,15 +178,16 @@
             margin-bottom: 25px;
         }
 
-        .address-entry, .job-entry, .travel-entry {
+        .address-entry, .employment-entry, .travel-entry {
             border: 1px solid #e0e0e0;
             padding: 15px;
             margin-bottom: 15px;
             border-radius: 8px;
             background-color: #fcfcfc;
+            position: relative; /* Para posicionar o botão de remover */
         }
 
-        .address-entry label, .job-entry label, .travel-entry label {
+        .address-entry label, .employment-entry label, .travel-entry label {
             font-weight: normal; /* Labels dentro das entradas não tão fortes */
             margin-top: 10px;
             margin-bottom: 5px;
@@ -193,8 +218,10 @@
             border-radius: 5px;
             cursor: pointer;
             font-size: 0.85em;
-            float: right; /* Alinha à direita */
-            margin-top: -30px; /* Ajusta posição vertical */
+            position: absolute; /* Posição absoluta para o canto superior direito */
+            top: 10px;
+            right: 10px;
+            z-index: 10;
         }
 
         .remove-button:hover {
@@ -297,6 +324,7 @@
 
         input[type="text"],
         input[type="date"],
+        input[type="month"], /* Adicionado para input type="month" */
         input[type="tel"],
         input[type="email"],
         textarea,
@@ -329,7 +357,7 @@
         .declaration-section input[type="text"][name="declaracaoLocal"],
         .declaration-section input[type="date"][name="declaracaoData"] {
             width: 100%; /* Ocupa a largura total para melhor preenchimento */
-            display: block; /* Cada um em sua própria linha */
+            display: block; /* Cada one em sua própria linha */
             margin-left: 0;
             margin-top: 5px; /* Espaçamento entre eles */
             margin-bottom: 10px;
@@ -364,6 +392,7 @@
             }
             input[type="text"],
             input[type="date"],
+            input[type="month"], /* Adicionado para input type="month" */
             input[type="tel"],
             input[type="email"],
             textarea,
@@ -390,6 +419,7 @@
             }
             input[type="text"],
             input[type="date"],
+            input[type="month"], /* Adicionado para input type="month" */
             input[type="tel"],
             input[type="email"],
             textarea,
@@ -504,17 +534,21 @@
             <label for="email">E-mail:</label>
             <input type="email" id="email" name="email">
 
-            <h3>Histórico de Endereços (Últimos 5 anos)</h3>
-            <p>Liste todos os endereços onde você residiu nos últimos 5 anos. Comece pelo mais recente.</p>
-            <div id="enderecosContainer">
-                </div>
-            <button type="button" class="add-button" onclick="addEndereco()">Adicionar Endereço</button>
+            <div class="form-section">
+                <h3>Histórico de Endereços (Últimos 5 anos)</h3>
+                <p>Liste todos os endereços onde você residiu nos últimos 5 anos. Comece pelo mais recente.</p>
+                <div id="addressHistoryContainer">
+                    </div>
+                <button type="button" class="add-button" onclick="addAddressEntry()">Adicionar Endereço</button>
+            </div>
 
-            <h3>Histórico de Emprego (Últimos 5 anos)</h3>
-            <p>Liste seu histórico de emprego nos últimos 5 anos. Comece pelo mais recente.</p>
-            <div id="empregosContainer">
-                </div>
-            <button type="button" class="add-button" onclick="addEmprego()">Adicionar Emprego</button>
+            <div class="form-section">
+                <h3>Histórico de Emprego (Últimos 5 anos)</h3>
+                <p>Liste seu histórico de emprego nos últimos 5 anos. Comece pelo mais recente.</p>
+                <div id="employmentHistoryContainer">
+                    </div>
+                <button type="button" class="add-button" onclick="addEmploymentEntry()">Adicionar Emprego</button>
+            </div>
 
             <h3>Informações Familiares</h3>
             <label for="temPaisVivos">Seus pais estão vivos?</label>
@@ -774,48 +808,44 @@
                 <h4>Perguntas Adicionais Global Entry</h4>
                 <p>Estas perguntas são específicas para a aplicação do Global Entry e serão adicionadas ao seu formulário.</p>
 
-                <label for="prisaoOuCondenacaoGE">a. Você já foi condenado(a) por qualquer crime (incluindo DUI/DWI), tem alguma acusação criminal pendente, ou possui mandados de prisão em aberto em qualquer país?</label>
-                <select id="prisaoOuCondenacaoGE" name="prisaoOuCondenacaoGE">
-                    <option value="">Selecione</option>
-                    <option value="Sim">Sim</option>
-                    <option value="Não">Não</option>
-                </select>
-                <div id="prisaoOuCondenacaoGEDetails" class="conditional-section hidden-section">
-                    <label for="prisaoOuCondenacaoGECausa">Explique a causa e forneça as datas:</label>
-                    <textarea id="prisaoOuCondenacaoGECausa" name="prisaoOuCondenacaoGECausa"></textarea>
+                <div class="form-group radio-group">
+                    <label>a. Você já foi condenado(a) por qualquer crime (incluindo DUI/DWI), tem alguma acusação criminal pendente, ou possui mandados de prisão em aberto em qualquer país?</label>
+                    <input type="radio" id="prisaoOuCondenacaoGE_Sim" name="prisaoOuCondenacaoGE" value="Sim"> <label for="prisaoOuCondenacaoGE_Sim">Sim</label>
+                    <input type="radio" id="prisaoOuCondenacaoGE_Nao" name="prisaoOuCondenacaoGE" value="Não" checked> <label for="prisaoOuCondenacaoGE_Nao">Não</label>
+                    <div class="form-group" id="prisaoOuCondenacaoGEDetails" style="display: none; margin-top: 10px;">
+                        <label for="prisaoOuCondenacaoGECausa">Explique a causa e forneça as datas:</label>
+                        <textarea id="prisaoOuCondenacaoGECausa" name="prisaoOuCondenacaoGECausa" rows="3"></textarea>
+                    </div>
                 </div>
 
-                <label for="violacaoLeiAduaneiraGE">b. Você já foi considerado(a) culpado(a) de violação de quaisquer regulamentos ou leis alfandegárias, de imigração ou agrícolas em qualquer país?</label>
-                <select id="violacaoLeiAduaneiraGE" name="violacaoLeiAduaneiraGE">
-                    <option value="">Selecione</option>
-                    <option value="Sim">Sim</option>
-                    <option value="Não">Não</option>
-                </select>
-                <div id="violacaoLeiAduaneiraGEDetails" class="conditional-section hidden-section">
-                    <label for="violacaoLeiAduaneiraGECausa">Explique a violação e forneça as datas:</label>
-                    <textarea id="violacaoLeiAduaneiraGECausa" name="violacaoLeiAduaneiraGECausa"></textarea>
+                <div class="form-group radio-group">
+                    <label>b. Você já foi considerado(a) culpado(a) de violação de quaisquer regulamentos ou leis alfandegárias, de imigração ou agrícolas em qualquer país?</label>
+                    <input type="radio" id="violacaoLeiAduaneiraGE_Sim" name="violacaoLeiAduaneiraGE" value="Sim"> <label for="violacaoLeiAduaneiraGE_Sim">Sim</label>
+                    <input type="radio" id="violacaoLeiAduaneiraGE_Nao" name="violacaoLeiAduaneiraGE" value="Não" checked> <label for="violacaoLeiAduaneiraGE_Nao">Não</label>
+                    <div class="form-group" id="violacaoLeiAduaneiraGEDetails" style="display: none; margin-top: 10px;">
+                        <label for="violacaoLeiAduaneiraGECausa">Explique a violação e forneça as datas:</label>
+                        <textarea id="violacaoLeiAduaneiraGECausa" name="violacaoLeiAduaneiraGECausa" rows="3"></textarea>
+                    </div>
                 </div>
 
-                <label for="investigacaoFederalGE">c. Você é objeto de uma investigação em andamento por qualquer agência federal, estadual ou local de aplicação da lei?</label>
-                <select id="investigacaoFederalGE" name="investigacaoFederalGE">
-                    <option value="">Selecione</option>
-                    <option value="Sim">Sim</option>
-                    <option value="Não">Não</option>
-                </select>
-                <div id="investigacaoFederalGEDetails" class="conditional-section hidden-section">
-                    <label for="investigacaoFederalGECausa">Explique a investigação e forneça os detalhes:</label>
-                    <textarea id="investigacaoFederalGECausa" name="investigacaoFederalGECausa"></textarea>
+                <div class="form-group radio-group">
+                    <label>c. Você é objeto de uma investigação em andamento por qualquer agência federal, estadual ou local de aplicação da lei?</label>
+                    <input type="radio" id="investigacaoFederalGE_Sim" name="investigacaoFederalGE" value="Sim"> <label for="investigacaoFederalGE_Sim">Sim</label>
+                    <input type="radio" id="investigacaoFederalGE_Nao" name="investigacaoFederalGE" value="Não" checked> <label for="investigacaoFederalGE_Nao">Não</label>
+                    <div class="form-group" id="investigacaoFederalGEDetails" style="display: none; margin-top: 10px;">
+                        <label for="investigacaoFederalGECausa">Explique a investigação e forneça os detalhes:</label>
+                        <textarea id="investigacaoFederalGECausa" name="investigacaoFederalGECausa" rows="3"></textarea>
+                    </div>
                 </div>
 
-                <label for="informacaoIncorretaGE">d. Você já forneceu informações falsas ou incompletas em qualquer formulário de inscrição ou processo de imigração para os Estados Unidos ou qualquer outro país?</label>
-                <select id="informacaoIncorretaGE" name="informacaoIncorretaGE">
-                    <option value="">Selecione</option>
-                    <option value="Sim">Sim</option>
-                    <option value="Não">Não</option>
-                </select>
-                <div id="informacaoIncorretaGEDetails" class="conditional-section hidden-section">
-                    <label for="informacaoIncorretaGECausa">Explique a situação e forneça os detalhes:</label>
-                    <textarea id="informacaoIncorretaGECausa" name="informacaoIncorretaGECausa"></textarea>
+                <div class="form-group radio-group">
+                    <label>d. Você já forneceu informações falsas ou incompletas em qualquer formulário de inscrição ou processo de imigração para os Estados Unidos ou qualquer outro país?</label>
+                    <input type="radio" id="informacaoIncorretaGE_Sim" name="informacaoIncorretaGE" value="Sim"> <label for="informacaoIncorretaGE_Sim">Sim</label>
+                    <input type="radio" id="informacaoIncorretaGE_Nao" name="informacaoIncorretaGE" value="Não" checked> <label for="informacaoIncorretaGE_Nao">Não</label>
+                    <div class="form-group" id="informacaoIncorretaGEDetails" style="display: none; margin-top: 10px;">
+                        <label for="informacaoIncorretaGECausa">Explique a situação e forneça os detalhes:</label>
+                        <textarea id="informacaoIncorretaGECausa" name="informacaoIncorretaGECausa" rows="3"></textarea>
+                    </div>
                 </div>
 
                 <label for="negadoTrustedTravelerGE">Você já teve um pedido para qualquer programa de Trusted Traveler negado, ou a participação cancelada?</label>
@@ -924,6 +954,12 @@
 
         function formatDateBr(dateStr) {
             if (!dateStr) return 'Não informado';
+            // Se for um input type="month", o valor será YYYY-MM
+            if (dateStr.includes('-') && dateStr.length === 7) {
+                const [year, month] = dateStr.split('-');
+                return `${month}/${year}`;
+            }
+            // Para input type="date" (YYYY-MM-DD)
             const [year, month, day] = dateStr.split('-');
             const date = new Date(year, month - 1, day);
             return date.toLocaleDateString('pt-BR', { timeZone: 'America/Sao_Paulo' });
@@ -1071,22 +1107,50 @@
             if (interessadoGlobalEntry.value === 'Sim') {
                 globalEntryApplication.classList.remove('hidden-section');
                 // Reavalia todas as sub-seções de "Global Entry Application"
-                toggleConditionalGE('prisaoOuCondenacaoGE', 'prisaoOuCondenacaoGEDetails');
-                toggleConditionalGE('violacaoLeiAduaneiraGE', 'violacaoLeiAduaneiraGEDetails');
-                toggleConditionalGE('investigacaoFederalGE', 'investigacaoFederalGEDetails');
-                toggleConditionalGE('informacaoIncorretaGE', 'informacaoIncorretaGEDetails');
+                document.querySelectorAll('#globalEntryApplication input[type="radio"]').forEach(radio => {
+                    radio.addEventListener('change', (event) => {
+                        const name = event.target.name;
+                        const detailsDivId = name + 'Details';
+                        const detailsDiv = document.getElementById(detailsDivId);
+                        if (detailsDiv) {
+                            if (event.target.value === 'Sim') {
+                                detailsDiv.style.display = 'block';
+                            } else {
+                                detailsDiv.style.display = 'none';
+                                detailsDiv.querySelectorAll('textarea').forEach(textarea => textarea.value = '');
+                            }
+                        }
+                    });
+                    // Chamar o evento change para cada radio para inicializar a visibilidade
+                    if (radio.checked) {
+                        const name = radio.name;
+                        const detailsDivId = name + 'Details';
+                        const detailsDiv = document.getElementById(detailsDivId);
+                        if (detailsDiv) {
+                            if (radio.value === 'Sim') {
+                                detailsDiv.style.display = 'block';
+                            } else {
+                                detailsDiv.style.display = 'none';
+                                detailsDiv.querySelectorAll('textarea').forEach(textarea => textarea.value = '');
+                            }
+                        }
+                    }
+                });
+
                 toggleConditionalGE('negadoTrustedTravelerGE', 'negadoTrustedTravelerGEDetails');
                 toggleConditionalGE('serviuMilitarGE', 'serviuMilitarGEDetails');
+
             } else {
                 globalEntryApplication.classList.add('hidden-section');
                 globalEntryApplication.querySelectorAll('input, textarea, select').forEach(input => input.value = '');
             }
         }
 
+        // Função auxiliar para os selects do Global Entry
         function toggleConditionalGE(selectId, divId) {
             const selectElement = document.getElementById(selectId);
             const divElement = document.getElementById(divId);
-            if (selectElement && divElement) { // Verifica se os elementos existem
+            if (selectElement && divElement) {
                 if (selectElement.value === 'Sim') {
                     divElement.classList.remove('hidden-section');
                 } else {
@@ -1097,63 +1161,72 @@
         }
         
         // Funções para adicionar/remover histórico de endereços e empregos
-        let enderecoIndex = 0;
-        function addEndereco() {
-            const container = document.getElementById('enderecosContainer');
+        function addAddressEntry() {
+            const container = document.getElementById('addressHistoryContainer');
             const div = document.createElement('div');
             div.classList.add('address-entry');
             div.innerHTML = `
                 <button type="button" class="remove-button" onclick="removeEntry(this)">Remover</button>
-                <label for="endereco_${enderecoIndex}">Endereço:</label>
-                <input type="text" id="endereco_${enderecoIndex}" name="enderecos[${enderecoIndex}][endereco]" placeholder="Rua, Número, Complemento">
-
-                <label for="cidade_endereco_${enderecoIndex}">Cidade:</label>
-                <input type="text" id="cidade_endereco_${enderecoIndex}" name="enderecos[${enderecoIndex}][cidade]">
-
-                <label for="estado_endereco_${enderecoIndex}">Estado/Província:</label>
-                <input type="text" id="estado_endereco_${enderecoIndex}" name="enderecos[${enderecoIndex}][estado]">
-
-                <label for="pais_endereco_${enderecoIndex}">País:</label>
-                <input type="text" id="pais_endereco_${enderecoIndex}" name="enderecos[${enderecoIndex}][pais]">
-
-                <label for="de_endereco_${enderecoIndex}">De (MM/AAAA):</label>
-                <input type="date" id="de_endereco_${enderecoIndex}" name="enderecos[${enderecoIndex}][data_de]">
-
-                <label for="ate_endereco_${enderecoIndex}">Até (MM/AAAA):</label>
-                <input type="date" id="ate_endereco_${enderecoIndex}" name="enderecos[${enderecoIndex}][data_ate]">
+                <div class="form-group">
+                    <label>Endereço:</label>
+                    <input type="text" name="pastAddress[]" placeholder="Rua, Número, Complemento">
+                </div>
+                <div class="form-group">
+                    <label>Cidade:</label>
+                    <input type="text" name="pastCity[]">
+                </div>
+                <div class="form-group">
+                    <label>Estado/Província:</label>
+                    <input type="text" name="pastState[]">
+                </div>
+                <div class="form-group">
+                    <label>País:</label>
+                    <input type="text" name="pastCountry[]">
+                </div>
+                <div class="form-group">
+                    <label>De (MM/AAAA):</label>
+                    <input type="month" name="pastAddressFrom[]">
+                </div>
+                <div class="form-group">
+                    <label>Até (MM/AAAA):</label>
+                    <input type="month" name="pastAddressTo[]">
+                </div>
             `;
             container.appendChild(div);
-            enderecoIndex++;
         }
 
-        let empregoIndex = 0;
-        function addEmprego() {
-            const container = document.getElementById('empregosContainer');
+        function addEmploymentEntry() {
+            const container = document.getElementById('employmentHistoryContainer');
             const div = document.createElement('div');
-            div.classList.add('job-entry');
+            div.classList.add('employment-entry');
             div.innerHTML = `
                 <button type="button" class="remove-button" onclick="removeEntry(this)">Remover</button>
-                <label for="empregador_hist_${empregoIndex}">Empregador:</label>
-                <input type="text" id="empregador_hist_${empregoIndex}" name="empregos[${empregoIndex}][empregador]">
-
-                <label for="cargo_hist_${empregoIndex}">Cargo:</label>
-                <input type="text" id="cargo_hist_${empregoIndex}" name="empregos[${empregoIndex}][cargo]">
-
-                <label for="endereco_empregador_hist_${empregoIndex}">Endereço do Empregador:</label>
-                <input type="text" id="endereco_empregador_hist_${empregoIndex}" name="empregos[${empregoIndex}][endereco]" placeholder="Rua, Número, Cidade, País">
-
-                <label for="de_emprego_${empregoIndex}">De (MM/AAAA):</label>
-                <input type="date" id="de_emprego_${empregoIndex}" name="empregos[${empregoIndex}][data_de]">
-
-                <label for="ate_emprego_${empregoIndex}">Até (MM/AAAA):</label>
-                <input type="date" id="ate_emprego_${empregoIndex}" name="empregos[${empregoIndex}][data_ate]">
+                <div class="form-group">
+                    <label>Empregador:</label>
+                    <input type="text" name="employerName[]">
+                </div>
+                <div class="form-group">
+                    <label>Cargo:</label>
+                    <input type="text" name="occupation[]">
+                </div>
+                <div class="form-group">
+                    <label>Endereço do Empregador:</label>
+                    <input type="text" name="employerAddress[]" placeholder="Rua, Número, Cidade, País">
+                </div>
+                <div class="form-group">
+                    <label>De (MM/AAAA):</label>
+                    <input type="month" name="employmentFrom[]">
+                </div>
+                <div class="form-group">
+                    <label>Até (MM/AAAA):</label>
+                    <input type="month" name="employmentTo[]">
+                </div>
             `;
             container.appendChild(div);
-            empregoIndex++;
         }
 
         function removeEntry(button) {
-            button.closest('.address-entry, .job-entry, .travel-entry').remove();
+            button.closest('.address-entry, .employment-entry, .travel-entry').remove();
         }
 
         // Adicionando event listeners e chamadas iniciais
@@ -1173,10 +1246,21 @@
             
             // Global Entry Listeners
             document.getElementById('interessadoGlobalEntry').addEventListener('change', toggleGlobalEntryApplication);
-            document.getElementById('prisaoOuCondenacaoGE').addEventListener('change', () => toggleConditionalGE('prisaoOuCondenacaoGE', 'prisaoOuCondenacaoGEDetails'));
-            document.getElementById('violacaoLeiAduaneiraGE').addEventListener('change', () => toggleConditionalGE('violacaoLeiAduaneiraGE', 'violacaoLeiAduaneiraGEDetails'));
-            document.getElementById('investigacaoFederalGE').addEventListener('change', () => toggleConditionalGE('investigacaoFederalGE', 'investigacaoFederalGEDetails'));
-            document.getElementById('informacaoIncorretaGE').addEventListener('change', () => toggleConditionalGE('informacaoIncorretaGE', 'informacaoIncorretaGEDetails'));
+
+            // Adiciona listeners para os radio buttons do Global Entry
+            document.querySelectorAll('input[name="prisaoOuCondenacaoGE"]').forEach(radio => {
+                radio.addEventListener('change', () => toggleConditionalGEbyRadio('prisaoOuCondenacaoGE', 'prisaoOuCondenacaoGEDetails'));
+            });
+            document.querySelectorAll('input[name="violacaoLeiAduaneiraGE"]').forEach(radio => {
+                radio.addEventListener('change', () => toggleConditionalGEbyRadio('violacaoLeiAduaneiraGE', 'violacaoLeiAduaneiraGEDetails'));
+            });
+            document.querySelectorAll('input[name="investigacaoFederalGE"]').forEach(radio => {
+                radio.addEventListener('change', () => toggleConditionalGEbyRadio('investigacaoFederalGE', 'investigacaoFederalGEDetails'));
+            });
+            document.querySelectorAll('input[name="informacaoIncorretaGE"]').forEach(radio => {
+                radio.addEventListener('change', () => toggleConditionalGEbyRadio('informacaoIncorretaGE', 'informacaoIncorretaGEDetails'));
+            });
+
             document.getElementById('negadoTrustedTravelerGE').addEventListener('change', () => toggleConditionalGE('negadoTrustedTravelerGE', 'negadoTrustedTravelerGEDetails'));
             document.getElementById('serviuMilitarGE').addEventListener('change', () => toggleConditionalGE('serviuMilitarGE', 'serviuMilitarGEDetails'));
 
@@ -1193,9 +1277,32 @@
             toggleVisaDeniedDetails();
             toggleGlobalEntryApplication(); // Chamar esta função na inicialização
 
-            // Adicionar uma entrada de endereço e emprego ao carregar a página
-            addEndereco();
-            addEmprego();
+            // Adicionar uma entrada de endereço e emprego ao carregar a página para que já apareça um campo
+            addAddressEntry();
+            addEmploymentEntry();
+
+            // Função para controlar a visibilidade de detalhes com base em radio buttons
+            function toggleConditionalGEbyRadio(name, divId) {
+                const radios = document.querySelectorAll(`input[name="${name}"]`);
+                const detailsDiv = document.getElementById(divId);
+                let showDetails = false;
+                radios.forEach(radio => {
+                    if (radio.checked && radio.value === 'Sim') {
+                        showDetails = true;
+                    }
+                });
+                if (detailsDiv) {
+                    detailsDiv.style.display = showDetails ? 'block' : 'none';
+                    if (!showDetails) {
+                        detailsDiv.querySelectorAll('textarea').forEach(textarea => textarea.value = '');
+                    }
+                }
+            }
+            // Chamada inicial para os radio buttons do Global Entry
+            toggleConditionalGEbyRadio('prisaoOuCondenacaoGE', 'prisaoOuCondenacaoGEDetails');
+            toggleConditionalGEbyRadio('violacaoLeiAduaneiraGE', 'violacaoLeiAduaneiraGEDetails');
+            toggleConditionalGEbyRadio('investigacaoFederalGE', 'investigacaoFederalGEDetails');
+            toggleConditionalGEbyRadio('informacaoIncorretaGE', 'informacaoIncorretaGEDetails');
         });
 
 
@@ -1384,17 +1491,23 @@
 
                 addSectionTitle("Histórico de Endereços (Últimos 5 anos)");
                 const enderecos = [];
-                for (let i = 0; ; i++) {
-                    const endereco = formData.get(`enderecos[${i}][endereco]`);
-                    if (!endereco) break;
-                    enderecos.push({
-                        endereco: endereco,
-                        cidade: formData.get(`enderecos[${i}][cidade]`),
-                        estado: formData.get(`enderecos[${i}][estado]`),
-                        pais: formData.get(`enderecos[${i}][pais]`),
-                        data_de: formatDateBr(formData.get(`enderecos[${i}][data_de]`)),
-                        data_ate: formatDateBr(formData.get(`enderecos[${i}][data_ate]`))
-                    });
+                // Use os nomes dos campos do anexo
+                const pastAddresses = formData.getAll('pastAddress[]');
+                if (pastAddresses.length > 0) {
+                    for (let i = 0; i < pastAddresses.length; i++) {
+                        const endereco = pastAddresses[i];
+                        // Certifique-se de que o campo de endereço não está vazio antes de adicionar
+                        if (endereco && endereco.trim() !== '') {
+                            enderecos.push({
+                                endereco: endereco,
+                                cidade: formData.getAll('pastCity[]')[i] || 'Não informado',
+                                estado: formData.getAll('pastState[]')[i] || 'Não informado',
+                                pais: formData.getAll('pastCountry[]')[i] || 'Não informado',
+                                data_de: formatDateBr(formData.getAll('pastAddressFrom[]')[i]),
+                                data_ate: formatDateBr(formData.getAll('pastAddressTo[]')[i])
+                            });
+                        }
+                    }
                 }
                 if (enderecos.length > 0) {
                     enderecos.forEach((addr, index) => {
@@ -1406,19 +1519,24 @@
                     addText('Nenhum endereço adicional informado nos últimos 5 anos.');
                 }
 
-
                 addSectionTitle("Histórico de Emprego (Últimos 5 anos)");
                 const empregos = [];
-                for (let i = 0; ; i++) {
-                    const empregador = formData.get(`empregos[${i}][empregador]`);
-                    if (!empregador) break;
-                    empregos.push({
-                        empregador: empregador,
-                        cargo: formData.get(`empregos[${i}][cargo]`),
-                        endereco: formData.get(`empregos[${i}][endereco]`),
-                        data_de: formatDateBr(formData.get(`empregos[${i}][data_de]`)),
-                        data_ate: formatDateBr(formData.get(`empregos[${i}][data_ate]`))
-                    });
+                // Use os nomes dos campos do anexo
+                const employerNames = formData.getAll('employerName[]');
+                if (employerNames.length > 0) {
+                    for (let i = 0; i < employerNames.length; i++) {
+                        const empregador = employerNames[i];
+                        // Certifique-se de que o campo de empregador não está vazio antes de adicionar
+                        if (empregador && empregador.trim() !== '') {
+                            empregos.push({
+                                empregador: empregador,
+                                cargo: formData.getAll('occupation[]')[i] || 'Não informado',
+                                endereco: formData.getAll('employerAddress[]')[i] || 'Não informado',
+                                data_de: formatDateBr(formData.getAll('employmentFrom[]')[i]),
+                                data_ate: formatDateBr(formData.getAll('employmentTo[]')[i])
+                            });
+                        }
+                    }
                 }
                 if (empregos.length > 0) {
                     empregos.forEach((job, index) => {
