@@ -539,7 +539,7 @@
                 <p>Liste todos os endereços onde você residiu nos últimos 5 anos. Comece pelo mais recente.</p>
                 <div id="addressHistoryContainer">
                     </div>
-                <button type="button" class="add-button" onclick="addAddressEntry()">Adicionar Endereço</button>
+                <button type="button" id="addAddressBtn" class="add-button">Adicionar Endereço</button>
             </div>
 
             <div class="form-section">
@@ -547,8 +547,17 @@
                 <p>Liste seu histórico de emprego nos últimos 5 anos. Comece pelo mais recente.</p>
                 <div id="employmentHistoryContainer">
                     </div>
-                <button type="button" class="add-button" onclick="addEmploymentEntry()">Adicionar Emprego</button>
+                <button type="button" id="addEmploymentBtn" class="add-button">Adicionar Emprego</button>
             </div>
+
+            <div class="form-section">
+                <h3>Histórico de Viagens aos EUA (Últimos 5 anos)</h3>
+                <p>Liste todas as suas viagens aos EUA nos últimos 5 anos.</p>
+                <div id="travelHistoryContainer">
+                    </div>
+                <button type="button" id="addTravelBtn" class="add-button">Adicionar Viagem</button>
+            </div>
+
 
             <h3>Informações Familiares</h3>
             <label for="temPaisVivos">Seus pais estão vivos?</label>
@@ -1160,13 +1169,13 @@
             }
         }
         
-        // Funções para adicionar/remover histórico de endereços e empregos
+        // Funções para adicionar/remover histórico de endereços e empregos e VIAGENS (NOVO)
         function addAddressEntry() {
             const container = document.getElementById('addressHistoryContainer');
             const div = document.createElement('div');
             div.classList.add('address-entry');
             div.innerHTML = `
-                <button type="button" class="remove-button" onclick="removeEntry(this)">Remover</button>
+                <button type="button" class="remove-button" onclick="this.closest('.address-entry').remove()">Remover</button>
                 <div class="form-group">
                     <label>Endereço:</label>
                     <input type="text" name="pastAddress[]" placeholder="Rua, Número, Complemento">
@@ -1200,7 +1209,7 @@
             const div = document.createElement('div');
             div.classList.add('employment-entry');
             div.innerHTML = `
-                <button type="button" class="remove-button" onclick="removeEntry(this)">Remover</button>
+                <button type="button" class="remove-button" onclick="this.closest('.employment-entry').remove()">Remover</button>
                 <div class="form-group">
                     <label>Empregador:</label>
                     <input type="text" name="employerName[]">
@@ -1225,13 +1234,32 @@
             container.appendChild(div);
         }
 
-        function removeEntry(button) {
-            button.closest('.address-entry, .employment-entry, .travel-entry').remove();
+        function addTravelEntry() {
+            const container = document.getElementById('travelHistoryContainer');
+            const div = document.createElement('div');
+            div.classList.add('travel-entry');
+            div.innerHTML = `
+                <button type="button" class="remove-button" onclick="this.closest('.travel-entry').remove()">Remover</button>
+                <div class="form-group">
+                    <label>Data de Chegada aos EUA:</label>
+                    <input type="date" name="travelArrivalDate[]">
+                </div>
+                <div class="form-group">
+                    <label>Data de Saída dos EUA:</label>
+                    <input type="date" name="travelDepartureDate[]">
+                </div>
+                <div class="form-group">
+                    <label>País de Partida (para esta viagem):</label>
+                    <input type="text" name="travelOriginCountry[]">
+                </div>
+            `;
+            container.appendChild(div);
         }
+
 
         // Adicionando event listeners e chamadas iniciais
         document.addEventListener('DOMContentLoaded', () => {
-            // Adicionando listeners
+            // Adicionando listeners para os selects que controlam a visibilidade
             document.getElementById('estadoCivil').addEventListener('change', toggleSpouseInfo);
             document.getElementById('temPaisVivos').addEventListener('change', toggleParentsInfo);
             document.getElementById('paisNosEUA').addEventListener('change', toggleParentsInUSInfo);
@@ -1264,6 +1292,11 @@
             document.getElementById('negadoTrustedTravelerGE').addEventListener('change', () => toggleConditionalGE('negadoTrustedTravelerGE', 'negadoTrustedTravelerGEDetails'));
             document.getElementById('serviuMilitarGE').addEventListener('change', () => toggleConditionalGE('serviuMilitarGE', 'serviuMilitarGEDetails'));
 
+            // LISTENERS PARA OS BOTÕES DE ADICIONAR ENTRADAS DINÂMICAS (Corrigido para tipo module)
+            document.getElementById('addAddressBtn').addEventListener('click', addAddressEntry);
+            document.getElementById('addEmploymentBtn').addEventListener('click', addEmploymentEntry);
+            document.getElementById('addTravelBtn').addEventListener('click', addTravelEntry); // Novo botão de viagem
+
             document.getElementById('visaForm').addEventListener('submit', generatePDF);
 
             // Chamadas iniciais para definir o estado correto no carregamento da página
@@ -1277,9 +1310,10 @@
             toggleVisaDeniedDetails();
             toggleGlobalEntryApplication(); // Chamar esta função na inicialização
 
-            // Adicionar uma entrada de endereço e emprego ao carregar a página para que já apareça um campo
+            // Adicionar uma entrada de endereço, emprego e viagem ao carregar a página para que já apareça um campo
             addAddressEntry();
             addEmploymentEntry();
+            addTravelEntry(); // Adiciona uma entrada de viagem inicial
 
             // Função para controlar a visibilidade de detalhes com base em radio buttons
             function toggleConditionalGEbyRadio(name, divId) {
@@ -1550,6 +1584,35 @@
                 } else {
                     addText('Nenhum histórico de emprego nos últimos 5 anos informado.');
                 }
+
+                // Adição do Histórico de Viagens ao PDF (NOVO)
+                addSectionTitle("Histórico de Viagens aos EUA (Últimos 5 anos)");
+                const viagens = [];
+                const travelArrivalDates = formData.getAll('travelArrivalDate[]');
+                if (travelArrivalDates.length > 0) {
+                    for (let i = 0; i < travelArrivalDates.length; i++) {
+                        const arrivalDate = travelArrivalDates[i];
+                        if (arrivalDate && arrivalDate.trim() !== '') {
+                            viagens.push({
+                                chegada: formatDateBr(arrivalDate),
+                                saida: formatDateBr(formData.getAll('travelDepartureDate[]')[i]),
+                                pais_origem: formData.getAll('travelOriginCountry[]')[i] || 'Não informado'
+                            });
+                        }
+                    }
+                }
+                if (viagens.length > 0) {
+                    viagens.forEach((travel, index) => {
+                        addText(`Viagem ${index + 1}:`);
+                        addText(`  Chegada: ${travel.chegada}`);
+                        addText(`  Saída: ${travel.saida}`);
+                        addText(`  País de Origem: ${travel.pais_origem}`);
+                        yPosition += 2; // Espaçamento extra entre viagens
+                    });
+                } else {
+                    addText('Nenhuma viagem aos EUA nos últimos 5 anos informada.');
+                }
+
 
                 addSectionTitle("Informações Familiares");
                 addText(`Pais Vivos: ${formData.get('temPaisVivos') || 'Não informado'}`);
