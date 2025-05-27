@@ -154,6 +154,53 @@
             margin-bottom: 25px;
         }
 
+        .address-entry, .job-entry, .travel-entry {
+            border: 1px solid #e0e0e0;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            background-color: #fcfcfc;
+        }
+
+        .address-entry label, .job-entry label, .travel-entry label {
+            font-weight: normal; /* Labels dentro das entradas não tão fortes */
+            margin-top: 10px;
+            margin-bottom: 5px;
+        }
+
+        .add-button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            margin-top: 15px;
+            display: block; /* Ocupa a largura total para alinhar */
+            width: fit-content; /* Ajusta a largura ao conteúdo */
+        }
+
+        .add-button:hover {
+            background-color: #0056b3;
+        }
+
+        .remove-button {
+            background-color: #dc3545;
+            color: white;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.85em;
+            float: right; /* Alinha à direita */
+            margin-top: -30px; /* Ajusta posição vertical */
+        }
+
+        .remove-button:hover {
+            background-color: #c82333;
+        }
+
         /* Estilos para a declaração */
         .declaration-section {
             background-color: #e6f7ff; /* Fundo azul claro */
@@ -457,6 +504,18 @@
             <label for="email">E-mail:</label>
             <input type="email" id="email" name="email">
 
+            <h3>Histórico de Endereços (Últimos 5 anos)</h3>
+            <p>Liste todos os endereços onde você residiu nos últimos 5 anos. Comece pelo mais recente.</p>
+            <div id="enderecosContainer">
+                </div>
+            <button type="button" class="add-button" onclick="addEndereco()">Adicionar Endereço</button>
+
+            <h3>Histórico de Emprego (Últimos 5 anos)</h3>
+            <p>Liste seu histórico de emprego nos últimos 5 anos. Comece pelo mais recente.</p>
+            <div id="empregosContainer">
+                </div>
+            <button type="button" class="add-button" onclick="addEmprego()">Adicionar Emprego</button>
+
             <h3>Informações Familiares</h3>
             <label for="temPaisVivos">Seus pais estão vivos?</label>
             <select id="temPaisVivos" name="temPaisVivos">
@@ -595,7 +654,7 @@
                 <input type="text" id="relacaoCompanheiro" name="relacaoCompanheiro">
             </div>
 
-            <h3>Informações de Trabalho</h3>
+            <h3>Informações de Trabalho e Educação</h3>
             <label for="ocupacao">Ocupação atual:</label>
             <input type="text" id="ocupacao" name="ocupacao">
 
@@ -614,7 +673,6 @@
             <label for="rendaMensal">Renda mensal (em reais):</label>
             <input type="text" id="rendaMensal" name="rendaMensal">
 
-            <h3>Informações de Educação</h3>
             <label for="nivelEducacao">Nível mais alto de educação concluído:</label>
             <select id="nivelEducacao" name="nivelEducacao">
                 <option value="">Selecione</option>
@@ -636,7 +694,7 @@
             <label for="dataFimEducacao">Data de conclusão do curso:</label>
             <input type="date" id="dataFimEducacao" name="dataFimEducacao">
 
-            <h3>Histórico de Viagens</h3>
+            <h3>Histórico de Vistos e Imigração</h3>
             <label for="primeiroVisto">É o seu primeiro visto ou uma renovação?</label>
             <select id="primeiroVisto" name="primeiroVisto">
                 <option value="">Selecione</option>
@@ -683,9 +741,6 @@
                 <input type="text" id="numeroVistoAnterior" name="numeroVistoAnterior">
             </div>
 
-            <label for="outrosPaises">Países visitados nos últimos 5 anos:</label>
-            <textarea id="outrosPaises" name="outrosPaises"></textarea>
-
             <label for="vistoNegado">Já teve um visto americano negado?</label>
             <select id="vistoNegado" name="vistoNegado">
                 <option value="">Selecione</option>
@@ -705,7 +760,9 @@
                 <textarea id="detalhesVistoNegado" name="detalhesVistoNegado"></textarea>
             </div>
 
-            <h3>Informações para Global Entry (se aplicável)</h3>
+            <h3>Informações para Global Entry</h3>
+            <p>O Global Entry é um programa do U.S. Customs and Border Protection (CBP) que permite o desembaraço acelerado para viajantes de baixo risco pré-aprovados na chegada aos Estados Unidos. É necessário ter um visto válido para os EUA para se qualificar.</p>
+            
             <label for="interessadoGlobalEntry">Você está interessado em solicitar o Global Entry?</label>
             <select id="interessadoGlobalEntry" name="interessadoGlobalEntry">
                 <option value="">Selecione</option>
@@ -713,90 +770,74 @@
                 <option value="Não">Não</option>
             </select>
 
-            <div id="globalEntryInfo" class="conditional-section hidden-section">
-                <p>O Global Entry é um programa do U.S. Customs and Border Protection (CBP) que permite o desembaraço acelerado para viajantes de baixo risco pré-aprovados na chegada aos Estados Unidos. É necessário ter um visto válido para os EUA para se qualificar.</p>
-                
-                <label for="jaPossuiGlobalEntry">Já possui Global Entry?</label>
-                <select id="jaPossuiGlobalEntry" name="jaPossuiGlobalEntry">
+            <div id="globalEntryApplication" class="conditional-section hidden-section">
+                <h4>Perguntas Adicionais Global Entry</h4>
+                <p>Estas perguntas são específicas para a aplicação do Global Entry e serão adicionadas ao seu formulário.</p>
+
+                <label for="prisaoOuCondenacaoGE">a. Você já foi condenado(a) por qualquer crime (incluindo DUI/DWI), tem alguma acusação criminal pendente, ou possui mandados de prisão em aberto em qualquer país?</label>
+                <select id="prisaoOuCondenacaoGE" name="prisaoOuCondenacaoGE">
                     <option value="">Selecione</option>
                     <option value="Sim">Sim</option>
                     <option value="Não">Não</option>
                 </select>
-
-                <div id="globalEntryExisting" class="conditional-section hidden-section">
-                    <label for="numeroGlobalEntry">Número do seu Global Entry (PASS ID ou Membership Number):</label>
-                    <input type="text" id="numeroGlobalEntry" name="numeroGlobalEntry">
-                    <label for="dataValidadeGlobalEntry">Data de validade do seu Global Entry:</label>
-                    <input type="date" id="dataValidadeGlobalEntry" name="dataValidadeGlobalEntry">
+                <div id="prisaoOuCondenacaoGEDetails" class="conditional-section hidden-section">
+                    <label for="prisaoOuCondenacaoGECausa">Explique a causa e forneça as datas:</label>
+                    <textarea id="prisaoOuCondenacaoGECausa" name="prisaoOuCondenacaoGECausa"></textarea>
                 </div>
 
-                <div id="globalEntryApplication" class="conditional-section hidden-section">
-                    <h4>Informações para Nova Aplicação do Global Entry</h4>
-                    <label for="prisaoOuCondenacaoGE">Você já foi preso ou condenado por qualquer ofensa, em qualquer país?</label>
-                    <select id="prisaoOuCondenacaoGE" name="prisaoOuCondenacaoGE">
-                        <option value="">Selecione</option>
-                        <option value="Sim">Sim</option>
-                        <option value="Não">Não</option>
-                    </select>
-                    <div id="prisaoOuCondenacaoGEDetails" class="conditional-section hidden-section">
-                        <label for="prisaoOuCondenacaoGECausa">Explique a causa e forneça as datas:</label>
-                        <textarea id="prisaoOuCondenacaoGECausa" name="prisaoOuCondenacaoGECausa"></textarea>
-                    </div>
+                <label for="violacaoLeiAduaneiraGE">b. Você já foi considerado(a) culpado(a) de violação de quaisquer regulamentos ou leis alfandegárias, de imigração ou agrícolas em qualquer país?</label>
+                <select id="violacaoLeiAduaneiraGE" name="violacaoLeiAduaneiraGE">
+                    <option value="">Selecione</option>
+                    <option value="Sim">Sim</option>
+                    <option value="Não">Não</option>
+                </select>
+                <div id="violacaoLeiAduaneiraGEDetails" class="conditional-section hidden-section">
+                    <label for="violacaoLeiAduaneiraGECausa">Explique a violação e forneça as datas:</label>
+                    <textarea id="violacaoLeiAduaneiraGECausa" name="violacaoLeiAduaneiraGECausa"></textarea>
+                </div>
 
-                    <label for="violacaoLeiAduaneiraGE">Você já violou alguma lei aduaneira ou de imigração em qualquer país?</label>
-                    <select id="violacaoLeiAduaneiraGE" name="violacaoLeiAduaneiraGE">
-                        <option value="">Selecione</option>
-                        <option value="Sim">Sim</option>
-                        <option value="Não">Não</option>
-                    </select>
-                    <div id="violacaoLeiAduaneiraGEDetails" class="conditional-section hidden-section">
-                        <label for="violacaoLeiAduaneiraGECausa">Explique a violação e forneça as datas:</label>
-                        <textarea id="violacaoLeiAduaneiraGECausa" name="violacaoLeiAduaneiraGECausa"></textarea>
-                    </div>
+                <label for="investigacaoFederalGE">c. Você é objeto de uma investigação em andamento por qualquer agência federal, estadual ou local de aplicação da lei?</label>
+                <select id="investigacaoFederalGE" name="investigacaoFederalGE">
+                    <option value="">Selecione</option>
+                    <option value="Sim">Sim</option>
+                    <option value="Não">Não</option>
+                </select>
+                <div id="investigacaoFederalGEDetails" class="conditional-section hidden-section">
+                    <label for="investigacaoFederalGECausa">Explique a investigação e forneça os detalhes:</label>
+                    <textarea id="investigacaoFederalGECausa" name="investigacaoFederalGECausa"></textarea>
+                </div>
 
-                    <label for="investigacaoFederalGE">Você está atualmente sob investigação federal, estadual ou local?</label>
-                    <select id="investigacaoFederalGE" name="investigacaoFederalGE">
-                        <option value="">Selecione</option>
-                        <option value="Sim">Sim</option>
-                        <option value="Não">Não</option>
-                    </select>
-                    <div id="investigacaoFederalGEDetails" class="conditional-section hidden-section">
-                        <label for="investigacaoFederalGECausa">Explique a investigação e forneça os detalhes:</label>
-                        <textarea id="investigacaoFederalGECausa" name="investigacaoFederalGECausa"></textarea>
-                    </div>
+                <label for="informacaoIncorretaGE">d. Você já forneceu informações falsas ou incompletas em qualquer formulário de inscrição ou processo de imigração para os Estados Unidos ou qualquer outro país?</label>
+                <select id="informacaoIncorretaGE" name="informacaoIncorretaGE">
+                    <option value="">Selecione</option>
+                    <option value="Sim">Sim</option>
+                    <option value="Não">Não</option>
+                </select>
+                <div id="informacaoIncorretaGEDetails" class="conditional-section hidden-section">
+                    <label for="informacaoIncorretaGECausa">Explique a situação e forneça os detalhes:</label>
+                    <textarea id="informacaoIncorretaGECausa" name="informacaoIncorretaGECausa"></textarea>
+                </div>
 
-                    <label for="informacaoIncorretaGE">Você já forneceu informações falsas ou incompletas em qualquer formulário de solicitação ao governo dos EUA?</label>
-                    <select id="informacaoIncorretaGE" name="informacaoIncorretaGE">
-                        <option value="">Selecione</option>
-                        <option value="Sim">Sim</option>
-                        <option value="Não">Não</option>
-                    </select>
-                    <div id="informacaoIncorretaGEDetails" class="conditional-section hidden-section">
-                        <label for="informacaoIncorretaGECausa">Explique a situação e forneça os detalhes:</label>
-                        <textarea id="informacaoIncorretaGECausa" name="informacaoIncorretaGECausa"></textarea>
-                    </div>
+                <label for="negadoTrustedTravelerGE">Você já teve um pedido para qualquer programa de Trusted Traveler negado, ou a participação cancelada?</label>
+                <select id="negadoTrustedTravelerGE" name="negadoTrustedTravelerGE">
+                    <option value="">Selecione</option>
+                    <option value="Sim">Sim</option>
+                    <option value="Não">Não</option>
+                </select>
+                <div id="negadoTrustedTravelerGEDetails" class="conditional-section hidden-section">
+                    <label for="negadoTrustedTravelerGECausa">Explique a situação (qual programa, data, motivo):</label>
+                    <textarea id="negadoTrustedTravelerGECausa" name="negadoTrustedTravelerGECausa"></textarea>
+                </div>
 
-                    <label for="negadoTrustedTravelerGE">Você já teve um pedido para qualquer programa de Trusted Traveler negado, ou a participação cancelada?</label>
-                    <select id="negadoTrustedTravelerGE" name="negadoTrustedTravelerGE">
-                        <option value="">Selecione</option>
-                        <option value="Sim">Sim</option>
-                        <option value="Não">Não</option>
-                    </select>
-                    <div id="negadoTrustedTravelerGEDetails" class="conditional-section hidden-section">
-                        <label for="negadoTrustedTravelerGECausa">Explique a situação (qual programa, data, motivo):</label>
-                        <textarea id="negadoTrustedTravelerGECausa" name="negadoTrustedTravelerGECausa"></textarea>
-                    </div>
-
-                    <label for="serviuMilitarGE">Você serviu ou serve em qualquer força militar (inclusive não-americana)?</label>
-                    <select id="serviuMilitarGE" name="serviuMilitarGE">
-                        <option value="">Selecione</option>
-                        <option value="Sim">Sim</option>
-                        <option value="Não">Não</option>
-                    </select>
-                    <div id="serviuMilitarGEDetails" class="conditional-section hidden-section">
-                        <label for="serviuMilitarGECausa">Forneça detalhes (país, ramo, período de serviço, cargo):</label>
-                        <textarea id="serviuMilitarGECausa" name="serviuMilitarGECausa"></textarea>
-                    </div>
+                <label for="serviuMilitarGE">Você serviu ou serve em qualquer força militar (inclusive não-americana)?</label>
+                <select id="serviuMilitarGE" name="serviuMilitarGE">
+                    <option value="">Selecione</option>
+                    <option value="Sim">Sim</option>
+                    <option value="Não">Não</option>
+                </select>
+                <div id="serviuMilitarGEDetails" class="conditional-section hidden-section">
+                    <label for="serviuMilitarGECausa">Forneça detalhes (país, ramo, período de serviço, cargo):</label>
+                    <textarea id="serviuMilitarGECausa" name="serviuMilitarGECausa"></textarea>
                 </div>
             </div>
 
@@ -1024,35 +1065,10 @@
         }
 
         // Global Entry Toggles
-        function toggleGlobalEntryInfo() {
+        function toggleGlobalEntryApplication() {
             const interessadoGlobalEntry = document.getElementById('interessadoGlobalEntry');
-            const globalEntryInfo = document.getElementById('globalEntryInfo');
-            if (interessadoGlobalEntry.value === 'Sim') {
-                globalEntryInfo.classList.remove('hidden-section');
-                toggleJaPossuiGlobalEntry(); // Reavalia a sub-seção
-            } else {
-                globalEntryInfo.classList.add('hidden-section');
-                globalEntryInfo.querySelectorAll('input, textarea, select').forEach(input => input.value = '');
-                // Garante que as sub-seções também sejam ocultadas e limpas
-                document.getElementById('globalEntryExisting').classList.add('hidden-section');
-                document.getElementById('globalEntryExisting').querySelectorAll('input, textarea, select').forEach(input => input.value = '');
-                document.getElementById('globalEntryApplication').classList.add('hidden-section');
-                document.getElementById('globalEntryApplication').querySelectorAll('input, textarea, select').forEach(input => input.value = '');
-            }
-        }
-
-        function toggleJaPossuiGlobalEntry() {
-            const jaPossuiGlobalEntry = document.getElementById('jaPossuiGlobalEntry');
-            const globalEntryExisting = document.getElementById('globalEntryExisting');
             const globalEntryApplication = document.getElementById('globalEntryApplication');
-
-            if (jaPossuiGlobalEntry.value === 'Sim') {
-                globalEntryExisting.classList.remove('hidden-section');
-                globalEntryApplication.classList.add('hidden-section');
-                globalEntryApplication.querySelectorAll('input, textarea, select').forEach(input => input.value = ''); // Limpa os campos de aplicação
-            } else if (jaPossuiGlobalEntry.value === 'Não') {
-                globalEntryExisting.classList.add('hidden-section');
-                globalEntryExisting.querySelectorAll('input, textarea, select').forEach(input => input.value = ''); // Limpa os campos existentes
+            if (interessadoGlobalEntry.value === 'Sim') {
                 globalEntryApplication.classList.remove('hidden-section');
                 // Reavalia todas as sub-seções de "Global Entry Application"
                 toggleConditionalGE('prisaoOuCondenacaoGE', 'prisaoOuCondenacaoGEDetails');
@@ -1062,8 +1078,6 @@
                 toggleConditionalGE('negadoTrustedTravelerGE', 'negadoTrustedTravelerGEDetails');
                 toggleConditionalGE('serviuMilitarGE', 'serviuMilitarGEDetails');
             } else {
-                globalEntryExisting.classList.add('hidden-section');
-                globalEntryExisting.querySelectorAll('input, textarea, select').forEach(input => input.value = '');
                 globalEntryApplication.classList.add('hidden-section');
                 globalEntryApplication.querySelectorAll('input, textarea, select').forEach(input => input.value = '');
             }
@@ -1081,7 +1095,66 @@
                 }
             }
         }
+        
+        // Funções para adicionar/remover histórico de endereços e empregos
+        let enderecoIndex = 0;
+        function addEndereco() {
+            const container = document.getElementById('enderecosContainer');
+            const div = document.createElement('div');
+            div.classList.add('address-entry');
+            div.innerHTML = `
+                <button type="button" class="remove-button" onclick="removeEntry(this)">Remover</button>
+                <label for="endereco_${enderecoIndex}">Endereço:</label>
+                <input type="text" id="endereco_${enderecoIndex}" name="enderecos[${enderecoIndex}][endereco]" placeholder="Rua, Número, Complemento">
 
+                <label for="cidade_endereco_${enderecoIndex}">Cidade:</label>
+                <input type="text" id="cidade_endereco_${enderecoIndex}" name="enderecos[${enderecoIndex}][cidade]">
+
+                <label for="estado_endereco_${enderecoIndex}">Estado/Província:</label>
+                <input type="text" id="estado_endereco_${enderecoIndex}" name="enderecos[${enderecoIndex}][estado]">
+
+                <label for="pais_endereco_${enderecoIndex}">País:</label>
+                <input type="text" id="pais_endereco_${enderecoIndex}" name="enderecos[${enderecoIndex}][pais]">
+
+                <label for="de_endereco_${enderecoIndex}">De (MM/AAAA):</label>
+                <input type="date" id="de_endereco_${enderecoIndex}" name="enderecos[${enderecoIndex}][data_de]">
+
+                <label for="ate_endereco_${enderecoIndex}">Até (MM/AAAA):</label>
+                <input type="date" id="ate_endereco_${enderecoIndex}" name="enderecos[${enderecoIndex}][data_ate]">
+            `;
+            container.appendChild(div);
+            enderecoIndex++;
+        }
+
+        let empregoIndex = 0;
+        function addEmprego() {
+            const container = document.getElementById('empregosContainer');
+            const div = document.createElement('div');
+            div.classList.add('job-entry');
+            div.innerHTML = `
+                <button type="button" class="remove-button" onclick="removeEntry(this)">Remover</button>
+                <label for="empregador_hist_${empregoIndex}">Empregador:</label>
+                <input type="text" id="empregador_hist_${empregoIndex}" name="empregos[${empregoIndex}][empregador]">
+
+                <label for="cargo_hist_${empregoIndex}">Cargo:</label>
+                <input type="text" id="cargo_hist_${empregoIndex}" name="empregos[${empregoIndex}][cargo]">
+
+                <label for="endereco_empregador_hist_${empregoIndex}">Endereço do Empregador:</label>
+                <input type="text" id="endereco_empregador_hist_${empregoIndex}" name="empregos[${empregoIndex}][endereco]" placeholder="Rua, Número, Cidade, País">
+
+                <label for="de_emprego_${empregoIndex}">De (MM/AAAA):</label>
+                <input type="date" id="de_emprego_${empregoIndex}" name="empregos[${empregoIndex}][data_de]">
+
+                <label for="ate_emprego_${empregoIndex}">Até (MM/AAAA):</label>
+                <input type="date" id="ate_emprego_${empregoIndex}" name="empregos[${empregoIndex}][data_ate]">
+            `;
+            container.appendChild(div);
+            empregoIndex++;
+        }
+
+        function removeEntry(button) {
+            button.closest('.address-entry, .job-entry, .travel-entry').remove();
+        }
 
         // Adicionando event listeners e chamadas iniciais
         document.addEventListener('DOMContentLoaded', () => {
@@ -1099,15 +1172,13 @@
             document.getElementById('entradaRecusada').addEventListener('change', toggleVisaDeniedDetails);
             
             // Global Entry Listeners
-            document.getElementById('interessadoGlobalEntry').addEventListener('change', toggleGlobalEntryInfo);
-            document.getElementById('jaPossuiGlobalEntry').addEventListener('change', toggleJaPossuiGlobalEntry);
+            document.getElementById('interessadoGlobalEntry').addEventListener('change', toggleGlobalEntryApplication);
             document.getElementById('prisaoOuCondenacaoGE').addEventListener('change', () => toggleConditionalGE('prisaoOuCondenacaoGE', 'prisaoOuCondenacaoGEDetails'));
             document.getElementById('violacaoLeiAduaneiraGE').addEventListener('change', () => toggleConditionalGE('violacaoLeiAduaneiraGE', 'violacaoLeiAduaneiraGEDetails'));
             document.getElementById('investigacaoFederalGE').addEventListener('change', () => toggleConditionalGE('investigacaoFederalGE', 'investigacaoFederalGEDetails'));
             document.getElementById('informacaoIncorretaGE').addEventListener('change', () => toggleConditionalGE('informacaoIncorretaGE', 'informacaoIncorretaGEDetails'));
             document.getElementById('negadoTrustedTravelerGE').addEventListener('change', () => toggleConditionalGE('negadoTrustedTravelerGE', 'negadoTrustedTravelerGEDetails'));
             document.getElementById('serviuMilitarGE').addEventListener('change', () => toggleConditionalGE('serviuMilitarGE', 'serviuMilitarGEDetails'));
-
 
             document.getElementById('visaForm').addEventListener('submit', generatePDF);
 
@@ -1120,7 +1191,11 @@
             toggleRenewalInfo();
             togglePreviousUSVisaInfo();
             toggleVisaDeniedDetails();
-            toggleGlobalEntryInfo(); // Chamar esta função na inicialização
+            toggleGlobalEntryApplication(); // Chamar esta função na inicialização
+
+            // Adicionar uma entrada de endereço e emprego ao carregar a página
+            addEndereco();
+            addEmprego();
         });
 
 
@@ -1288,10 +1363,8 @@
                     }
                 }
 
-                // INÍCIO DA ALTERAÇÃO SOLICITADA
                 yPosition += 5; // Pequeno espaçamento antes do novo subtítulo
                 addSectionTitle("Dados do Passaporte Pessoal");
-                // FIM DA ALTERAÇÃO SOLICITADA
                 
                 addText(`Nacionalidade: ${formData.get('nacionalidade') || 'Não informado'}`);
                 addText(`Outras Nacionalidades: ${formData.get('outrasNacionalidades') || 'Não informado'}`);
@@ -1308,6 +1381,57 @@
                 addText(`País: ${formData.get('pais') || 'Não informado'}`);
                 addText(`Telefone: ${formData.get('telefone') || 'Não informado'}`);
                 addText(`E-mail: ${formData.get('email') || 'Não informado'}`);
+
+                addSectionTitle("Histórico de Endereços (Últimos 5 anos)");
+                const enderecos = [];
+                for (let i = 0; ; i++) {
+                    const endereco = formData.get(`enderecos[${i}][endereco]`);
+                    if (!endereco) break;
+                    enderecos.push({
+                        endereco: endereco,
+                        cidade: formData.get(`enderecos[${i}][cidade]`),
+                        estado: formData.get(`enderecos[${i}][estado]`),
+                        pais: formData.get(`enderecos[${i}][pais]`),
+                        data_de: formatDateBr(formData.get(`enderecos[${i}][data_de]`)),
+                        data_ate: formatDateBr(formData.get(`enderecos[${i}][data_ate]`))
+                    });
+                }
+                if (enderecos.length > 0) {
+                    enderecos.forEach((addr, index) => {
+                        addText(`Endereço ${index + 1}: ${addr.endereco}, ${addr.cidade}, ${addr.estado}, ${addr.pais}`);
+                        addText(`  De: ${addr.data_de} Até: ${addr.data_ate}`);
+                        yPosition += 2; // Espaçamento extra entre endereços
+                    });
+                } else {
+                    addText('Nenhum endereço adicional informado nos últimos 5 anos.');
+                }
+
+
+                addSectionTitle("Histórico de Emprego (Últimos 5 anos)");
+                const empregos = [];
+                for (let i = 0; ; i++) {
+                    const empregador = formData.get(`empregos[${i}][empregador]`);
+                    if (!empregador) break;
+                    empregos.push({
+                        empregador: empregador,
+                        cargo: formData.get(`empregos[${i}][cargo]`),
+                        endereco: formData.get(`empregos[${i}][endereco]`),
+                        data_de: formatDateBr(formData.get(`empregos[${i}][data_de]`)),
+                        data_ate: formatDateBr(formData.get(`empregos[${i}][data_ate]`))
+                    });
+                }
+                if (empregos.length > 0) {
+                    empregos.forEach((job, index) => {
+                        addText(`Emprego ${index + 1}:`);
+                        addText(`  Empregador: ${job.empregador}`);
+                        addText(`  Cargo: ${job.cargo}`);
+                        addText(`  Endereço: ${job.endereco}`);
+                        addText(`  De: ${job.data_de} Até: ${job.data_ate}`);
+                        yPosition += 2; // Espaçamento extra entre empregos
+                    });
+                } else {
+                    addText('Nenhum histórico de emprego nos últimos 5 anos informado.');
+                }
 
                 addSectionTitle("Informações Familiares");
                 addText(`Pais Vivos: ${formData.get('temPaisVivos') || 'Não informado'}`);
@@ -1355,20 +1479,20 @@
                     addText(`Relação com o(s) Companheiro(s): ${formData.get('relacaoCompanheiro') || 'Não informado'}`);
                 }
 
-                addSectionTitle("Informações de Trabalho");
+                addSectionTitle("Informações de Trabalho e Educação");
                 addText(`Ocupação: ${formData.get('ocupacao') || 'Não informado'}`);
                 addText(`Empregador: ${formData.get('empregador') || 'Não informado'}`);
                 addText(`Endereço do Empregador: ${formData.get('enderecoEmpregador') || 'Não informado'}`);
                 addText(`Telefone do Empregador: ${formData.get('telefoneEmpregador') || 'Não informado'}`);
                 addText(`Data de Início no Trabalho: ${formatDateBr(formData.get('dataInicioTrabalho'))}`);
                 addText(`Renda Mensal: ${formData.get('rendaMensal') || 'Não informado'}`);
-                addSectionTitle("Informações de Educação");
                 addText(`Nível de Educação: ${formData.get('nivelEducacao') || 'Não informado'}`);
                 addText(`Instituição: ${formData.get('instituicao') || 'Não informado'}`);
                 addText(`Endereço da Instituição: ${formData.get('enderecoInstituicao') || 'Não informado'}`);
                 addText(`Data de Início do Curso: ${formatDateBr(formData.get('dataInicioEducacao'))}`);
                 addText(`Data de Conclusão do Curso: ${formatDateBr(formData.get('dataFimEducacao'))}`);
-                addSectionTitle("Histórico de Viagens");
+
+                addSectionTitle("Histórico de Vistos e Imigração");
                 addText(`Primeiro Visto ou Renovação: ${formData.get('primeiroVisto') || 'Não informado'}`);
                 if (formData.get('primeiroVisto') === 'Renovação') {
                     addText(`Número do Visto Anterior: ${formData.get('numeroVistoAnteriorRenovacao') || 'Não informado'}`);
@@ -1383,7 +1507,6 @@
                     addText(`Número do Visto Anterior: ${formData.get('numeroVistoAnterior') || 'Não informado'}`);
                 }
                 addText(`Impressão Digital Coletada: ${formData.get('impressaoDigital') || 'Não informado'}`);
-                addText(`Países Visitados (Últimos 5 Anos): ${formData.get('outrosPaises') || 'Não informado'}`);
                 addText(`Visto Negado: ${formData.get('vistoNegado') || 'Não informado'}`);
                 addText(`Entrada Recusada nos EUA: ${formData.get('entradaRecusada') || 'Não informado'}`);
 
@@ -1395,38 +1518,31 @@
                 addText(`Interessado em Global Entry: ${formData.get('interessadoGlobalEntry') || 'Não informado'}`);
 
                 if (formData.get('interessadoGlobalEntry') === 'Sim') {
-                    addText(`Já possui Global Entry: ${formData.get('jaPossuiGlobalEntry') || 'Não informado'}`);
-                    if (formData.get('jaPossuiGlobalEntry') === 'Sim') {
-                        addText(`Número do Global Entry: ${formData.get('numeroGlobalEntry') || 'Não informado'}`);
-                        addText(`Data de Validade do Global Entry: ${formatDateBr(formData.get('dataValidadeGlobalEntry'))}`);
-                    } else if (formData.get('jaPossuiGlobalEntry') === 'Não') {
-                        addText(`Já foi preso ou condenado por qualquer ofensa: ${formData.get('prisaoOuCondenacaoGE') || 'Não informado'}`);
-                        if (formData.get('prisaoOuCondenacaoGE') === 'Sim') {
-                            addText(`Detalhes: ${formData.get('prisaoOuCondenacaoGECausa') || 'Não informado'}`);
-                        }
-                        addText(`Já violou lei aduaneira ou de imigração: ${formData.get('violacaoLeiAduaneiraGE') || 'Não informado'}`);
-                        if (formData.get('violacaoLeiAduaneiraGE') === 'Sim') {
-                            addText(`Detalhes: ${formData.get('violacaoLeiAduaneiraGECausa') || 'Não informado'}`);
-                        }
-                        addText(`Atualmente sob investigação federal, estadual ou local: ${formData.get('investigacaoFederalGE') || 'Não informado'}`);
-                        if (formData.get('investigacaoFederalGE') === 'Sim') {
-                            addText(`Detalhes: ${formData.get('investigacaoFederalGECausa') || 'Não informado'}`);
-                        }
-                        addText(`Já forneceu informações falsas ou incompletas ao governo dos EUA: ${formData.get('informacaoIncorretaGE') || 'Não informado'}`);
-                        if (formData.get('informacaoIncorretaGE') === 'Sim') {
-                            addText(`Detalhes: ${formData.get('informacaoIncorretaGECausa') || 'Não informado'}`);
-                        }
-                        addText(`Já teve pedido de Trusted Traveler negado ou participação cancelada: ${formData.get('negadoTrustedTravelerGE') || 'Não informado'}`);
-                        if (formData.get('negadoTrustedTravelerGE') === 'Sim') {
-                            addText(`Detalhes: ${formData.get('negadoTrustedTravelerGECausa') || 'Não informado'}`);
-                        }
-                        addText(`Serviu ou serve em força militar: ${formData.get('serviuMilitarGE') || 'Não informado'}`);
-                        if (formData.get('serviuMilitarGE') === 'Sim') {
-                            addText(`Detalhes: ${formData.get('serviuMilitarGECausa') || 'Não informado'}`);
-                        }
+                    addText(`a. Já foi condenado(a) por qualquer crime (incluindo DUI/DWI), tem alguma acusação criminal pendente, ou possui mandados de prisão em aberto em qualquer país?: ${formData.get('prisaoOuCondenacaoGE') || 'Não informado'}`);
+                    if (formData.get('prisaoOuCondenacaoGE') === 'Sim') {
+                        addText(`Detalhes: ${formData.get('prisaoOuCondenacaoGECausa') || 'Não informado'}`);
+                    }
+                    addText(`b. Já foi considerado(a) culpado(a) de violação de quaisquer regulamentos ou leis alfandegárias, de imigração ou agrícolas em qualquer país?: ${formData.get('violacaoLeiAduaneiraGE') || 'Não informado'}`);
+                    if (formData.get('violacaoLeiAduaneiraGE') === 'Sim') {
+                        addText(`Detalhes: ${formData.get('violacaoLeiAduaneiraGECausa') || 'Não informado'}`);
+                    }
+                    addText(`c. Você é objeto de uma investigação em andamento por qualquer agência federal, estadual ou local de aplicação da lei?: ${formData.get('investigacaoFederalGE') || 'Não informado'}`);
+                    if (formData.get('investigacaoFederalGE') === 'Sim') {
+                        addText(`Detalhes: ${formData.get('investigacaoFederalGECausa') || 'Não informado'}`);
+                    }
+                    addText(`d. Você já forneceu informações falsas ou incompletas em qualquer formulário de inscrição ou processo de imigração para os Estados Unidos ou qualquer outro país?: ${formData.get('informacaoIncorretaGE') || 'Não informado'}`);
+                    if (formData.get('informacaoIncorretaGE') === 'Sim') {
+                        addText(`Detalhes: ${formData.get('informacaoIncorretaGECausa') || 'Não informado'}`);
+                    }
+                    addText(`Já teve um pedido para qualquer programa de Trusted Traveler negado, ou a participação cancelada?: ${formData.get('negadoTrustedTravelerGE') || 'Não informado'}`);
+                    if (formData.get('negadoTrustedTravelerGE') === 'Sim') {
+                        addText(`Detalhes: ${formData.get('negadoTrustedTravelerGECausa') || 'Não informado'}`);
+                    }
+                    addText(`Serviu ou serve em qualquer força militar (inclusive não-americana)?: ${formData.get('serviuMilitarGE') || 'Não informado'}`);
+                    if (formData.get('serviuMilitarGE') === 'Sim') {
+                        addText(`Detalhes: ${formData.get('serviuMilitarGECausa') || 'Não informado'}`);
                     }
                 }
-
 
                 addSectionTitle("Declaração");
                 addText(`Nome: ${solicitanteNome}`, true);
