@@ -705,6 +705,101 @@
                 <textarea id="detalhesVistoNegado" name="detalhesVistoNegado"></textarea>
             </div>
 
+            <h3>Informações para Global Entry (se aplicável)</h3>
+            <label for="interessadoGlobalEntry">Você está interessado em solicitar o Global Entry?</label>
+            <select id="interessadoGlobalEntry" name="interessadoGlobalEntry">
+                <option value="">Selecione</option>
+                <option value="Sim">Sim</option>
+                <option value="Não">Não</option>
+            </select>
+
+            <div id="globalEntryInfo" class="conditional-section hidden-section">
+                <p>O Global Entry é um programa do U.S. Customs and Border Protection (CBP) que permite o desembaraço acelerado para viajantes de baixo risco pré-aprovados na chegada aos Estados Unidos. É necessário ter um visto válido para os EUA para se qualificar.</p>
+                
+                <label for="jaPossuiGlobalEntry">Já possui Global Entry?</label>
+                <select id="jaPossuiGlobalEntry" name="jaPossuiGlobalEntry">
+                    <option value="">Selecione</option>
+                    <option value="Sim">Sim</option>
+                    <option value="Não">Não</option>
+                </select>
+
+                <div id="globalEntryExisting" class="conditional-section hidden-section">
+                    <label for="numeroGlobalEntry">Número do seu Global Entry (PASS ID ou Membership Number):</label>
+                    <input type="text" id="numeroGlobalEntry" name="numeroGlobalEntry">
+                    <label for="dataValidadeGlobalEntry">Data de validade do seu Global Entry:</label>
+                    <input type="date" id="dataValidadeGlobalEntry" name="dataValidadeGlobalEntry">
+                </div>
+
+                <div id="globalEntryApplication" class="conditional-section hidden-section">
+                    <h4>Informações para Nova Aplicação do Global Entry</h4>
+                    <label for="prisaoOuCondenacaoGE">Você já foi preso ou condenado por qualquer ofensa, em qualquer país?</label>
+                    <select id="prisaoOuCondenacaoGE" name="prisaoOuCondenacaoGE">
+                        <option value="">Selecione</option>
+                        <option value="Sim">Sim</option>
+                        <option value="Não">Não</option>
+                    </select>
+                    <div id="prisaoOuCondenacaoGEDetails" class="conditional-section hidden-section">
+                        <label for="prisaoOuCondenacaoGECausa">Explique a causa e forneça as datas:</label>
+                        <textarea id="prisaoOuCondenacaoGECausa" name="prisaoOuCondenacaoGECausa"></textarea>
+                    </div>
+
+                    <label for="violacaoLeiAduaneiraGE">Você já violou alguma lei aduaneira ou de imigração em qualquer país?</label>
+                    <select id="violacaoLeiAduaneiraGE" name="violacaoLeiAduaneiraGE">
+                        <option value="">Selecione</option>
+                        <option value="Sim">Sim</option>
+                        <option value="Não">Não</option>
+                    </select>
+                    <div id="violacaoLeiAduaneiraGEDetails" class="conditional-section hidden-section">
+                        <label for="violacaoLeiAduaneiraGECausa">Explique a violação e forneça as datas:</label>
+                        <textarea id="violacaoLeiAduaneiraGECausa" name="violacaoLeiAduaneiraGECausa"></textarea>
+                    </div>
+
+                    <label for="investigacaoFederalGE">Você está atualmente sob investigação federal, estadual ou local?</label>
+                    <select id="investigacaoFederalGE" name="investigacaoFederalGE">
+                        <option value="">Selecione</option>
+                        <option value="Sim">Sim</option>
+                        <option value="Não">Não</option>
+                    </select>
+                    <div id="investigacaoFederalGEDetails" class="conditional-section hidden-section">
+                        <label for="investigacaoFederalGECausa">Explique a investigação e forneça os detalhes:</label>
+                        <textarea id="investigacaoFederalGECausa" name="investigacaoFederalGECausa"></textarea>
+                    </div>
+
+                    <label for="informacaoIncorretaGE">Você já forneceu informações falsas ou incompletas em qualquer formulário de solicitação ao governo dos EUA?</label>
+                    <select id="informacaoIncorretaGE" name="informacaoIncorretaGE">
+                        <option value="">Selecione</option>
+                        <option value="Sim">Sim</option>
+                        <option value="Não">Não</option>
+                    </select>
+                    <div id="informacaoIncorretaGEDetails" class="conditional-section hidden-section">
+                        <label for="informacaoIncorretaGECausa">Explique a situação e forneça os detalhes:</label>
+                        <textarea id="informacaoIncorretaGECausa" name="informacaoIncorretaGECausa"></textarea>
+                    </div>
+
+                    <label for="negadoTrustedTravelerGE">Você já teve um pedido para qualquer programa de Trusted Traveler negado, ou a participação cancelada?</label>
+                    <select id="negadoTrustedTravelerGE" name="negadoTrustedTravelerGE">
+                        <option value="">Selecione</option>
+                        <option value="Sim">Sim</option>
+                        <option value="Não">Não</option>
+                    </select>
+                    <div id="negadoTrustedTravelerGEDetails" class="conditional-section hidden-section">
+                        <label for="negadoTrustedTravelerGECausa">Explique a situação (qual programa, data, motivo):</label>
+                        <textarea id="negadoTrustedTravelerGECausa" name="negadoTrustedTravelerGECausa"></textarea>
+                    </div>
+
+                    <label for="serviuMilitarGE">Você serviu ou serve em qualquer força militar (inclusive não-americana)?</label>
+                    <select id="serviuMilitarGE" name="serviuMilitarGE">
+                        <option value="">Selecione</option>
+                        <option value="Sim">Sim</option>
+                        <option value="Não">Não</option>
+                    </select>
+                    <div id="serviuMilitarGEDetails" class="conditional-section hidden-section">
+                        <label for="serviuMilitarGECausa">Forneça detalhes (país, ramo, período de serviço, cargo):</label>
+                        <textarea id="serviuMilitarGECausa" name="serviuMilitarGECausa"></textarea>
+                    </div>
+                </div>
+            </div>
+
             <div class="declaration-section">
                 <h3>Declaração</h3>
                 <p>Eu, <input type="text" id="declaracaoNome" name="declaracaoNome" placeholder="Nome completo" required> declaro, sob as penas da lei, que li e compreendi integralmente todas as questões contidas nesta solicitação de visto e afirmo que as respostas por mim fornecidas são verdadeiras, completas e corretas, conforme o meu melhor conhecimento e convicção.</p>
@@ -928,6 +1023,66 @@
             }
         }
 
+        // Global Entry Toggles
+        function toggleGlobalEntryInfo() {
+            const interessadoGlobalEntry = document.getElementById('interessadoGlobalEntry');
+            const globalEntryInfo = document.getElementById('globalEntryInfo');
+            if (interessadoGlobalEntry.value === 'Sim') {
+                globalEntryInfo.classList.remove('hidden-section');
+                toggleJaPossuiGlobalEntry(); // Reavalia a sub-seção
+            } else {
+                globalEntryInfo.classList.add('hidden-section');
+                globalEntryInfo.querySelectorAll('input, textarea, select').forEach(input => input.value = '');
+                // Garante que as sub-seções também sejam ocultadas e limpas
+                document.getElementById('globalEntryExisting').classList.add('hidden-section');
+                document.getElementById('globalEntryExisting').querySelectorAll('input, textarea, select').forEach(input => input.value = '');
+                document.getElementById('globalEntryApplication').classList.add('hidden-section');
+                document.getElementById('globalEntryApplication').querySelectorAll('input, textarea, select').forEach(input => input.value = '');
+            }
+        }
+
+        function toggleJaPossuiGlobalEntry() {
+            const jaPossuiGlobalEntry = document.getElementById('jaPossuiGlobalEntry');
+            const globalEntryExisting = document.getElementById('globalEntryExisting');
+            const globalEntryApplication = document.getElementById('globalEntryApplication');
+
+            if (jaPossuiGlobalEntry.value === 'Sim') {
+                globalEntryExisting.classList.remove('hidden-section');
+                globalEntryApplication.classList.add('hidden-section');
+                globalEntryApplication.querySelectorAll('input, textarea, select').forEach(input => input.value = ''); // Limpa os campos de aplicação
+            } else if (jaPossuiGlobalEntry.value === 'Não') {
+                globalEntryExisting.classList.add('hidden-section');
+                globalEntryExisting.querySelectorAll('input, textarea, select').forEach(input => input.value = ''); // Limpa os campos existentes
+                globalEntryApplication.classList.remove('hidden-section');
+                // Reavalia todas as sub-seções de "Global Entry Application"
+                toggleConditionalGE('prisaoOuCondenacaoGE', 'prisaoOuCondenacaoGEDetails');
+                toggleConditionalGE('violacaoLeiAduaneiraGE', 'violacaoLeiAduaneiraGEDetails');
+                toggleConditionalGE('investigacaoFederalGE', 'investigacaoFederalGEDetails');
+                toggleConditionalGE('informacaoIncorretaGE', 'informacaoIncorretaGEDetails');
+                toggleConditionalGE('negadoTrustedTravelerGE', 'negadoTrustedTravelerGEDetails');
+                toggleConditionalGE('serviuMilitarGE', 'serviuMilitarGEDetails');
+            } else {
+                globalEntryExisting.classList.add('hidden-section');
+                globalEntryExisting.querySelectorAll('input, textarea, select').forEach(input => input.value = '');
+                globalEntryApplication.classList.add('hidden-section');
+                globalEntryApplication.querySelectorAll('input, textarea, select').forEach(input => input.value = '');
+            }
+        }
+
+        function toggleConditionalGE(selectId, divId) {
+            const selectElement = document.getElementById(selectId);
+            const divElement = document.getElementById(divId);
+            if (selectElement && divElement) { // Verifica se os elementos existem
+                if (selectElement.value === 'Sim') {
+                    divElement.classList.remove('hidden-section');
+                } else {
+                    divElement.classList.add('hidden-section');
+                    divElement.querySelectorAll('input, textarea, select').forEach(input => input.value = '');
+                }
+            }
+        }
+
+
         // Adicionando event listeners e chamadas iniciais
         document.addEventListener('DOMContentLoaded', () => {
             // Adicionando listeners
@@ -942,6 +1097,18 @@
             document.getElementById('visitouEUA').addEventListener('change', togglePreviousUSVisaInfo);
             document.getElementById('vistoNegado').addEventListener('change', toggleVisaDeniedDetails);
             document.getElementById('entradaRecusada').addEventListener('change', toggleVisaDeniedDetails);
+            
+            // Global Entry Listeners
+            document.getElementById('interessadoGlobalEntry').addEventListener('change', toggleGlobalEntryInfo);
+            document.getElementById('jaPossuiGlobalEntry').addEventListener('change', toggleJaPossuiGlobalEntry);
+            document.getElementById('prisaoOuCondenacaoGE').addEventListener('change', () => toggleConditionalGE('prisaoOuCondenacaoGE', 'prisaoOuCondenacaoGEDetails'));
+            document.getElementById('violacaoLeiAduaneiraGE').addEventListener('change', () => toggleConditionalGE('violacaoLeiAduaneiraGE', 'violacaoLeiAduaneiraGEDetails'));
+            document.getElementById('investigacaoFederalGE').addEventListener('change', () => toggleConditionalGE('investigacaoFederalGE', 'investigacaoFederalGEDetails'));
+            document.getElementById('informacaoIncorretaGE').addEventListener('change', () => toggleConditionalGE('informacaoIncorretaGE', 'informacaoIncorretaGEDetails'));
+            document.getElementById('negadoTrustedTravelerGE').addEventListener('change', () => toggleConditionalGE('negadoTrustedTravelerGE', 'negadoTrustedTravelerGEDetails'));
+            document.getElementById('serviuMilitarGE').addEventListener('change', () => toggleConditionalGE('serviuMilitarGE', 'serviuMilitarGEDetails'));
+
+
             document.getElementById('visaForm').addEventListener('submit', generatePDF);
 
             // Chamadas iniciais para definir o estado correto no carregamento da página
@@ -953,6 +1120,7 @@
             toggleRenewalInfo();
             togglePreviousUSVisaInfo();
             toggleVisaDeniedDetails();
+            toggleGlobalEntryInfo(); // Chamar esta função na inicialização
         });
 
 
@@ -1222,6 +1390,43 @@
                 if (formData.get('vistoNegado') === 'Sim' || formData.get('entradaRecusada') === 'Sim') {
                     addText(`Detalhes da Negativa: ${formData.get('detalhesVistoNegado') || 'Não informado'}`);
                 }
+
+                addSectionTitle("Informações para Global Entry");
+                addText(`Interessado em Global Entry: ${formData.get('interessadoGlobalEntry') || 'Não informado'}`);
+
+                if (formData.get('interessadoGlobalEntry') === 'Sim') {
+                    addText(`Já possui Global Entry: ${formData.get('jaPossuiGlobalEntry') || 'Não informado'}`);
+                    if (formData.get('jaPossuiGlobalEntry') === 'Sim') {
+                        addText(`Número do Global Entry: ${formData.get('numeroGlobalEntry') || 'Não informado'}`);
+                        addText(`Data de Validade do Global Entry: ${formatDateBr(formData.get('dataValidadeGlobalEntry'))}`);
+                    } else if (formData.get('jaPossuiGlobalEntry') === 'Não') {
+                        addText(`Já foi preso ou condenado por qualquer ofensa: ${formData.get('prisaoOuCondenacaoGE') || 'Não informado'}`);
+                        if (formData.get('prisaoOuCondenacaoGE') === 'Sim') {
+                            addText(`Detalhes: ${formData.get('prisaoOuCondenacaoGECausa') || 'Não informado'}`);
+                        }
+                        addText(`Já violou lei aduaneira ou de imigração: ${formData.get('violacaoLeiAduaneiraGE') || 'Não informado'}`);
+                        if (formData.get('violacaoLeiAduaneiraGE') === 'Sim') {
+                            addText(`Detalhes: ${formData.get('violacaoLeiAduaneiraGECausa') || 'Não informado'}`);
+                        }
+                        addText(`Atualmente sob investigação federal, estadual ou local: ${formData.get('investigacaoFederalGE') || 'Não informado'}`);
+                        if (formData.get('investigacaoFederalGE') === 'Sim') {
+                            addText(`Detalhes: ${formData.get('investigacaoFederalGECausa') || 'Não informado'}`);
+                        }
+                        addText(`Já forneceu informações falsas ou incompletas ao governo dos EUA: ${formData.get('informacaoIncorretaGE') || 'Não informado'}`);
+                        if (formData.get('informacaoIncorretaGE') === 'Sim') {
+                            addText(`Detalhes: ${formData.get('informacaoIncorretaGECausa') || 'Não informado'}`);
+                        }
+                        addText(`Já teve pedido de Trusted Traveler negado ou participação cancelada: ${formData.get('negadoTrustedTravelerGE') || 'Não informado'}`);
+                        if (formData.get('negadoTrustedTravelerGE') === 'Sim') {
+                            addText(`Detalhes: ${formData.get('negadoTrustedTravelerGECausa') || 'Não informado'}`);
+                        }
+                        addText(`Serviu ou serve em força militar: ${formData.get('serviuMilitarGE') || 'Não informado'}`);
+                        if (formData.get('serviuMilitarGE') === 'Sim') {
+                            addText(`Detalhes: ${formData.get('serviuMilitarGECausa') || 'Não informado'}`);
+                        }
+                    }
+                }
+
 
                 addSectionTitle("Declaração");
                 addText(`Nome: ${solicitanteNome}`, true);
