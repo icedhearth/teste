@@ -406,7 +406,7 @@
                 font-size: 1.1em;
             }
             p, label {
-                font-size: 0.9em;
+                font-size: 0.95em;
             }
             input[type="text"],
             input[type="date"],
@@ -817,37 +817,36 @@
             <label for="dataFimEducacao">Data de conclusão do curso:</label>
             <input type="date" id="dataFimEducacao" name="dataFimEducacao">
 
-            <h3>Histórico de Vistos e Imigração</h3>
-            <label for="primeiroVisto">É o seu primeiro visto ou uma renovação?</label>
-            <select id="primeiroVisto" name="primeiroVisto">
-                <option value="">Selecione</option>
-                <option value="Primeiro visto">Primeiro visto</option>
-                <option value="Renovação">Renovação</option>
-            </select>
+            <h3>Visto Americano e Histórico de Imigração</h3>
+            <p>Por favor, forneça as informações do seu visto americano válido, que é um requisito para o Global Entry, e responda às perguntas sobre seu histórico de imigração.</p>
 
-            <div id="renewalInfo" class="conditional-section hidden-section">
-                <label for="numeroVistoAnteriorRenovacao">Número do visto anterior:</label>
-                <input type="text" id="numeroVistoAnteriorRenovacao" name="numeroVistoAnteriorRenovacao">
-
-                <label for="dataEmissaoVistoAnterior">Data de emissão do visto anterior:</label>
-                <input type="date" id="dataEmissaoVistoAnterior" name="dataEmissaoVistoAnterior">
-
-                <label for="dataValidadeVistoAnterior">Data de validade do visto anterior:</label>
-                <input type="date" id="dataValidadeVistoAnterior" name="dataValidadeVistoAnterior">
-
-                <label for="localEmissaoVistoAnterior">Local de emissão do visto anterior:</label>
-                <input type="text" id="localEmissaoVistoAnterior" name="localEmissaoVistoAnterior">
-            </div>
-
-            <label for="visitouEUA">Já visitou os EUA antes?</label>
-            <select id="visitouEUA" name="visitouEUA">
+            <label for="possuiVistoValidoGE">Você possui um visto americano válido?</label>
+            <select id="possuiVistoValidoGE" name="possuiVistoValidoGE" required>
                 <option value="">Selecione</option>
                 <option value="Sim">Sim</option>
                 <option value="Não">Não</option>
             </select>
 
-            <label for="impressaoDigital">Já teve impressão digital dos dedos coletada?</label>
-            <select id="impressaoDigital" name="impressaoDigital">
+            <div id="vistoValidoGEDetails" class="conditional-section hidden-section">
+                <h4>Dados do Visto Americano Válido</h4>
+                <label for="tipoVistoGE">Tipo de Visto (ex: B1/B2, F-1):</label>
+                <input type="text" id="tipoVistoGE" name="tipoVistoGE">
+
+                <label for="numeroVistoGE">Número do Visto (Visto Foil Number):</label>
+                <input type="text" id="numeroVistoGE" name="numeroVistoGE">
+
+                <label for="dataEmissaoVistoGE">Data de Emissão do Visto:</label>
+                <input type="date" id="dataEmissaoVistoGE" name="dataEmissaoVistoGE">
+
+                <label for="dataValidadeVistoGE">Data de Validade do Visto:</label>
+                <input type="date" id="dataValidadeVistoGE" name="dataValidadeVistoGE">
+
+                <label for="localEmissaoVistoGE">Local de Emissão do Visto (Cidade e País):</label>
+                <input type="text" id="localEmissaoVistoGE" name="localEmissaoVistoGE">
+            </div>
+
+            <label for="visitouEUA">Já visitou os EUA antes?</label>
+            <select id="visitouEUA" name="visitouEUA">
                 <option value="">Selecione</option>
                 <option value="Sim">Sim</option>
                 <option value="Não">Não</option>
@@ -859,9 +858,6 @@
 
                 <label for="tempoUltimaVisita">Tempo de estadia na última visita:</label>
                 <input type="text" id="tempoUltimaVisita" name="tempoUltimaVisita">
-
-                <label for="numeroVistoAnterior">Número do visto anterior (se aplicável):</label>
-                <input type="text" id="numeroVistoAnterior" name="numeroVistoAnterior">
             </div>
 
             <label for="vistoNegado">Já teve um visto americano negado?</label>
@@ -879,9 +875,16 @@
             </select>
 
             <div id="visaDeniedDetails" class="conditional-section hidden-section">
-                <label for="detalhesVistoNegado">Detalhes da negativa (data e motivo):</label>
+                <label for="detalhesVistoNegado">Detalhes da negativa/recusa (data e motivo):</label>
                 <textarea id="detalhesVistoNegado" name="detalhesVistoNegado"></textarea>
             </div>
+
+            <label for="impressaoDigital">Já teve impressão digital dos dedos coletada para um visto dos EUA?</label>
+            <select id="impressaoDigital" name="impressaoDigital">
+                <option value="">Selecione</option>
+                <option value="Sim">Sim</option>
+                <option value="Não">Não</option>
+            </select>
 
             <h3>Informações para Global Entry</h3>
             <p>O Global Entry é um programa do U.S. Customs and Border Protection (CBP) que permite o desembaraço acelerado para viajantes de baixo risco pré-aprovados na chegada aos Estados Unidos. É necessário ter um visto válido para os EUA para se qualificar.</p>
@@ -1113,6 +1116,18 @@
             }
         }
 
+        // NOVO: Função para exibir/ocultar os detalhes do visto válido
+        function toggleVistoValidoGEDetails() {
+            const possuiVistoValidoGE = document.getElementById('possuiVistoValidoGE');
+            const vistoValidoGEDetails = document.getElementById('vistoValidoGEDetails');
+            if (possuiVistoValidoGE.value === 'Sim') {
+                vistoValidoGEDetails.classList.remove('hidden-section');
+            } else {
+                vistoValidoGEDetails.classList.add('hidden-section');
+                vistoValidoGEDetails.querySelectorAll('input, textarea, select').forEach(input => input.value = '');
+            }
+        }
+
         function togglePreviousUSVisaInfo() {
             const visitouEUA = document.getElementById('visitouEUA');
             const previousUSVisaInfo = document.getElementById('previousUSVisaInfo');
@@ -1158,17 +1173,6 @@
             } else {
                 payerAddressInfo.classList.add('hidden-section');
                 payerAddressInfo.querySelectorAll('input, textarea, select').forEach(input => input.value = '');
-            }
-        }
-
-        function toggleRenewalInfo() {
-            const primeiroVisto = document.getElementById('primeiroVisto');
-            const renewalInfo = document.getElementById('renewalInfo');
-            if (primeiroVisto.value === 'Renovação') {
-                renewalInfo.classList.remove('hidden-section');
-            } else {
-                renewalInfo.classList.add('hidden-section');
-                renewalInfo.querySelectorAll('input, textarea, select').forEach(input => input.value = '');
             }
         }
 
@@ -1241,7 +1245,6 @@
         }
         
         // NOVO: Funções para adicionar e gerenciar entradas dinâmicas
-        // Cada entrada será armazenada em um Array de objetos para facilitar a leitura no PDF
         const addresses = [];
         const employments = [];
         const travels = [];
@@ -1408,7 +1411,11 @@
             document.getElementById('quemPaga').addEventListener('change', togglePayerInfo);
             document.getElementById('payerSameAddress').addEventListener('change', togglePayerAddressInfo);
             document.getElementById('temCompanheiros').addEventListener('change', toggleTravelCompanionsInfo);
-            document.getElementById('primeiroVisto').addEventListener('change', toggleRenewalInfo);
+            // Removido: document.getElementById('primeiroVisto').addEventListener('change', toggleRenewalInfo);
+            
+            // NOVO: Listener para o visto válido GE
+            document.getElementById('possuiVistoValidoGE').addEventListener('change', toggleVistoValidoGEDetails);
+
             document.getElementById('visitouEUA').addEventListener('change', togglePreviousUSVisaInfo);
             document.getElementById('vistoNegado').addEventListener('change', toggleVisaDeniedDetails);
             document.getElementById('entradaRecusada').addEventListener('change', toggleVisaDeniedDetails);
@@ -1444,7 +1451,11 @@
             toggleAcquaintancesInfo();
             togglePayerInfo();
             toggleTravelCompanionsInfo();
-            toggleRenewalInfo();
+            // Removido: toggleRenewalInfo();
+            
+            // NOVO: Chamar o toggle do visto válido ao carregar a página
+            toggleVistoValidoGEDetails();
+
             togglePreviousUSVisaInfo();
             toggleVisaDeniedDetails();
             toggleGlobalEntryApplication();
@@ -1761,27 +1772,30 @@
                 addText(`Data de Início do Curso: ${formatDateBr(formData.get('dataInicioEducacao'))}`);
                 addText(`Data de Conclusão do Curso: ${formatDateBr(formData.get('dataFimEducacao'))}`);
 
-                addSectionTitle("Histórico de Vistos e Imigração");
-                addText(`Primeiro Visto ou Renovação: ${formData.get('primeiroVisto') || 'Não informado'}`);
-                if (formData.get('primeiroVisto') === 'Renovação') {
-                    addText(`Número do Visto Anterior: ${formData.get('numeroVistoAnteriorRenovacao') || 'Não informado'}`);
-                    addText(`Data de Emissão do Visto Anterior: ${formatDateBr(formData.get('dataEmissaoVistoAnterior'))}`);
-                    addText(`Data de Validade do Visto Anterior: ${formatDateBr(formData.get('dataValidadeVistoAnterior'))}`);
-                    addText(`Local de Emissão do Visto Anterior: ${formData.get('localEmissaoVistoAnterior') || 'Não informado'}`);
+                // Seção de Visto e Imigração ATUALIZADA
+                addSectionTitle("Visto Americano e Histórico de Imigração");
+                addText(`Possui visto americano válido?: ${formData.get('possuiVistoValidoGE') || 'Não informado'}`);
+                if (formData.get('possuiVistoValidoGE') === 'Sim') {
+                    addText(`Tipo de Visto: ${formData.get('tipoVistoGE') || 'Não informado'}`);
+                    addText(`Número do Visto: ${formData.get('numeroVistoGE') || 'Não informado'}`);
+                    addText(`Data de Emissão do Visto: ${formatDateBr(formData.get('dataEmissaoVistoGE'))}`);
+                    addText(`Data de Validade do Visto: ${formatDateBr(formData.get('dataValidadeVistoGE'))}`);
+                    addText(`Local de Emissão do Visto: ${formData.get('localEmissaoVistoGE') || 'Não informado'}`);
                 }
-                addText(`Já Visitou os EUA: ${formData.get('visitouEUA') || 'Não informado'}`);
+
+                addText(`Já visitou os EUA antes?: ${formData.get('visitouEUA') || 'Não informado'}`);
                 if (formData.get('visitouEUA') === 'Sim') {
                     addText(`Data da Última Visita: ${formatDateBr(formData.get('dataUltimaVisita'))}`);
-                    addText(`Tempo da Última Visita: ${formData.get('tempoUltimaVisita') || 'Não informado'}`);
-                    addText(`Número do Visto Anterior: ${formData.get('numeroVistoAnterior') || 'Não informado'}`);
+                    addText(`Tempo de estadia na última visita: ${formData.get('tempoUltimaVisita') || 'Não informado'}`);
                 }
-                addText(`Impressão Digital Coletada: ${formData.get('impressaoDigital') || 'Não informado'}`);
-                addText(`Visto Negado: ${formData.get('vistoNegado') || 'Não informado'}`);
-                addText(`Entrada Recusada nos EUA: ${formData.get('entradaRecusada') || 'Não informado'}`);
+                
+                addText(`Já teve um visto americano negado?: ${formData.get('vistoNegado') || 'Não informado'}`);
+                addText(`Já foi negada admissão aos EUA ou teve entrada recusada?: ${formData.get('entradaRecusada') || 'Não informado'}`);
 
                 if (formData.get('vistoNegado') === 'Sim' || formData.get('entradaRecusada') === 'Sim') {
-                    addText(`Detalhes da Negativa: ${formData.get('detalhesVistoNegado') || 'Não informado'}`);
+                    addText(`Detalhes da negativa/recusa: ${formData.get('detalhesVistoNegado') || 'Não informado'}`);
                 }
+                addText(`Já teve impressão digital dos dedos coletada para um visto dos EUA?: ${formData.get('impressaoDigital') || 'Não informado'}`);
 
                 addSectionTitle("Informações para Global Entry");
                 addText(`Interessado em Global Entry: ${formData.get('interessadoGlobalEntry') || 'Não informado'}`);
